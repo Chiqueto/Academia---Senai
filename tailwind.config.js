@@ -8,6 +8,7 @@ module.exports = {
         jersey: ["'Jersey 25'", "sans-serif"], // Adiciona a fonte Jersey
         body: ["Nunito", "sans-serif"], // Adiciona a fonte Nunito
         jura: ["Jura", "sans-serif"], // Adiciona a fonte Jura
+        zain: ["Zain", "sans-serif"], // Adiciona a fonte Zain
       },
       colors: {
         neonGreen: "rgba(57, 255, 20, 0.7)",
