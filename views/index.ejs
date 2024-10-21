@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta lang="pt-br" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="./styles/output.css" rel="stylesheet" />
+    <title>GymFit</title>
+  </head>
+  <body class="flex flex-col min-h-screen">
+    <header>
+      <nav class="flex justify-between bg-zinc-800 py-5 px-4">
+        <div class="flex items-center gap-4">
+          <!-- <img src="/icons/menu.svg" /> -->
+          <h1 class="font-jaro text-zinc-50 text-3xl">GymFit</h1>
+        </div>
+      </nav>
+    </header>
+
+    <main class="text-center mt-4 text-white mx-4 flex-grow">
+      <h1 class="text-4xl font-jersey">Bem vindo!</h1>
+      <p class="text-3xl">
+        Para se cadastrar ou fazer login clique em uma das opções abaixo:
+      </p>
+      <div class="flex flex-col font-jersey text-4xl mt-10 gap-10">
+        <button
+          onclick="window.location.href = '/aluno';"
+          class="bg-neonGreen rounded-xl py-2 hover:bg-neonGreenHover transition-colors"
+        >
+          Aluno</button
+        ><button
+          class="bg-neonGreen rounded-xl py-2 hover:bg-neonGreenHover transition-colors"
+        >
+          Academia</button
+        ><button
+          class="bg-neonGreen rounded-xl py-2 hover:bg-neonGreenHover transition-colors"
+        >
+          Professor
+        </button>
+      </div>
+    </main>
+
+    <footer class="text-zinc-200">
+      <p>&copy Luís Felipe, Edney Araujo, Marília</p>
+    </footer>
+  </body>
+</html>
