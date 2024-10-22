@@ -2,11 +2,11 @@ const express = require("express");
 const router = express.Router();
 
 router.get("/", (req, res) => {
-  res.render("aluno/login");
+  res.render("academia/login");
 });
 
 router.get("/cadastro", (req, res) => {
-  res.render("aluno/cadastro");
+  res.render("academia/cadastro");
 });
 
 module.exports = router;

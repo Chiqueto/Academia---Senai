@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta lang="pt-br" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/styles/output.css" />
+    <title>Cadastro</title>
+  </head>
+  <body class="flex flex-col min-h-screen">
+    <header>
+      <nav class="flex justify-between bg-zinc-800 py-5 px-4">
+        <div class="flex items-center gap-4">
+          <a href="/personal"><img src="/icons/back_arrow.svg" /></a>
+          <h1 class="font-jaro text-zinc-50 text-3xl">GymFit</h1>
+          <!-- <img src="/icons/GymFit.svg" /> -->
+        </div>
+      </nav>
+    </header>
+
+    <main class="text-center my-10 text-white mx-4 flex-grow">
+      <div class="font- bg-zinc-50 text-zinc-950 py-4 rounded-2xl">
+        <h2 class="text-4xl">Cadastrar</h2>
+        <form class="flex flex-col text-2xl gap-6 text-black">
+          <div class="flex flex-col gap-2 px-6">
+            <label class="text-start" for="nome">Nome</label>
+            <input
+              class="border-2 border-black rounded-full bg-pink-50 text-lg px-2 py-1"
+              type="text"
+              name="nome"
+              placeholder="Nome"
+            />
+          </div>
+
+          <div class="flex flex-col gap-2 px-6">
+            <label class="text-start" for="email">Email</label>
+            <input
+              class="border-2 border-black rounded-full bg-pink-50 text-lg px-2 py-1"
+              type="email"
+              name="email"
+              placeholder="Email"
+            />
+          </div>
+
+          <div class="flex flex-col gap-2 px-6">
+            <label class="text-start" for="senha">Senha</label>
+            <input
+              class="border-2 border-black rounded-full bg-pink-50 text-lg px-2 py-1"
+              type="password"
+              name="senha"
+              placeholder="*********"
+            />
+          </div>
+
+          <div class="flex flex-col gap-2 px-6">
+            <label class="text-start" for="cref">CREF</label>
+            <input
+              class="border-2 border-black rounded-full bg-pink-50 text-lg px-2 py-1"
+              type="text"
+              name="cref"
+              placeholder="0000-G/SC"
+            />
+          </div>
+
+          <div class="flex flex-col gap-2 px-6">
+            <label class="text-start" for="cref">Cidade</label>
+            <input
+              class="border-2 border-black rounded-full bg-pink-50 text-lg px-2 py-1"
+              type="text"
+              name="cidade"
+              placeholder="Cidade"
+            />
+          </div>
+
+          <div class="flex flex-col gap-2 px-6">
+            <label class="text-start" for="cref">Especialidade</label>
+
+            <select
+              name="especialidade"
+              id="especialidade"
+              class="border-2 border-black rounded-full bg-pink-50 text-lg px-2 py-1"
+              placeholder="Especialidade"
+            >
+              >
+              <option class="text-sm" value="teste">Hipertrofia</option>
+              <option class="text-sm" value="teste">Esporte</option>
+              <option class="text-sm" value="teste">Força</option>
+            </select>
+          </div>
+
+          <div class="flex flex-col gap-2 px-6">
+            <label class="text-start" for="telefone">Telefone</label>
+            <input
+              class="border-2 border-black rounded-full bg-pink-50 text-lg px-2 py-1"
+              type="text"
+              name="telefone"
+              placeholder="(16) 999968-6044"
+            />
+          </div>
+          <button
+            class="bg-neonGreen rounded-xl py-2 hover:bg-neonGreenHover transition-colors text-zinc-50 font-zain text-4xl mx-12"
+          >
+            Cadastrar
+          </button>
+        </form>
+      </div>
+    </main>
+
+    <footer class="text-zinc-200">
+      <p>&copy Luís Felipe, Edney Araujo, Marília</p>
+    </footer>
+  </body>
+</html>
