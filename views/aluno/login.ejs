@@ -20,16 +20,17 @@
     </header>
 
     <main class="text-center mt-10 text-white mx-4 flex-grow">
-      <div class="font-zain bg-zinc-50 text-zinc-950 py-4 rounded-2xl">
+      <section class="font-zain bg-zinc-50 text-zinc-950 py-4 rounded-2xl">
         <h2 class="text-4xl">Login</h2>
         <form class="flex flex-col text-2xl">
           <div class="flex flex-col gap-2 px-6 mb-6">
-            <label class="text-start" for="nome">Email</label>
+            <label class="text-start" for="email">Email</label>
             <input
               class="border-2 border-black rounded-full bg-pink-50 text-lg px-2 py-1"
               type="text"
-              name="nome"
-              id="senha"
+              name="email"
+              id="email"
+              placeholder="seuemail@exemplo.com.br"
             />
           </div>
           <div class="flex flex-col gap-2 px-6 mb-12">
@@ -39,6 +40,7 @@
               type="password"
               name="senha"
               id="senha"
+              placeholder="*********"
             />
           </div>
           <button
@@ -50,7 +52,7 @@
         <p class="font-body text-2xl text-end mr-2 text-zinc-600">
           <a href="/aluno/cadastro">cadastrar</a>
         </p>
-      </div>
+      </section>
     </main>
 
     <footer class="text-zinc-200">

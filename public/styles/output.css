@@ -607,12 +607,16 @@ video {
   min-height: 100vh;
 }
 
-.w-20{
-  width: 5rem;
+.w-1\/3{
+  width: 33.333333%;
 }
 
-.flex-1{
-  flex: 1 1 0%;
+.w-2\/3{
+  width: 66.666667%;
+}
+
+.max-w-screen-sm{
+  max-width: 640px;
 }
 
 .flex-grow{
@@ -645,6 +649,10 @@ video {
 
 .gap-2{
   gap: 0.5rem;
+}
+
+.gap-3{
+  gap: 0.75rem;
 }
 
 .gap-4{
@@ -734,22 +742,6 @@ video {
   padding-bottom: 1.25rem;
 }
 
-.pl-3{
-  padding-left: 0.75rem;
-}
-
-.pl-6{
-  padding-left: 1.5rem;
-}
-
-.pr-3{
-  padding-right: 0.75rem;
-}
-
-.pr-6{
-  padding-right: 1.5rem;
-}
-
 .text-center{
   text-align: center;
 }
@@ -766,20 +758,16 @@ video {
   font-family: Nunito, sans-serif;
 }
 
+.font-jaro{
+  font-family: Jaro, sans-serif;
+}
+
 .font-jersey{
   font-family: 'Jersey 25', sans-serif;
 }
 
-.font-jura{
-  font-family: Jura, sans-serif;
-}
-
 .font-zain{
   font-family: Zain, sans-serif;
-}
-
-.font-jaro{
-  font-family: Jaro, sans-serif;
 }
 
 .text-2xl{
