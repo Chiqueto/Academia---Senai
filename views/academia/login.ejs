@@ -24,12 +24,13 @@
         <h2 class="text-4xl">Login</h2>
         <form class="flex flex-col text-2xl">
           <div class="flex flex-col gap-2 px-6 mb-6">
-            <label class="text-start" for="nome">CNPJ</label>
+            <label class="text-start" for="cnpj">CNPJ</label>
             <input
               class="border-2 border-black rounded-full bg-pink-50 text-lg px-2 py-1"
               type="text"
-              name="nome"
-              id="senha"
+              name="cnpj"
+              id="cnpj"
+              placeholder="00.000.000/0000-00"
             />
           </div>
           <div class="flex flex-col gap-2 px-6 mb-12">
@@ -39,6 +40,7 @@
               type="password"
               name="senha"
               id="senha"
+              placeholder="*********"
             />
           </div>
           <button
