@@ -9,4 +9,8 @@ router.get("/cadastro", (req, res) => {
   res.render("aluno/cadastro");
 });
 
+router.get("/home", (req, res) => {
+  res.render("aluno/home");
+});
+
 module.exports = router;
