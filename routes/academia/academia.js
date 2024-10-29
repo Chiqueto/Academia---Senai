@@ -9,4 +9,8 @@ router.get("/cadastro", (req, res) => {
   res.render("academia/cadastro");
 });
 
+router.get("/menu", (req,res) => {
+  res.render("academia/menuAcademia")
+});
+
 module.exports = router;
