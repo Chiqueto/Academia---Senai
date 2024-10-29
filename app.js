@@ -6,8 +6,7 @@ const aluno = require("./routes/aluno/aluno");
 const personal = require("./routes/personal/personal");
 const academia = require("./routes/academia/academia");
 
-
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
 app.set("view engine", "ejs");
 
@@ -16,7 +15,6 @@ app.use("/", baseApi);
 app.use("/aluno", aluno);
 app.use("/personal", personal);
 app.use("/academia", academia);
-
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
