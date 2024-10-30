@@ -8,4 +8,8 @@ router.get("/", (req, res) => {
 router.get("/cadastro", (req, res) => {
   res.render("personal/cadastro");
 });
+
+router.get("/menu", (req,res) => {
+  res.render("personal/menuPersonal");
+});
 module.exports = router;
