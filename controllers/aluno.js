@@ -65,8 +65,9 @@ const deletarAluno = async (req, res) => {
 const atualizarAluno = async (req, res) => {
   const { id } = req.params;
   const { nome, telefone } = req.body;
+  const telefoneFormatado = telefone.replace(/\D/g, "");
   try {
-    const result = await Aluno.updateAluno(id, { nome, telefone });
+    const result = await Aluno.updateAluno(id, { nome, telefoneFormatado });
     if (result.length === 0) {
       return res.status(404).json({ error: "Aluno não encontrado" });
     } else {
