@@ -33,7 +33,8 @@ router.get("/cadastro", (req, res) => {
 router.post("/cadastro", alunoController.criarAluno);
 router.get("/listaAlunos", alunoController.listarAlunos);
 router.get("/buscarAluno/:id", alunoController.buscarAluno);
-router.delete("deletar/:id", alunoController.deletarAluno);
+router.delete("/deletar/:id", alunoController.deletarAluno);
+router.put("/atualizar/:id", alunoController.atualizarAluno);
 
 router.get("/menu", (req, res) => {
   res.render("aluno/menuAluno");

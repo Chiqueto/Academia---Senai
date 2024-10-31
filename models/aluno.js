@@ -25,9 +25,19 @@ const deleteAluno = async (id) => {
   return result.rowCount;
 };
 
+const updateAluno = async (id, alunoData) => {
+  const { nome, telefone } = alunoData;
+  const result = await pool.query(
+    "UPDATE tb_aluno SET nome = $1, telefone = $2 WHERE id = $3 RETURNING *",
+    [nome, telefone, id]
+  );
+  return result.rows[0];
+};
+
 module.exports = {
   findAll,
   findById,
   createAluno,
   deleteAluno,
+  updateAluno,
 };

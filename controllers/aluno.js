@@ -51,13 +51,29 @@ const deletarAluno = async (req, res) => {
   const { id } = req.params;
   try {
     const result = await Aluno.deleteAluno(id);
-    if (res.length === 0) {
-      return result.status(404).json({ error: "Aluno não encontrado" });
+    if (result === 0) {
+      // Se `rowCount` for 0, o aluno não foi encontrado
+      return res.status(404).json({ error: "Aluno não encontrado" });
     } else {
-      return result.json({ message: "Aluno deletado com sucesso!" });
+      return res.json({ message: "Aluno deletado com sucesso!" });
     }
   } catch (error) {
-    result.status(500).json({ error: error.message });
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const atualizarAluno = async (req, res) => {
+  const { id } = req.params;
+  const { nome, telefone } = req.body;
+  try {
+    const result = await Aluno.updateAluno(id, { nome, telefone });
+    if (result.length === 0) {
+      return res.status(404).json({ error: "Aluno não encontrado" });
+    } else {
+      return res.json({ message: "Aluno atualizado com sucesso!" });
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
 };
 
@@ -66,4 +82,5 @@ module.exports = {
   listarAlunos,
   buscarAluno,
   deletarAluno,
+  atualizarAluno,
 };
