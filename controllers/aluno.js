@@ -78,10 +78,25 @@ const atualizarAluno = async (req, res) => {
   }
 };
 
+const renderizaLogin = (req, res) => {
+  res.render("aluno/login");
+};
+
+const renderizaCadastro = (req, res) => {
+  res.render("aluno/cadastro");
+};
+
+const renderizaMenu = (req, res) => {
+  res.render("aluno/menuAluno");
+};
+
 module.exports = {
   criarAluno,
   listarAlunos,
   buscarAluno,
   deletarAluno,
   atualizarAluno,
+  renderizaLogin,
+  renderizaCadastro,
+  renderizaMenu,
 };
