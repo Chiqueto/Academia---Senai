@@ -634,16 +634,12 @@ video {
   margin-top: 2.5rem;
 }
 
+.mt-2{
+  margin-top: 0.5rem;
+}
+
 .mt-4{
   margin-top: 1rem;
-}
-
-.mt-20{
-  margin-top: 5rem;
-}
-
-.mt-56{
-  margin-top: 14rem;
 }
 
 .flex{
@@ -694,24 +690,8 @@ video {
   flex-direction: column;
 }
 
-.items-start{
-  align-items: flex-start;
-}
-
-.items-end{
-  align-items: flex-end;
-}
-
 .items-center{
   align-items: center;
-}
-
-.items-baseline{
-  align-items: baseline;
-}
-
-.items-stretch{
-  align-items: stretch;
 }
 
 .justify-start{
@@ -804,6 +784,31 @@ video {
   background-color: rgb(39 39 42 / var(--tw-bg-opacity));
 }
 
+.bg-red-400{
+  --tw-bg-opacity: 1;
+  background-color: rgb(248 113 113 / var(--tw-bg-opacity));
+}
+
+.bg-zinc-700{
+  --tw-bg-opacity: 1;
+  background-color: rgb(63 63 70 / var(--tw-bg-opacity));
+}
+
+.bg-zinc-300{
+  --tw-bg-opacity: 1;
+  background-color: rgb(212 212 216 / var(--tw-bg-opacity));
+}
+
+.bg-zinc-500{
+  --tw-bg-opacity: 1;
+  background-color: rgb(113 113 122 / var(--tw-bg-opacity));
+}
+
+.bg-zinc-600{
+  --tw-bg-opacity: 1;
+  background-color: rgb(82 82 91 / var(--tw-bg-opacity));
+}
+
 .p-2{
   padding: 0.5rem;
 }
@@ -814,22 +819,6 @@ video {
 
 .p-4{
   padding: 1rem;
-}
-
-.p-7{
-  padding: 1.75rem;
-}
-
-.p-1{
-  padding: 0.25rem;
-}
-
-.p-5{
-  padding: 1.25rem;
-}
-
-.p-8{
-  padding: 2rem;
 }
 
 .px-2{
@@ -877,14 +866,6 @@ video {
 
 .text-end{
   text-align: end;
-}
-
-.align-bottom{
-  vertical-align: bottom;
-}
-
-.align-sub{
-  vertical-align: sub;
 }
 
 .font-body{
@@ -963,14 +944,18 @@ video {
   color: rgb(9 9 11 / var(--tw-text-opacity));
 }
 
-.text-red-700{
+.text-red-50{
   --tw-text-opacity: 1;
-  color: rgb(185 28 28 / var(--tw-text-opacity));
+  color: rgb(254 242 242 / var(--tw-text-opacity));
 }
 
-.text-red-600{
+.text-red-500{
   --tw-text-opacity: 1;
-  color: rgb(220 38 38 / var(--tw-text-opacity));
+  color: rgb(239 68 68 / var(--tw-text-opacity));
+}
+
+.bg-blend-color{
+  background-blend-mode: color;
 }
 
 .shadow-md{
@@ -995,3 +980,4 @@ body{
 .hover\:bg-neonGreenHover:hover{
   background-color: rgba(57, 255, 20, 0.9);
 }
+
