@@ -95,6 +95,7 @@ const renderizaMenu = (req, res) => {
 };
 
 const autenticaAluno = async (req, res) => {
+  console.log("entroooooooou")
   const { email, senha } = req.body;
   try {
     const aluno = await Aluno.loginAluno(email);
