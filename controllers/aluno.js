@@ -111,10 +111,13 @@ const autenticaAluno = async (req, res) => {
       expiresIn: "1h",
     });
 
-    return res.status(200).json({
-      message: "Aluno autenticado com sucesso!",
-      token,
-    });
+    localStorage.setItem("Authorization", token);
+    res.status(200);
+    return renderizaMenu;
+    // return res.status(200).json({
+    //   message: "Aluno autenticado com sucesso!",
+    //   token,
+    // });
   } catch (error) {
     console.error(error);
     res.status(401).json({ error: "Erro! Usuário ou senha inválida" });
