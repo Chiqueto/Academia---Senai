@@ -2,11 +2,15 @@ const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
 const baseApi = require("./routes/base");
-const aluno = require("./routes/aluno/aluno");
-const personal = require("./routes/personal/personal");
-const academia = require("./routes/academia/academia");
+const aluno = require("./routes/aluno");
+const personal = require("./routes/personal");
+const academia = require("./routes/academia");
+const cors = require("cors");
 
 app.use(bodyParser.json());
+app.use(express.urlencoded({ extended: true }));
+
+app.use(cors());
 
 app.set("view engine", "ejs");
 
