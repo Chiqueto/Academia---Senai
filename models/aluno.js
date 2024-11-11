@@ -34,10 +34,21 @@ const updateAluno = async (id, alunoData) => {
   return result.rows[0];
 };
 
+const loginAluno = async (email) => {
+  const result = await pool.query("SELECT * FROM tb_aluno WHERE email = $1", [
+    email,
+  ]);
+  if (result.rowCount === 0) {
+    return null;
+  }
+  return result.rows[0];
+};
+
 module.exports = {
   findAll,
   findById,
   createAluno,
   deleteAluno,
   updateAluno,
+  loginAluno,
 };

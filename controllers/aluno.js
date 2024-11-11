@@ -1,11 +1,15 @@
 const Aluno = require("../models/aluno.js");
-const becrypt = require("bcrypt");
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+require("dotenv").config();
+
+const SECRET_KEY = process.env.SECRET_KEY;
 
 const criarAluno = async (req, res) => {
   const { nome, email, senha, genero, telefone, dt_nascimento } = req.body;
 
   const telefoneFormatado = telefone.replace(/\D/g, "");
-  const senhaCriptografada = await becrypt.hash(senha, 10);
+  const senhaCriptografada = await bcrypt.hash(senha, 10);
 
   try {
     const novoAluno = await Aluno.createAluno({
@@ -90,6 +94,32 @@ const renderizaMenu = (req, res) => {
   res.render("aluno/menuAluno");
 };
 
+const autenticaAluno = async (req, res) => {
+  const { email, senha } = req.body;
+  try {
+    const aluno = await Aluno.loginAluno(email);
+
+    if (!aluno) {
+      res.status(404).json({ error: "Aluno não encontrado" });
+      return;
+    }
+
+    await bcrypt.compare(senha, aluno.senha);
+
+    const token = jwt.sign({ id: aluno.id, email: aluno.email }, SECRET_KEY, {
+      expiresIn: "1h",
+    });
+
+    return res.status(200).json({
+      message: "Aluno autenticado com sucesso!",
+      token,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(401).json({ error: "Erro! Usuário ou senha inválida" });
+  }
+};
+
 module.exports = {
   criarAluno,
   listarAlunos,
@@ -99,4 +129,5 @@ module.exports = {
   renderizaLogin,
   renderizaCadastro,
   renderizaMenu,
+  autenticaAluno,
 };

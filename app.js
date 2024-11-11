@@ -5,9 +5,12 @@ const baseApi = require("./routes/base");
 const aluno = require("./routes/aluno");
 const personal = require("./routes/personal");
 const academia = require("./routes/academia");
+const cors = require("cors");
 
 app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: true }));
+
+app.use(cors());
 
 app.set("view engine", "ejs");
 
