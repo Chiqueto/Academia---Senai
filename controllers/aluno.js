@@ -95,32 +95,31 @@ const renderizaMenu = (req, res) => {
 };
 
 const autenticaAluno = async (req, res) => {
-  console.log("entroooooooou")
   const { email, senha } = req.body;
   try {
     const aluno = await Aluno.loginAluno(email);
 
     if (!aluno) {
-      res.status(404).json({ error: "Aluno não encontrado" });
-      return;
+      return res.status(404).json({ error: "Aluno não encontrado" });
     }
 
-    await bcrypt.compare(senha, aluno.senha);
+    const senhaValida = await bcrypt.compare(senha, aluno.senha);
+    if (!senhaValida) {
+      return res.status(401).json({ error: "Erro! Usuário ou senha inválida" });
+    }
 
     const token = jwt.sign({ id: aluno.id, email: aluno.email }, SECRET_KEY, {
       expiresIn: "1h",
     });
 
-    localStorage.setItem("Authorization", token);
-    res.status(200);
-    return renderizaMenu;
-    // return res.status(200).json({
-    //   message: "Aluno autenticado com sucesso!",
-    //   token,
-    // });
+    return res.status(200).json({
+      message: "Aluno autenticado com sucesso!",
+      token,
+      redirectTo: "/aluno/menu",
+    });
   } catch (error) {
     console.error(error);
-    res.status(401).json({ error: "Erro! Usuário ou senha inválida" });
+    return res.status(500).json({ error: "Erro interno do servidor" });
   }
 };
 

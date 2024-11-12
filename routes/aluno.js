@@ -5,7 +5,7 @@ const { authMiddleware } = require("../middleware/authMiddleware");
 
 router.get("/", alunoController.renderizaLogin);
 router.get("/cadastro", alunoController.renderizaCadastro);
-router.get("/menu", authMiddleware, alunoController.renderizaMenu);
+router.get("/menu", alunoController.renderizaMenu, authMiddleware);
 
 router.post("/cadastro", alunoController.criarAluno);
 router.get("/listaAlunos", authMiddleware, alunoController.listarAlunos);

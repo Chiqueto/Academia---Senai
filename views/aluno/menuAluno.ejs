@@ -22,47 +22,88 @@
     <main class="text-center mt-10 text-white mx-4 flex-grow">
       <div class="container mx-auto bg-zinc-600">
         <div class="grid grid-cols-2 gap-4">
-          <div class="bg-white shadow-md rounded p-3 flex flex-col justify-center items-center">
+          <div
+            class="bg-white shadow-md rounded p-3 flex flex-col justify-center items-center"
+          >
             <div class="rounded-full p-2 bg-pink-200">
-              <img src="/icons/user.svg" class="w-8 h-8">
+              <img src="/icons/user.svg" class="w-8 h-8" />
             </div>
-            <p class="font-zain text-lg text-black mt-2 ">Perfil</p>
+            <p class="font-zain text-lg text-black mt-2">Perfil</p>
           </div>
-    
-          <div class="bg-white shadow-md rounded p-3 flex flex-col justify-center items-center">
+
+          <div
+            class="bg-white shadow-md rounded p-3 flex flex-col justify-center items-center"
+          >
             <div class="rounded-full p-2 bg-pink-200">
-              <img src="/icons/user.svg" class="w-8 h-8">
+              <img src="/icons/user.svg" class="w-8 h-8" />
             </div>
             <p class="font-zain text-lg text-black mt-2">Meu Treino</p>
           </div>
-    
-          <div class="bg-white shadow-md rounded p-3 flex flex-col justify-center items-center">
+
+          <div
+            class="bg-white shadow-md rounded p-3 flex flex-col justify-center items-center"
+          >
             <div class="rounded-full p-2 bg-pink-200">
-              <img src="/icons/user.svg" class="w-8 h-8">
+              <img src="/icons/user.svg" class="w-8 h-8" />
             </div>
             <p class="font-zain text-lg text-black mt-2">Montar Treinos</p>
           </div>
-    
-          <div class="bg-white shadow-md rounded p-3 flex flex-col justify-center items-center">
+
+          <div
+            class="bg-white shadow-md rounded p-3 flex flex-col justify-center items-center"
+          >
             <div class="rounded-full p-2 bg-pink-200">
-              <img src="/icons/user.svg" class="w-8 h-8">
+              <img src="/icons/user.svg" class="w-8 h-8" />
             </div>
             <p class="font-zain text-lg text-black mt-2">Encontrar Personal</p>
           </div>
-    
-          <div class="bg-white shadow-md rounded p-3 flex flex-col justify-center items-center">
+
+          <div
+            class="bg-white shadow-md rounded p-3 flex flex-col justify-center items-center"
+          >
             <div class="rounded-full p-2 bg-pink-200">
-              <img src="/icons/user.svg" class="w-8 h-8">
+              <img src="/icons/user.svg" class="w-8 h-8" />
             </div>
-            <p class=" font-zain text-lg text-black mt-2">Encontrar Academia</p>
+            <p class="font-zain text-lg text-black mt-2">Encontrar Academia</p>
           </div>
         </div>
       </div>
     </main>
 
-    
     <footer class="text-zinc-200 p-4 text-center">
       <p>&copy Luís Felipe, Edney Araujo, Marília</p>
     </footer>
+
+    <script>
+      // Recupera o token usando a função getToken
+      const token = localStorage.getItem("authorization");
+      console.log({ token });
+      if (!token) {
+        // Se não houver token, redireciona para a página de login
+        window.location.href = "/aluno";
+      } else {
+        // Faz a requisição autenticada
+        console.log(token);
+        fetch("/aluno/menu", {
+          method: "GET",
+          headers: {
+            authorization: `Bearer ${token}`, // Inclui o token no cabeçalho
+            "Content-Type": "application/json",
+          },
+        })
+          .then((response) => {
+            if (!response.ok) {
+              // Se a resposta não for OK (ex: token inválido), redireciona para o login
+              throw new Error("Token inválido ou expirado");
+            }
+            console.log(response);
+            return;
+          })
+          .catch((error) => {
+            console.error(error);
+            window.location.href = "/aluno";
+          });
+      }
+    </script>
   </body>
 </html>
