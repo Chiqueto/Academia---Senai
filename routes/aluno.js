@@ -3,9 +3,29 @@ const router = express.Router();
 const alunoController = require("../controllers/aluno");
 const { authMiddleware } = require("../middleware/authMiddleware");
 
+router.get("/perfil", (req, res) => {
+    res.render("aluno/perfilAluno");
+  });
+
+  router.get("/meu_treino", (req, res) => {
+    res.render("aluno/opcaoTreinoAluno");
+  });
+
+  router.get("/treinoA", (req, res) => {
+    res.render("aluno/treinoA");
+  });
+  router.get("/treinoB", (req, res) => {
+    res.render("aluno/treinoB");
+  });
+  router.get("/treinoC", (req, res) => {
+    res.render("aluno/treinoC");
+  });
+
+
+
 router.get("/", alunoController.renderizaLogin);
 router.get("/cadastro", alunoController.renderizaCadastro);
-router.get("/menu", authMiddleware, alunoController.renderizaMenu);
+router.get("/menu", alunoController.renderizaMenu);
 
 router.post("/cadastro", alunoController.criarAluno);
 router.get("/listaAlunos", authMiddleware, alunoController.listarAlunos);
