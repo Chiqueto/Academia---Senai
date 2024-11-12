@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta lang="pt-br" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="/styles/output.css" rel="stylesheet" />
+    <title>Perfil do Aluno</title>
+  </head>
+  <body class="flex flex-col min-h-screen">
+    <header>
+      <nav class="flex justify-between bg-zinc-800 py-5 px-4">
+        <div class="flex items-center gap-4">
+          <a href="/"><img src="/icons/back_arrow.svg" /></a>
+          <h1 class="font-jaro text-zinc-50 text-3xl">GymFit</h1>
+          <!-- <img src="/icons/GymFit.svg" /> -->
+        </div>
+      </nav>
+    </header>
+
+     <main class="flex flex-col">
+        <div class="shadow-md rounded p-3 flex flex-col justify-center items-center">
+          <div class="rounded-full p-2 bg-slate-300">
+            <img src="/icons/user.svg" class="w-14 h-14">
+          </div>
+          <p class="font-zain text-lg text-white mt-2 ">Nome do Aluno</p>
+        </div>
+        <div class="font-zain text-white p-5">
+            <h3>Dados Pessoais </h3>
+            <h4 class="ml-3">Idade: </h4>
+            <h4 class="ml-3">Sexo: </h4>
+            <h4 class="ml-3">Telefone: </h4>
+        </div>
+    </main>
+
+        <!-- Calendário Automático -->
+      <div class="w-45 max-w-lg bg-zinc-700 p-4 rounded-lg shadow-md">
+        <div id="calendar" class="grid grid-cols-7 gap-2 text-center text-white"></div>
+      </div>
+<script>
+  function generateCalendar() {
+    const calendarContainer = document.getElementById("calendar");
+    calendarContainer.innerHTML = ""; // Limpa o calendário para recriação
+
+    const today = new Date();
+    const currentYear = today.getFullYear();
+    const currentMonth = today.getMonth();
+
+    const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+    const firstDayOfMonth = new Date(currentYear, currentMonth, 1).getDay();
+
+    // Dias da semana
+    const daysOfWeek = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
+    daysOfWeek.forEach(day => {
+      const dayElement = document.createElement("div");
+      dayElement.classList.add("font-bold");
+      dayElement.innerText = day;
+      calendarContainer.appendChild(dayElement);
+    });
+
+    // Espaço inicial para alinhar o primeiro dia do mês
+    for (let i = 0; i < firstDayOfMonth; i++) {
+      const emptyCell = document.createElement("div");
+      calendarContainer.appendChild(emptyCell);
+    }
+
+    // Dias do mês
+    for (let day = 1; day <= daysInMonth; day++) {
+      const dayElement = document.createElement("div");
+      dayElement.innerText = day;
+      dayElement.classList.add("p-2", "rounded-lg");
+      
+      // Destaque para o dia atual
+      if (day === today.getDate()) {
+        dayElement.classList.add("bg-blue-500");
+      } else {
+        dayElement.classList.add("bg-zinc-600");
+      }
+      calendarContainer.appendChild(dayElement);
+    }
+  }
+  document.addEventListener("DOMContentLoaded", generateCalendar);
+</script>
+
+<div class="font-zain text-white p-5">
+    <h3>
+        <p class="text-lime-500">Treino concluído</p>
+        <p class="text-red-600">Marca falta</p>
+    </h3>
+    
+</div>
+<button type="submit" class="bg-neonGreen rounded-xl py-2 hover:bg-neonGreenHover transition-colors text-zinc-50 font-zain text-4xl mx-12">
+    Sair
+</button>
+
+
+<script>
+  // Recupera o token usando a função getToken
+  const token = localStorage.getItem("authorization");
+  console.log({ token });
+  if (!token) {
+    // Se não houver token, redireciona para a página de login
+    window.location.href = "/aluno";
+  } else {
+    // Faz a requisição autenticada
+    console.log(token);
+    fetch("/aluno/perfilAluno", {
+      method: "GET",
+      headers: {
+        authorization: `Bearer ${token}`, // Inclui o token no cabeçalho
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          // Se a resposta não for OK (ex: token inválido), redireciona para o login
+          throw new Error("Token inválido ou expirado");
+        }
+        console.log(response);
+        return;
+      })
+      .catch((error) => {
+        console.error(error);
+        window.location.href = "/aluno";
+      });
+  }
+</script>
+  </body>
+</html>
