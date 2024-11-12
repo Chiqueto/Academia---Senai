@@ -690,26 +690,6 @@ video {
   height: 2rem;
 }
 
-.h-full{
-  height: 100%;
-}
-
-.max-h-11{
-  max-height: 2.75rem;
-}
-
-.max-h-12{
-  max-height: 3rem;
-}
-
-.max-h-16{
-  max-height: 4rem;
-}
-
-.max-h-1{
-  max-height: 0.25rem;
-}
-
 .min-h-screen{
   min-height: 100vh;
 }
