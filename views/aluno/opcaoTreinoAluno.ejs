@@ -1,40 +1,52 @@
 <!DOCTYPE html>
 
 <html>
-  <head>
-    <meta lang="pt-br" />
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link href="/styles/output.css" rel="stylesheet" />
-    <title>Opções de treino</title>
-  </head>
-  <body class="flex flex-col min-h-screen">
-    <header>
-      <nav class="flex justify-between bg-zinc-800 py-5 px-4">
-        <div class="flex items-center gap-4">
-          <a href="/"><img src="/icons/back_arrow.svg" /></a>
-          <h1 class="font-jaro text-zinc-50 text-3xl">GymFit</h1>
-          <!-- <img src="/icons/GymFit.svg" /> -->
-        </div>
-      </nav>
-    </header>
 
-    <main class="text-center mt-10 text-white mx-4 flex-grow">
-      <h1>Selecione o Treino</h1>
-      <div class="container mx-auto bg-zinc-600">
-        <div class="grid grid-cols-1 gap-4">
-          <div class="bg-neonGreen shadow-md rounded p-3 flex flex-col justify-center items-center">
-            <a href="/aluno/treinoA" class="font-zain text-lg mt-2">Treino A</a>
-          </div>
-          <div class="bg-neonGreen shadow-md rounded p-3 flex flex-col justify-center items-center">
-            <a href="/aluno/treinoB" class="font-zain text-lg mt-2">Treino B</a>
-          </div>
-          <div class="bg-neonGreen shadow-md rounded p-3 flex flex-col justify-center items-center">
-            <a href="/aluno/treinoC" class="font-zain text-lg mt-2">Treino C</a>
-          </div>
-        </div>
+<head>
+  <meta lang="pt-br" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="/styles/output.css" rel="stylesheet" />
+  <title>Opções de treino</title>
+</head>
+
+<body class="flex flex-col min-h-screen">
+  <header>
+    <nav class="flex justify-between bg-zinc-800 py-5 px-4">
+      <div class="flex items-center gap-4">
+        <a href="/aluno/menu"><img src="/icons/back_arrow.svg" /></a>
+        <h1 class="font-jaro text-zinc-50 text-3xl">GymFit</h1>
+        <!-- <img src="/icons/GymFit.svg" /> -->
       </div>
-    </main>
-    
-  </body>
+    </nav>
+  </header>
+
+  <main class="text-center mt-10 text-white mx-4 flex-grow">
+    <h1>Selecione o Treino</h1>
+    <div class="container mx-auto bg-zinc-600">
+      <div class="grid grid-cols-1 gap-4">
+        <a href="/aluno/treinoA">
+          <div class="bg-neonGreen shadow-md rounded p-3 flex flex-col justify-center items-center">
+            <p class="font-zain text-lg mt-2">Treino A</p>
+          </div>
+        </a>
+
+        <a href="/aluno/treinoB">
+          <div class="bg-neonGreen shadow-md rounded p-3 flex flex-col justify-center items-center">
+            <p class="font-zain text-lg mt-2">Treino B</p>
+          </div>
+        </a>
+
+        <a href="/aluno/treinoC">
+          <div class="bg-neonGreen shadow-md rounded p-3 flex flex-col justify-center items-center">
+            <p class="font-zain text-lg mt-2">Treino C</p>
+          </div>
+        </a>
+
+      </div>
+    </div>
+  </main>
+
+</body>
+
 </html>
