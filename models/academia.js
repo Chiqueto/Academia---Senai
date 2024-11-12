@@ -48,8 +48,31 @@ const findById = async (id) => {
   return result.rows;
 };
 
+const updateAcademia = async (id, academiaData) => {
+  const { nome, cep, cidade, bairro, logradouro, numero, uf, telefone } =
+    academiaData;
+  console.log({
+    nome,
+    cep,
+    cidade,
+    bairro,
+    logradouro,
+    numero,
+    uf,
+    telefone,
+    id,
+  });
+  const result = await pool.query(
+    "UPDATE tb_academia SET nome = $1, cep = $2, cidade = $3, bairro = $4, logradouro = $5, numero = $6, uf = $7, telefone = $8 WHERE id = $9 RETURNING *",
+    [nome, cep, cidade, bairro, logradouro, numero, uf, telefone, id]
+  );
+
+  return result.rows;
+};
+
 module.exports = {
   createAcademia,
   findAll,
   findById,
+  updateAcademia,
 };

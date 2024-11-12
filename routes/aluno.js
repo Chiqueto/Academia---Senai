@@ -16,6 +16,14 @@ router.get("/opcaoTreinoAluno", (req,res) => {
     res.render("aluno/encontrarAcademia")
   });
 
+  router.get("/encontrarPersonal", (req,res) => {
+    res.render("aluno/encontrarPersonal")
+  });
+
+  router.get("/montarTreino", (req,res) => {
+    res.render("aluno/montarTreino")
+  });
+
   router.get("/TreinoA", (req,res) => {
     res.render("aluno/TreinoA")
   });

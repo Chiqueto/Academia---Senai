@@ -63,8 +63,35 @@ const listarAcademiaPorId = async (req, res) => {
   }
 };
 
+const atualizaAcademia = async (req, res) => {
+  const { id } = req.params;
+  const { nome, cep, cidade, bairro, logradouro, numero, uf, telefone } =
+    req.body;
+
+  const telefoneFormatado = telefone.replace(/\D/g, "");
+  const cepFormatado = cep.replace(/[-]/g, "");
+
+  try {
+    const academia = Academia.updateAcademia(id, {
+      nome,
+      cep: cepFormatado,
+      cidade,
+      bairro,
+      logradouro,
+      numero,
+      uf,
+      telefone: telefoneFormatado,
+    });
+
+    res.status(201).json(academia);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 module.exports = {
   cadastrar,
   listarAcademias,
   listarAcademiaPorId,
+  atualizaAcademia,
 };

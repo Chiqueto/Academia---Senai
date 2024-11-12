@@ -40,5 +40,6 @@ router.get("/detalhe", (req,res) => {
 router.post("/cadastro", academiaController.cadastrar);
 router.get("/listaAcademias", academiaController.listarAcademias);
 router.get("/listarAcademia/:id", academiaController.listarAcademiaPorId);
+router.put("/atualizar/:id", academiaController.atualizaAcademia);
 
 module.exports = router;
