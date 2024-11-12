@@ -22,7 +22,7 @@
     <main class="text-center mt-10 text-white mx-4 flex-grow">
       <section class="font-zain bg-zinc-50 text-zinc-950 py-4 rounded-2xl">
         <h2 class="text-4xl">Login</h2>
-        <form class="flex flex-col text-2xl">
+        <form onsubmit="/aluno/login" method="post" class="flex flex-col text-2xl">
           <div class="flex flex-col gap-2 px-6 mb-6">
             <label class="text-start" for="email">Email</label>
             <input
@@ -43,11 +43,7 @@
               placeholder="*********"
             />
           </div>
-          <button
-            class="bg-neonGreen rounded-xl py-2 hover:bg-neonGreenHover transition-colors text-zinc-50 font-zain text-4xl mx-12"
-          >
-            Login
-          </button>
+          <button type="submit" class="bg-neonGreen rounded-xl py-2 hover:bg-neonGreenHover transition-colors text-zinc-50 font-zain text-4xl mx-12">Login</button>
         </form>
         <p class="font-body text-2xl text-end mr-2 text-zinc-600">
           <a href="/aluno/cadastro">cadastrar</a>
