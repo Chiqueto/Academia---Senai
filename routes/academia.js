@@ -25,10 +25,17 @@ router.get("/personais", (req,res) => {
   res.render("academia/personais")
 });
 
-router.get("/aparelho", (req,res) => {
-  res.render("academia/aparelho")
+router.get("/aparelhos", (req,res) => {
+  res.render("academia/aparelhos")
 });
 
+router.get("/adcEquipamento", (req,res) => {
+  res.render("academia/adcEquipamento")
+});
+
+router.get("/detalhe", (req,res) => {
+  res.render("academia/adcdetalhe")
+});
 
 
 
