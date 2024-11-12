@@ -93,5 +93,38 @@
 <button type="submit" class="bg-neonGreen rounded-xl py-2 hover:bg-neonGreenHover transition-colors text-zinc-50 font-zain text-4xl mx-12">
     Sair
 </button>
+
+
+<script>
+  // Recupera o token usando a função getToken
+  const token = localStorage.getItem("authorization");
+  console.log({ token });
+  if (!token) {
+    // Se não houver token, redireciona para a página de login
+    window.location.href = "/aluno";
+  } else {
+    // Faz a requisição autenticada
+    console.log(token);
+    fetch("/aluno/perfilAluno", {
+      method: "GET",
+      headers: {
+        authorization: `Bearer ${token}`, // Inclui o token no cabeçalho
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          // Se a resposta não for OK (ex: token inválido), redireciona para o login
+          throw new Error("Token inválido ou expirado");
+        }
+        console.log(response);
+        return;
+      })
+      .catch((error) => {
+        console.error(error);
+        window.location.href = "/aluno";
+      });
+  }
+</script>
   </body>
 </html>

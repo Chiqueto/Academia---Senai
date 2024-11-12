@@ -94,6 +94,10 @@ const renderizaMenu = (req, res) => {
   res.render("aluno/menuAluno");
 };
 
+const renderizaPerfil = (req, res) => {
+  res.render("aluno/perfilAluno")
+}
+
 const autenticaAluno = async (req, res) => {
   const { email, senha } = req.body;
   try {
@@ -132,5 +136,6 @@ module.exports = {
   renderizaLogin,
   renderizaCadastro,
   renderizaMenu,
+  renderizaPerfil,
   autenticaAluno,
 };
