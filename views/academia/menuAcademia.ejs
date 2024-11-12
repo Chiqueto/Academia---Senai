@@ -6,7 +6,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link href="/styles/output.css" rel="stylesheet" />
-    <title>Menu Aluno</title>
+    <title>Menu Academia</title>
   </head>
   <body class="flex flex-col min-h-screen">
     <header>
@@ -19,48 +19,67 @@
       </nav>
     </header>
 
-    <main class="text-center mt-10 text-white mx-4 flex-grow">
-      <div class="container mx-auto bg-zinc-600">
+    <main class="text-center mt-10 text-white mx-4 flex-grow font-zain">
+      <div class="container mx-auto">
         <div class="grid grid-cols-2 gap-4">
-          <div class="bg-white shadow-md rounded p-3 flex flex-col justify-center items-center">
+          <a href="/academia/perfil">
+          <div class="bg-white shadow-md rounded-lg p-3 flex flex-col justify-center items-center">
             <div class="rounded-full p-2 bg-pink-200">
               <img src="/icons/user.svg" class="w-8 h-8">
             </div>
-            <p class="font-zain text-lg text-black mt-2 ">Perfil</p>
+            <p class="text-black text-xl font-bold">Perfil</p>
           </div>
-    
-          <div class="bg-white shadow-md rounded p-3 flex flex-col justify-center items-center">
+          </a>
+
+          <a href="/academia/alunos">
+          <div class="bg-white shadow-lg rounded-lg p-3 flex flex-col  justify-center items-center">
             <div class="rounded-full p-2 bg-pink-200">
               <img src="/icons/user.svg" class="w-8 h-8">
             </div>
-            <p class="font-zain text-lg text-black mt-2">Meu Treino</p>
+            <p class="text-black text-xl font-bold">Alunos</p>
           </div>
-    
-          <div class="bg-white shadow-md rounded p-3 flex flex-col justify-center items-center">
+          </a>
+
+          <a href="/academia/personais">
+          <div class="bg-white shadow-md rounded-lg p-3 flex flex-col justify-center items-center">
             <div class="rounded-full p-2 bg-pink-200">
               <img src="/icons/user.svg" class="w-8 h-8">
             </div>
-            <p class="font-zain text-lg text-black mt-2">Montar Treinos</p>
+            <h2 class="text-black text-xl font-bold">Personais</h2>
           </div>
-    
-          <div class="bg-white shadow-md rounded p-3 flex flex-col justify-center items-center">
+          </a>
+
+          <a href="/academia/treino">
+          <div class="bg-white shadow-md rounded-lg p-3 flex flex-col justify-center items-center">
             <div class="rounded-full p-2 bg-pink-200">
-              <img src="/icons/user.svg" class="w-8 h-8">
+              <img src="/icons/washer.svg" class="w-8 h-8">
             </div>
-            <p class="font-zain text-lg text-black mt-2">Encontrar Personal</p>
+            <p class="text-black text-xl font-bold">Treinos</p>
           </div>
-    
-          <div class="bg-white shadow-md rounded p-3 flex flex-col justify-center items-center">
+          </a>
+
+          <a href="/academia/aparelhos">
+          <div class="bg-white shadow-md rounded-lg p-3 flex flex-col  justify-center items-center">
             <div class="rounded-full p-2 bg-pink-200">
-              <img src="/icons/user.svg" class="w-8 h-8">
+              <img src="/icons/washer.svg" class="w-8 h-8">
             </div>
-            <p class=" font-zain text-lg text-black mt-2">Encontrar Academia</p>
+            <p class="text-black text-xl font-bold">Aparelhos</p>
           </div>
+          </a>
+
+          <a href="/academia/relatorio">
+          <div class="bg-white shadow-md rounded-lg p-3 flex flex-col  justify-center items-center">
+            <div class="rounded-full p-2 bg-pink-200">
+              <img src="/icons/graphic.svg" class="w-8 h-8">
+            </div>
+            <p class="text-black text-xl font-bold">Relatorios</p>
+          </div>
+          </a>
+
         </div>
       </div>
     </main>
-
-    <footer class="text-zinc-200 p-4 text-center">
+    <footer class="text-zinc-200">
       <p>&copy Luís Felipe, Edney Araujo, Marília</p>
     </footer>
   </body>

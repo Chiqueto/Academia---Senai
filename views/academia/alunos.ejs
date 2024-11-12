@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta lang="pt-br" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/styles/output.css" />
+    <title>Lista de alunos</title>
+  </head>
+
+  <body class="flex flex-col min-h-screen">
+    <header>
+      <nav class="flex justify-between bg-zinc-800 py-5 px-4">
+        <div class="flex items-center gap-4">
+          <a href="/academia/menu"><img src="/icons/back_arrow.svg" /></a>
+          <h1 class="font-jaro text-zinc-50 text-3xl">GymFit</h1>
+        </div>
+      </nav>
+    </header> 
+    <main class=" mx-4 flex-grow"><!--Começo do perfil-->
+      <section class="font-zain  px-4">
+          <h2 class="text-3xl text-center text-white py-2">Lista de alunos</h2>
+          <div class="relative w-full ">
+            <input type="text" placeholder="Pesquisar pelo nome do aluno..."
+              class="w-full py-1 pl-10 pr-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-gray-700 placeholder-gray-400">
+            <div class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none">
+              <img src="/icons/lupa.svg" class="w-5 h-5">
+            </div>
+          </div><br>
+          <div class="rounded-lg bg-zinc-700  ">
+            <div class="bg-white rounded-lg flex items-center p-4 shadow-md w-full max-w-xs">
+                <div class="rounded-full  bg-pink-200 flex-shrink-0">
+                  <img src="/icons/user.svg" class="w-8 h-8">
+                </div>
+                <span class="ml-4 text-gray-900 font-semibold">Edney Araujo</span>
+              </div>
+          
+         
+          </div>
+
+    <button class=" bg-neonGreen rounded-xl px-4 py-2 hover:bg-neonGreenHover transition-colors text-zinc-50 font-zain text-4xl mx-12">
+      Sair
+    </button>
+      </section>
+    </main>
+   
+    <footer class="text-zinc-200">
+      <p>&copy Luís Felipe, Edney Araujo, Marília</p>
+    </footer>
+  </body>
+</html>
