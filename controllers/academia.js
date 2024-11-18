@@ -23,6 +23,33 @@ const cadastrar = async (req, res) => {
   const cnpjFormatado = cnpj.replace(/[.\-\/]/g, "");
   const cepFormatado = cep.replace(/[-]/g, "");
 
+  const db_cnpj = Academia.findByCnpj(cnpjFormatado);
+  const db_email = Academia.findByEmail(email);
+
+  //validações de campos em branco
+  if (
+    !nome ||
+    !email ||
+    !senha ||
+    !cnpj ||
+    !cep ||
+    !cidade ||
+    !bairro ||
+    !logradouro ||
+    !numero ||
+    !uf ||
+    !telefone
+  ) {
+    return res.status(400).json({ message: "Preencha todos os campos!" });
+  }
+
+  if (db_cnpj) {
+    return res.status(400).json({ message: "CNPJ já cadastrado!" });
+  }
+  if (db_email) {
+    return res.status(400).json({ message: "Email já cadastrado!" });
+  }
+
   try {
     const novaAcademia = Academia.createAcademia({
       nome,
@@ -37,7 +64,9 @@ const cadastrar = async (req, res) => {
       uf,
       telefone: telefoneFormatado,
     });
-    res.status(201).json(novaAcademia);
+    res
+      .status(201)
+      .json({ novaAcademia, message: "Academia inserida com sucesso!" });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -57,7 +86,9 @@ const listarAcademiaPorId = async (req, res) => {
   console.log(id);
   try {
     const academia = await Academia.findById(id);
-    res.status(201).json(academia);
+    res
+      .status(201)
+      .json({ academia, message: "Academia atualizado com sucesso!" });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -67,6 +98,20 @@ const atualizaAcademia = async (req, res) => {
   const { id } = req.params;
   const { nome, cep, cidade, bairro, logradouro, numero, uf, telefone } =
     req.body;
+
+  //verificar campos vazios
+  if (
+    !nome ||
+    !cep ||
+    !cidade ||
+    !bairro ||
+    !logradouro ||
+    !numero ||
+    !uf ||
+    !telefone
+  ) {
+    return res.status(400).json({ message: "Preencha todos os campos!" });
+  }
 
   const telefoneFormatado = telefone.replace(/\D/g, "");
   const cepFormatado = cep.replace(/[-]/g, "");
@@ -83,40 +128,50 @@ const atualizaAcademia = async (req, res) => {
       telefone: telefoneFormatado,
     });
 
-    res.status(201).json(academia);
+    res
+      .status(201)
+      .json({ academia }, { message: "Academia atualizado com sucesso!" });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 };
 
-const renderizaLogin = (req, res) => {
-  res.render("academia/login");
-};
+const deletar = async (req, res) => {
+  const { id } = req.params;
 
-const renderizaCadastro = (req, res) => {
-  res.render("academia/cadastro");
+  try {
+    const result = Academia.deleteAcademia(id);
+
+    res.status(200).json({ message: "Academia deletado com sucesso!" });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 };
 
 const autenticaAcademia = async (req, res) => {
-  const { cnpj, senha } = req.body;
+  const { email, senha } = req.body;
   try {
-    const academia = await Academia.loginAcademia(cnpj);
+    const academia = await Academia.loginAcademia(email);
 
     if (!academia) {
-      return res.status(404).json({ error: "Academia não encontrado" });
+      return res.status(404).json({ error: "Academia não encontrada" });
     }
 
     const senhaValida = await bcrypt.compare(senha, academia.senha);
     if (!senhaValida) {
-      return res.status(401).json({ error: "Erro! Usuário ou senha inválida" });
+      return res.status(401).json({ error: "Erro! Email ou senha inválida" });
     }
 
-    const token = jwt.sign({ id: academia.id, cnpj: academia.cnpj }, SECRET_KEY, {
-      expiresIn: "1h",
-    });
+    const token = jwt.sign(
+      { id: academia.id, email: academia.email },
+      SECRET_KEY,
+      {
+        expiresIn: "1h",
+      }
+    );
 
     return res.status(200).json({
-      message: "Academia autenticado com sucesso!",
+      message: "Academia autenticada com sucesso!",
       token,
       redirectTo: "/academia/menu",
     });
@@ -131,7 +186,6 @@ module.exports = {
   listarAcademias,
   listarAcademiaPorId,
   atualizaAcademia,
-  renderizaLogin,
-  renderizaCadastro,
+  deletar,
   autenticaAcademia,
 };
