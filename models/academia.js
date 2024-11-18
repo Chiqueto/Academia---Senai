@@ -93,6 +93,17 @@ const findByEmail = async (email) => {
   return result.rows[0];
 };
 
+const loginAcademia = async (email) => {
+  const result = await pool.query(
+    "SELECT * FROM tb_academia WHERE email = $1",
+    [email]
+  );
+  if (result.rowCount === 0) {
+    return null;
+  }
+  return result.rows[0];
+};
+
 module.exports = {
   createAcademia,
   findAll,
@@ -101,4 +112,5 @@ module.exports = {
   deleteAcademia,
   findByCnpj,
   findByEmail,
+  loginAcademia,
 };

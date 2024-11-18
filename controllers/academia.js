@@ -116,10 +116,44 @@ const deletar = async (req, res) => {
   }
 };
 
+const autenticaAcademia = async (req, res) => {
+  const { email, senha } = req.body;
+  try {
+    const academia = await Academia.loginAcademia(email);
+
+    if (!academia) {
+      return res.status(404).json({ error: "Academia não encontrada" });
+    }
+
+    const senhaValida = await bcrypt.compare(senha, academia.senha);
+    if (!senhaValida) {
+      return res.status(401).json({ error: "Erro! Email ou senha inválida" });
+    }
+
+    const token = jwt.sign(
+      { id: academia.id, email: academia.email },
+      SECRET_KEY,
+      {
+        expiresIn: "1h",
+      }
+    );
+
+    return res.status(200).json({
+      message: "Academia autenticada com sucesso!",
+      token,
+      redirectTo: "/academia/menu",
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Erro interno do servidor" });
+  }
+};
+
 module.exports = {
   cadastrar,
   listarAcademias,
   listarAcademiaPorId,
   atualizaAcademia,
   deletar,
+  autenticaAcademia,
 };

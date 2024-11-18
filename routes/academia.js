@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const academiaController = require("../controllers/academia");
+const { authMiddleware } = require("../middleware/authMiddleware");
 
 router.get("/", (req, res) => {
   res.render("academia/login");
@@ -38,14 +39,27 @@ router.get("/detalhe", (req, res) => {
   res.render("academia/adcdetalhe");
 });
 
-router.get("/treinos", (req,res) => {
-  res.render("academia/treinos")
+router.get("/treinos", (req, res) => {
+  res.render("academia/treinos");
 });
 
 router.post("/cadastro", academiaController.cadastrar);
-router.get("/listaAcademias", academiaController.listarAcademias);
-router.get("/listarAcademia/:id", academiaController.listarAcademiaPorId);
-router.put("/atualizar/:id", academiaController.atualizaAcademia);
-router.delete("/deletar/:id", academiaController.deletar);
+router.get(
+  "/listaAcademias",
+  authMiddleware,
+  academiaController.listarAcademias
+);
+router.get(
+  "/listarAcademia/:id",
+  authMiddleware,
+  academiaController.listarAcademiaPorId
+);
+router.put(
+  "/atualizar/:id",
+  authMiddleware,
+  academiaController.atualizaAcademia
+);
+router.delete("/deletar/:id", authMiddleware, academiaController.deletar);
+router.post("/login", academiaController.autenticaAcademia);
 
 module.exports = router;
