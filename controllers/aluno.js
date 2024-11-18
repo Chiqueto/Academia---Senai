@@ -12,6 +12,11 @@ const criarAluno = async (req, res) => {
   const senhaCriptografada = await bcrypt.hash(senha, 10);
 
   try {
+        //verifica email
+    // const db_email = await Aluno.findByEmail(email);
+    // if (db_email) {
+    //   return res.status(400).json({ message: "Email já cadastrado!" });
+    // }
     const novoAluno = await Aluno.createAluno({
       nome,
       email,
@@ -24,11 +29,7 @@ const criarAluno = async (req, res) => {
     if (!novoAluno) {
       return res.status(400).json({ message: "Erro ao cadastrar aluno" });
     }
-    //verifica email
-    const db_email = await Aluno.findByEmail(email);
-    if (db_email) {
-      return res.status(400).json({ message: "Email já cadastrado!" });
-    }
+
 
     // res.status(201).json(novoAluno);
     res.redirect("/aluno");
