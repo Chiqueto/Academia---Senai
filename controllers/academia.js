@@ -25,6 +25,24 @@ const cadastrar = async (req, res) => {
 
   const db_cnpj = Academia.findByCnpj(cnpjFormatado);
   const db_email = Academia.findByEmail(email);
+
+  //validações de campos em branco
+  if (
+    !nome ||
+    !email ||
+    !senha ||
+    !cnpj ||
+    !cep ||
+    !cidade ||
+    !bairro ||
+    !logradouro ||
+    !numero ||
+    !uf ||
+    !telefone
+  ) {
+    return res.status(400).json({ message: "Preencha todos os campos!" });
+  }
+
   if (db_cnpj) {
     return res.status(400).json({ message: "CNPJ já cadastrado!" });
   }
@@ -80,6 +98,20 @@ const atualizaAcademia = async (req, res) => {
   const { id } = req.params;
   const { nome, cep, cidade, bairro, logradouro, numero, uf, telefone } =
     req.body;
+
+  //verificar campos vazios
+  if (
+    !nome ||
+    !cep ||
+    !cidade ||
+    !bairro ||
+    !logradouro ||
+    !numero ||
+    !uf ||
+    !telefone
+  ) {
+    return res.status(400).json({ message: "Preencha todos os campos!" });
+  }
 
   const telefoneFormatado = telefone.replace(/\D/g, "");
   const cepFormatado = cep.replace(/[-]/g, "");

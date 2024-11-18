@@ -11,6 +11,17 @@ const criarAluno = async (req, res) => {
   const telefoneFormatado = telefone.replace(/\D/g, "");
   const senhaCriptografada = await bcrypt.hash(senha, 10);
 
+  //validações de campos em branco
+  if (!nome || !email || !senha || !genero || !telefone || !dt_nascimento) {
+    return res.status(400).json({ message: "Preencha todos os campos!" });
+  }
+
+  //verifica email
+  const db_email = await Aluno.findByEmail(email);
+  if (db_email) {
+    return res.status(400).json({ message: "Email já cadastrado!" });
+  }
+
   try {
     const novoAluno = await Aluno.createAluno({
       nome,
@@ -23,11 +34,6 @@ const criarAluno = async (req, res) => {
 
     if (!novoAluno) {
       return res.status(400).json({ message: "Erro ao cadastrar aluno" });
-    }
-    //verifica email
-    const db_email = await Aluno.findByEmail(email);
-    if (db_email) {
-      return res.status(400).json({ message: "Email já cadastrado!" });
     }
 
     // res.status(201).json(novoAluno);
@@ -79,6 +85,11 @@ const deletarAluno = async (req, res) => {
 const atualizarAluno = async (req, res) => {
   const { id } = req.params;
   const { nome, telefone } = req.body;
+
+  //validações de campos em branco
+  if (!nome || !telefone) {
+    return res.status(400).json({ message: "Preencha todos os campos!" });
+  }
   const telefoneFormatado = telefone.replace(/\D/g, "");
   try {
     const result = await Aluno.updateAluno(id, { nome, telefoneFormatado });

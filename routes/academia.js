@@ -46,20 +46,24 @@ router.get("/treinos", (req, res) => {
 router.post("/cadastro", academiaController.cadastrar);
 router.get(
   "/listaAcademias",
-  authMiddleware,
+  // authMiddleware,
   academiaController.listarAcademias
 );
 router.get(
   "/listarAcademia/:id",
-  authMiddleware,
+  // authMiddleware,
   academiaController.listarAcademiaPorId
 );
 router.put(
   "/atualizar/:id",
-  authMiddleware,
+  // authMiddleware,
   academiaController.atualizaAcademia
 );
-router.delete("/deletar/:id", authMiddleware, academiaController.deletar);
+router.delete(
+  "/deletar/:id",
+  // authMiddleware,
+  academiaController.deletar
+);
 router.post("/login", academiaController.autenticaAcademia);
 
 module.exports = router;
