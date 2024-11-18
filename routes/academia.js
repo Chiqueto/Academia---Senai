@@ -37,6 +37,11 @@ router.get("/adcEquipamento", (req,res) => {
 router.get("/detalhe", (req,res) => {
   res.render("academia/adcdetalhe")
 });
+
+router.get("/treinos", (req,res) => {
+  res.render("academia/treinos")
+});
+
 router.post("/cadastro", academiaController.cadastrar);
 router.get("/listaAcademias", academiaController.listarAcademias);
 router.get("/listarAcademia/:id", academiaController.listarAcademiaPorId);

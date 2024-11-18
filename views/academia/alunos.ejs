@@ -6,6 +6,57 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="/styles/output.css" />
     <title>Lista de alunos</title>
+    <script>
+      // Script para exibir a aba de pesquisa
+      function toggleSearchModal() {
+        const modal = document.getElementById("searchModal");
+        modal.classList.toggle("hidden"); // Mostra ou oculta a aba
+      }
+
+      // Função para adicionar aluno na lista
+      function addAluno(nome) {
+        const lista = document.getElementById("alunosLista");
+
+        // Cria o modelo do aluno
+        const alunoDiv = document.createElement("div");
+        alunoDiv.classList = "container bg-white rounded-lg flex items-center p-3 shadow-md w-auto mb-2";
+        alunoDiv.innerHTML = `
+          <div class="rounded-full bg-pink-200 flex-shrink-0 w-10 h-10">
+            <img src="/icons/user.svg" class="w-10 h-8">
+          </div>
+          <span class="ml-4 text-2xl text-gray-900 font-semibold">${nome}</span>
+        `;
+        
+        lista.appendChild(alunoDiv); // Adiciona à lista de alunos
+        toggleSearchModal(); // Fecha a aba
+      }
+
+      // Filtrando a busca dos alunos
+      const alunos = [
+        { nome: "João Silva" },
+        { nome: "Maria Oliveira" },
+        { nome: "Edney Araujo" },
+        { nome: "Carlos Souza" }
+      ];
+
+      function searchAlunos() {
+        const input = document.getElementById("searchInput").value.toLowerCase();
+        const resultsContainer = document.getElementById("searchResults");
+        resultsContainer.innerHTML = ""; // Limpar resultados anteriores
+
+        const filteredAlunos = alunos.filter(aluno =>
+          aluno.nome.toLowerCase().includes(input)
+        );
+
+        filteredAlunos.forEach(aluno => {
+          const alunoDiv = document.createElement("div");
+          alunoDiv.classList = "cursor-pointer p-2 rounded-lg hover:bg-gray-200";
+          alunoDiv.textContent = aluno.nome;
+          alunoDiv.onclick = () => addAluno(aluno.nome);
+          resultsContainer.appendChild(alunoDiv);
+        });
+      }
+    </script>
   </head>
 
   <body class="flex flex-col min-h-screen">
@@ -18,33 +69,49 @@
       </nav>
     </header> 
     <main class=" mx-4 flex-grow"><!--Começo do perfil-->
-      <section class="font-zain  px-4">
-          <h2 class="text-3xl text-center text-white py-2">Lista de alunos</h2>
-          <div class="relative w-full ">
-            <input type="text" placeholder="Pesquisar pelo nome do aluno..."
-              class="w-full py-1 pl-10 pr-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-gray-700 placeholder-gray-400">
-            <div class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none">
-              <img src="/icons/lupa.svg" class="w-5 h-5">
+      <!-- Seção de lista de alunos -->
+      <section class="font-zain px-4">
+        <h2 class="text-3xl text-center text-white py-2">Lista de alunos</h2>
+        <div id="alunosLista">
+          <!-- Modelo de aluno existente -->
+          <div class="container bg-white rounded-lg flex items-center p-3 shadow-md w-auto mb-2">
+            <div class="rounded-full bg-pink-200 flex-shrink-0 w-10 h-10">
+              <img src="/icons/user.svg" class="w-10 h-8">
             </div>
-          </div><br>
-            <div class="container bg-white rounded-lg flex items-center p-3  shadow-md w-auto max-w-xs " >
-                <div class="rounded-full  bg-pink-200 flex-shrink-0 w-10 h-10">
-                  <img src="/icons/user.svg" class="w-10 h-8">
-                </div>
-                <span class="ml-4 text-2xl text-gray-900 font-semibold">Edney Araujo</span>
-              </div>
-          
-         
-   
-
-    
+            <span class="ml-4 text-2xl text-gray-900 font-semibold">Edney Araujo</span>
+          </div>
+        </div>
       </section>
     </main>
-   <button class="mx-auto bg-neonGreen rounded-xl px-4 py-2 hover:bg-neonGreenHover transition-colors text-zinc-50 font-zain text-4xl ">
+    
+    <!-- Botão para abrir a aba -->
+    <button onclick="toggleSearchModal()" class="mx-auto bg-neonGreen rounded-xl px-4 py-2 hover:bg-neonGreenHover transition-colors text-zinc-50 font-zain text-4xl">
       Adicionar
-    </button><br>
+    </button>
+
+    <!-- Modal de pesquisa -->
+    <div id="searchModal" class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center hidden">
+      <div class="bg-white rounded-lg p-6 w-96">
+        <h2 class="text-2xl mb-4 text-gray-800 font-bold">Pesquisar Aluno</h2>
+        <input
+          type="text"
+          id="searchInput"
+          placeholder="Digite o nome do aluno..."
+          class="w-full py-2 px-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-100 text-gray-700"
+          onkeyup="searchAlunos()"
+        />
+        <div id="searchResults" class="mt-4">
+          <!-- Resultados da pesquisa aparecerão aqui -->
+        </div>
+        <button onclick="toggleSearchModal()" class="mt-4 w-full bg-red-500 text-white py-2 rounded-lg hover:bg-red-600">
+          Fechar
+        </button>
+      </div>
+    </div>
+    <br>
     <footer class="text-zinc-200">
       <p>&copy Luís Felipe, Edney Araujo, Marília</p>
     </footer>
+    
   </body>
 </html>
