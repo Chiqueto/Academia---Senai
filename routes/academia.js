@@ -2,6 +2,9 @@ const express = require("express");
 const router = express.Router();
 const academiaController = require("../controllers/academia");
 
+router.get("/", academiaController.renderizaLogin);
+router.get("/cadastro", academiaController.renderizaCadastro);
+
 router.get("/", (req, res) => {
   res.render("academia/login");
 });
@@ -43,6 +46,7 @@ router.get("/treinos", (req,res) => {
 });
 
 router.post("/cadastro", academiaController.cadastrar);
+router.post("/login", academiaController.autenticaAcademia);
 router.get("/listaAcademias", academiaController.listarAcademias);
 router.get("/listarAcademia/:id", academiaController.listarAcademiaPorId);
 router.put("/atualizar/:id", academiaController.atualizaAcademia);

@@ -70,9 +70,20 @@ const updateAcademia = async (id, academiaData) => {
   return result.rows;
 };
 
+const loginAcademia = async (cnpj) => {
+  const result = await pool.query("SELECT * FROM tb_academia WHERE cnpj = $1", [
+    cnpj,
+  ]);
+  if (result.rowCount === 0) {
+    return null;
+  }
+  return result.rows[0];
+};
+
 module.exports = {
   createAcademia,
   findAll,
   findById,
   updateAcademia,
+  loginAcademia,
 };

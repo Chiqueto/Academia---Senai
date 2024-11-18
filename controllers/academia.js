@@ -89,9 +89,49 @@ const atualizaAcademia = async (req, res) => {
   }
 };
 
+const renderizaLogin = (req, res) => {
+  res.render("academia/login");
+};
+
+const renderizaCadastro = (req, res) => {
+  res.render("academia/cadastro");
+};
+
+const autenticaAcademia = async (req, res) => {
+  const { cnpj, senha } = req.body;
+  try {
+    const academia = await Academia.loginAcademia(cnpj);
+
+    if (!academia) {
+      return res.status(404).json({ error: "Academia não encontrado" });
+    }
+
+    const senhaValida = await bcrypt.compare(senha, academia.senha);
+    if (!senhaValida) {
+      return res.status(401).json({ error: "Erro! Usuário ou senha inválida" });
+    }
+
+    const token = jwt.sign({ id: academia.id, cnpj: academia.cnpj }, SECRET_KEY, {
+      expiresIn: "1h",
+    });
+
+    return res.status(200).json({
+      message: "Academia autenticado com sucesso!",
+      token,
+      redirectTo: "/academia/menu",
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Erro interno do servidor" });
+  }
+};
+
 module.exports = {
   cadastrar,
   listarAcademias,
   listarAcademiaPorId,
   atualizaAcademia,
+  renderizaLogin,
+  renderizaCadastro,
+  autenticaAcademia,
 };

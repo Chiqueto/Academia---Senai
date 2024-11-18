@@ -13,7 +13,6 @@
       <nav class="flex justify-between bg-zinc-800 py-5 px-4">
         <div class="flex items-center gap-4">
           <a href="/"><img src="/icons/back_arrow.svg" /></a>
-          <!-- <img src="/icons/GymFit.svg" /> -->
           <h1 class="font-jaro text-zinc-50 text-3xl">GymFit</h1>
         </div>
       </nav>
@@ -22,15 +21,16 @@
     <main class="text-center mt-10 text-white mx-4 flex-grow">
       <section class="font-zain bg-zinc-50 text-zinc-950 py-4 rounded-2xl">
         <h2 class="text-4xl">Login</h2>
-        <form class="flex flex-col text-2xl">
+        <form id="loginFormAcad" class="flex flex-col text-2xl">
           <div class="flex flex-col gap-2 px-6 mb-6">
-            <label class="text-start" for="cnpj">CNPJ</label>
+            <label class="text-start" for="email">Email</label>
             <input
               class="border-2 border-black rounded-full bg-pink-50 text-lg px-2 py-1 text-center"
               type="text"
-              name="cnpj"
-              id="cnpj"
-              placeholder="00.000.000/0000-00"
+              name="email"
+              id="email"
+              placeholder="seuemail@exemplo.com.br"
+              required
             />
           </div>
           <div class="flex flex-col gap-2 px-6 mb-12">
@@ -44,7 +44,7 @@
             />
           </div>
           <button
-            class="bg-neonGreen rounded-xl py-2 hover:bg-neonGreenHover transition-colors text-zinc-50 font-zain text-4xl mx-12"
+            type="submit" class="bg-neonGreen rounded-xl py-2 hover:bg-neonGreenHover transition-colors text-zinc-50 font-zain text-4xl mx-12"
           >
             Login
           </button>
@@ -54,7 +54,8 @@
         </p>
       </section>
     </main>
-
+   <script src="/scripts/academiaLogin.js"></script>
+   
     <footer class="text-zinc-200 p-4 text-center">
       <p>&copy Luís Felipe, Edney Araujo, Marília</p>
     </footer>
