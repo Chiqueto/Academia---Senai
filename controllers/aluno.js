@@ -23,6 +23,11 @@ const criarAluno = async (req, res) => {
   }
 
   try {
+    //verifica email
+    // const db_email = await Aluno.findByEmail(email);
+    // if (db_email) {
+    //   return res.status(400).json({ message: "Email já cadastrado!" });
+    // }
     const novoAluno = await Aluno.createAluno({
       nome,
       email,
