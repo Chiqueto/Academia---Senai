@@ -44,6 +44,14 @@ const loginAluno = async (email) => {
   return result.rows[0];
 };
 
+const findByEmail = async (email) => {
+  const result = await pool.query("SELECT * FROM tb_aluno WHERE email = $1", [
+    email,
+  ]);
+
+  return result.rows[0];
+};
+
 module.exports = {
   findAll,
   findById,
@@ -51,4 +59,5 @@ module.exports = {
   deleteAluno,
   updateAluno,
   loginAluno,
+  findByEmail,
 };

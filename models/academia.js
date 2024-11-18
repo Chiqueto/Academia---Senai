@@ -70,9 +70,35 @@ const updateAcademia = async (id, academiaData) => {
   return result.rows;
 };
 
+const deleteAcademia = async (id) => {
+  const result = pool.query("DELETE FROM tb_academia WHERE id = $1", [id]);
+
+  return result.rowCount;
+};
+
+const findByCnpj = async (cnpj) => {
+  const result = await pool.query("SELECT * FROM tb_academia WHERE cnpj = $1", [
+    cnpj,
+  ]);
+
+  return result.rows[0];
+};
+
+const findByEmail = async (email) => {
+  const result = await pool.query(
+    "SELECT * FROM tb_academia WHERE email = $1",
+    [email]
+  );
+
+  return result.rows[0];
+};
+
 module.exports = {
   createAcademia,
   findAll,
   findById,
   updateAcademia,
+  deleteAcademia,
+  findByCnpj,
+  findByEmail,
 };

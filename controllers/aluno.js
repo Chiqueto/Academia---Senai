@@ -20,6 +20,16 @@ const criarAluno = async (req, res) => {
       telefone: telefoneFormatado,
       dt_nascimento,
     });
+
+    if (!novoAluno) {
+      return res.status(400).json({ message: "Erro ao cadastrar aluno" });
+    }
+    //verifica email
+    const db_email = await Aluno.findByEmail(email);
+    if (db_email) {
+      return res.status(400).json({ message: "Email já cadastrado!" });
+    }
+
     // res.status(201).json(novoAluno);
     res.redirect("/aluno");
   } catch (error) {
@@ -95,8 +105,8 @@ const renderizaMenu = (req, res) => {
 };
 
 const renderizaPerfil = (req, res) => {
-  res.render("aluno/perfilAluno")
-}
+  res.render("aluno/perfilAluno");
+};
 
 const autenticaAluno = async (req, res) => {
   const { email, senha } = req.body;

@@ -23,6 +23,15 @@ const cadastrar = async (req, res) => {
   const cnpjFormatado = cnpj.replace(/[.\-\/]/g, "");
   const cepFormatado = cep.replace(/[-]/g, "");
 
+  const db_cnpj = Academia.findByCnpj(cnpjFormatado);
+  const db_email = Academia.findByEmail(email);
+  if (db_cnpj) {
+    return res.status(400).json({ message: "CNPJ já cadastrado!" });
+  }
+  if (db_email) {
+    return res.status(400).json({ message: "Email já cadastrado!" });
+  }
+
   try {
     const novaAcademia = Academia.createAcademia({
       nome,
@@ -37,7 +46,9 @@ const cadastrar = async (req, res) => {
       uf,
       telefone: telefoneFormatado,
     });
-    res.status(201).json(novaAcademia);
+    res
+      .status(201)
+      .json({ novaAcademia, message: "Academia inserida com sucesso!" });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -57,7 +68,9 @@ const listarAcademiaPorId = async (req, res) => {
   console.log(id);
   try {
     const academia = await Academia.findById(id);
-    res.status(201).json(academia);
+    res
+      .status(201)
+      .json({ academia, message: "Academia atualizado com sucesso!" });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -83,7 +96,21 @@ const atualizaAcademia = async (req, res) => {
       telefone: telefoneFormatado,
     });
 
-    res.status(201).json(academia);
+    res
+      .status(201)
+      .json({ academia }, { message: "Academia atualizado com sucesso!" });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const deletar = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const result = Academia.deleteAcademia(id);
+
+    res.status(200).json({ message: "Academia deletado com sucesso!" });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -94,4 +121,5 @@ module.exports = {
   listarAcademias,
   listarAcademiaPorId,
   atualizaAcademia,
+  deletar,
 };

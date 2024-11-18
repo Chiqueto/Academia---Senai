@@ -720,7 +720,6 @@ video {
 
 .w-5{
   width: 1.25rem;
-<<<<<<< HEAD
 }
 
 .w-8{
@@ -729,12 +728,6 @@ video {
 
 .w-auto{
   width: auto;
-=======
->>>>>>> c292da6a7a4e6befaa73485e316f13afe679dff8
-}
-
-.w-8{
-  width: 2rem;
 }
 
 .w-full{
@@ -850,17 +843,14 @@ video {
   border-radius: 0.5rem;
 }
 
-.rounded-xl{
-  border-radius: 0.75rem;
-}
-
-<<<<<<< HEAD
-=======
 .rounded-md{
   border-radius: 0.375rem;
 }
 
->>>>>>> c292da6a7a4e6befaa73485e316f13afe679dff8
+.rounded-xl{
+  border-radius: 0.75rem;
+}
+
 .border-2{
   border-width: 2px;
 }
