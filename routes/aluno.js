@@ -7,8 +7,8 @@ router.get("/", alunoController.renderizaLogin);
 router.get("/cadastro", alunoController.renderizaCadastro);
 // router.get("/menu", alunoController.renderizaMenu, authMiddleware);
 // router.get("/perfilAluno", alunoController.renderizaPerfil, authMiddleware)
-
 //Sem a autenticação
+
 router.get("/menu", alunoController.renderizaMenu);
 router.get("/perfilAluno", alunoController.renderizaPerfil);
 
