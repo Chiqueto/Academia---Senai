@@ -22,14 +22,12 @@
     <main class="text-center my-10 text-white mx-4 flex-grow">
       <section class="font-zain bg-zinc-50 text-zinc-950 py-4 rounded-2xl">
         <h2 class="text-4xl">Cadastrar</h2>
-        <form class="flex flex-col text-2xl gap-6 text-black max-w-screen-sm">
+        <form onsubmit="/academia/cadastro" method="post" class="flex flex-col text-2xl gap-6 text-black max-w-screen-sm">
           <div class="flex flex-col gap-2 px-6">
             <label class="text-start" for="nome">Nome</label>
             <input
               class="border-2 border-black rounded-full bg-pink-50 text-lg px-2 py-1 text-center"
-              type="text"
-              name="nome"
-              placeholder="Nome"
+              type="text" name="nome" required minlength="3" maxlength="50"
             />
           </div>
 
@@ -39,7 +37,7 @@
               class="border-2 border-black rounded-full bg-pink-50 text-lg px-2 py-1 text-center"
               type="text"
               name="cnpj"
-              placeholder="00.000.000/0000-00"
+              required pattern="\d{14}" title="Digite um cnpj com 14 digitos"
             />
           </div>
 
@@ -49,7 +47,7 @@
               class="border-2 border-black rounded-full bg-pink-50 text-lg px-2 py-1 text-center"
               type="email"
               name="email"
-              placeholder="seuemail@exemplo.com.br"
+              placeholder="seuemail@exemplo.com.br" required
             />
           </div>
 
@@ -59,7 +57,7 @@
               class="border-2 border-black rounded-full bg-pink-50 text-lg px-2 py-1 text-center"
               type="password"
               name="senha"
-              placeholder="*********"
+              placeholder="*********" required minlength="4"
             />
           </div>
 
@@ -108,6 +106,7 @@
             </div>
           </div>
 
+          
           <div class="flex flex-col gap-2 px-6">
             <label class="text-start" for="nome">Bairro</label>
             <input
@@ -117,6 +116,16 @@
               placeholder="Bairro"
             />
           </div>
+         
+          <div class="flex flex-col gap-2 px-6">
+            <label class="text-start" for="cep">Cep</label>
+            <input
+              class="border-2 border-black rounded-full bg-pink-50 text-lg px-2 py-1 text-center"
+              type="text"
+              name="cep"
+               required pattern="\d{8}" title="digite um cep com 8 digitos"
+            />
+          </div>
 
           <div class="flex flex-col gap-2 px-6">
             <label class="text-start" for="telefone">Telefone</label>
@@ -124,12 +133,13 @@
               class="border-2 border-black rounded-full bg-pink-50 text-lg px-2 py-1 text-center"
               type="text"
               name="telefone"
-              placeholder="(16) 999968-6044"
+              required pattern="\d{10,11}" title="Digite um telefone com 10 ou 11 digitos"
               
             />
           </div>
 
           <button
+           type="submit"
             class="bg-neonGreen rounded-xl py-2 hover:bg-neonGreenHover transition-colors text-zinc-50 font-zain text-4xl mx-12"
           >
             Cadastrar

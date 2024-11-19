@@ -3,6 +3,8 @@ const router = express.Router();
 const academiaController = require("../controllers/academia");
 const { authMiddleware } = require("../middleware/authMiddleware");
 
+
+
 router.get("/", (req, res) => {
   res.render("academia/login");
 });

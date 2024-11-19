@@ -22,7 +22,7 @@
     <main class="text-center my-10 text-white mx-4 flex-grow">
       <section class="font-zain bg-zinc-50 text-zinc-950 py-4 rounded-2xl">
         <h2 class="text-4xl">Cadastrar</h2>
-        <form class="flex flex-col text-2xl gap-6 text-black max-w-screen-sm">
+        <form onsubmit="/aluno/cadastro" method="post" class="flex flex-col text-2xl gap-6 text-black max-w-screen-sm">
           <div class="flex flex-col gap-2 px-6">
             <label class="text-start" for="nome">Nome do Equipamento:</label>
             <input
@@ -31,18 +31,18 @@
           </div>
 
           <div class="flex flex-col gap-2 px-6">
-            <label class="text-start" for="date">Data de chagada:</label>
+            <label class="text-start" for="dt_chegada">Data de chagada:</label>
             <input
               class="border-2 border-black rounded-full bg-pink-50 text-lg px-2 py-1 text-center"
-              type="date" name="date" placeholder="00/00/0000"
+              type="date" name="dt_chegada" placeholder="00/00/0000"
             />
           </div>
 
           <div class="flex flex-col gap-2 px-6">
-            <label class="text-start" for="date">Ultima manutenção:</label>
+            <label class="text-start" for="dt_ultima_manutencao">Ultima manutenção:</label>
             <input
               class="border-2 border-black rounded-full bg-pink-50 text-lg px-2 py-1 text-center"
-              type="date" name="date" placeholder="00/00/0000"
+              type="date" name="dt_ultima_manutencao" placeholder="00/00/0000"
             />
           </div>
 

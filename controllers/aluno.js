@@ -148,6 +148,14 @@ const autenticaAluno = async (req, res) => {
   }
 };
 
+
+
+
+
+
+
+
+
 module.exports = {
   criarAluno,
   listarAlunos,
