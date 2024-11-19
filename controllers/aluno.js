@@ -148,7 +148,7 @@ const autenticaAluno = async (req, res) => {
   }
 };
 
-const InsereAlunoAcademia = async (req, res) => {
+const matriculaAlunoAcademia = async (req, res) => {
   const { idAluno, idAcademia } = req.body;
 
   try {
@@ -157,6 +157,44 @@ const InsereAlunoAcademia = async (req, res) => {
     res
       .status(200)
       .json({ message: "Aluno Matriculado na academia com sucesso!" });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const desmatriculaAlunoAcademia = async (req, res) => {
+  const { idAluno, idAcademia } = req.body;
+
+  try {
+    const result = await Aluno.removeFromGyn(idAluno, idAcademia);
+
+    res.status(200).json({ message: "Aluno Desmatriculado com sucesso!" });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const contrataPersonal = async (req, res) => {
+  const { idAluno, idPersonal } = req.body;
+
+  try {
+    const result = await Aluno.addPersonal(idAluno, idPersonal);
+
+    res.status(200).json({
+      message: "Personal contratado com sucesso!",
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const removePersonal = async (req, res) => {
+  const { idAluno, idPersonal } = req.body;
+
+  try {
+    const result = await Aluno.removePersonal(idAluno, idPersonal);
+
+    res.status(200).json({ message: "Personal removido com sucesso!" });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -173,4 +211,8 @@ module.exports = {
   renderizaMenu,
   renderizaPerfil,
   autenticaAluno,
+  matriculaAlunoAcademia,
+  desmatriculaAlunoAcademia,
+  contrataPersonal,
+  removePersonal,
 };

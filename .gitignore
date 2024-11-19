@@ -1,1 +1,3 @@
 node_modules
+/public/styles/output.css
+.env

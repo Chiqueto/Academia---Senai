@@ -50,5 +50,8 @@ router.get("/listaAlunos", alunoController.listarAlunos);
 router.get("/buscarAluno/:id", alunoController.buscarAluno);
 router.delete("/deletar/:id", alunoController.deletarAluno);
 router.put("/atualizar/:id", alunoController.atualizarAluno);
-
+router.post("/matricula", alunoController.matriculaAlunoAcademia);
+router.delete("/desmatricula", alunoController.desmatriculaAlunoAcademia);
+router.post("/contrataPersonal", alunoController.contrataPersonal);
+router.delete("/removePersonal", alunoController.removePersonal);
 module.exports = router;
