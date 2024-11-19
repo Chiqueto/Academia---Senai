@@ -3,6 +3,9 @@ const router = express.Router();
 const academiaController = require("../controllers/academia");
 const { authMiddleware } = require("../middleware/authMiddleware");
 
+router.get("/", academiaController.renderizaLogin);
+router.get("/cadastro", academiaController.renderizaCadastro);
+
 router.get("/", (req, res) => {
   res.render("academia/login");
 });
