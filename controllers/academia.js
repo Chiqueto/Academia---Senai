@@ -65,9 +65,9 @@ const cadastrar = async (req, res) => {
       uf,
       telefone: telefoneFormatado,
     });
-    res
-      .status(201)
-      .json({ novaAcademia, message: "Academia inserida com sucesso!" });
+    res.redirect("/academia");
+    // .status(201)
+    //.json({ novaAcademia, message: "Academia inserida com sucesso!" });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

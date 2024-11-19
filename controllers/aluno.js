@@ -148,13 +148,19 @@ const autenticaAluno = async (req, res) => {
   }
 };
 
+const InsereAlunoAcademia = async (req, res) => {
+  const { idAluno, idAcademia } = req.body;
 
+  try {
+    const result = await Aluno.insertInGym(idAluno, idAcademia);
 
-
-
-
-
-
+    res
+      .status(200)
+      .json({ message: "Aluno Matriculado na academia com sucesso!" });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
 
 module.exports = {
   criarAluno,
