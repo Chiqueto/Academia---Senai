@@ -18,28 +18,30 @@ const criarPersonal = async (req, res) => {
     telefone,
   } = req.body;
 
-  const telefoneFormatado = telefone.replace(/\D/g, "");
-  const senhaCriptografada = await bcrypt.hash(senha, 10);
-
   //validações de campos em branco
   if (!nome || !email || !senha || !cep || !cidade || !uf || !telefone) {
     return res.status(400).json({ message: "Preencha todos os campos!" });
   }
 
-  //   //verifica email
-  //   const db_email = await Aluno.findByEmail(email);
-  //   if (db_email) {
-  //     return res.status(400).json({ message: "Email já cadastrado!" });
-  //   }
+  const telefoneFormatado = telefone.replace(/\D/g, "");
+  const senhaCriptografada = await bcrypt.hash(senha, 10);
+  const cepFormatado = cep.replace(/[-]/g, "");
+
+  //verificar se o cep é válido
+  if (cepFormatado.length > 8) {
+    return res.status(400).json({ message: "CEP inválido!" });
+  }
 
   try {
     const novoPersonal = await Personal.createPersonal({
       nome,
       email,
       senha: senhaCriptografada,
-      cep,
+      cep: cepFormatado,
       cidade,
       uf,
+      descricao,
+      especialidade,
       telefone: telefoneFormatado,
     });
 
@@ -54,7 +56,7 @@ const criarPersonal = async (req, res) => {
   }
 };
 
-const listarPersonal = async (req, res) => {
+const listarPersonais = async (req, res) => {
   try {
     const personais = await Personal.findAll();
     res.status(201).json(personais);
@@ -81,7 +83,8 @@ const buscarPersonal = async (req, res) => {
 const deletarPersonal = async (req, res) => {
   const { id } = req.params;
   try {
-    const result = await Aluno.deletePersonal(id);
+    const result = await Personal.deletePersonal(id);
+
     if (result === 0) {
       return res.status(404).json({ error: "Presonal não encontrado" });
     } else {
@@ -102,15 +105,22 @@ const atualizarPersonal = async (req, res) => {
     return res.status(400).json({ message: "Preencha todos os campos!" });
   }
   const telefoneFormatado = telefone.replace(/\D/g, "");
+  const cepFormatado = cep.replace(/[-]/g, "");
+
+  //verificar se o cep é válido
+  if (cepFormatado.length > 8) {
+    return res.status(400).json({ message: "CEP inválido!" });
+  }
+
   try {
-    const result = await Aluno.updateAluno(id, {
+    const result = await Personal.updatePersonal(id, {
       nome,
-      cep,
+      cep: cepFormatado,
       cidade,
       uf,
       descricao,
       especialidade,
-      telefoneFormatado,
+      telefone: telefoneFormatado,
     });
     if (result.length === 0) {
       return res.status(404).json({ error: "Personal não encontrado" });
@@ -126,16 +136,16 @@ const renderizaLogin = (req, res) => {
   res.render("personal/login");
 };
 
-// const renderizaCadastro = (req, res) => {
-//   res.render("aluno/cadastro");
-// };
+const renderizaCadastro = (req, res) => {
+  res.render("personal/cadastro");
+};
 
-// const renderizaMenu = (req, res) => {
-//   res.render("aluno/menuAluno");
-// };
+const renderizaMenu = (req, res) => {
+  res.render("personal/menuPersonal");
+};
 
 // const renderizaPerfil = (req, res) => {
-//   res.render("aluno/perfilAluno");
+//   res.render("personal/perfilPersonal");
 // };
 
 const autenticaPersonal = async (req, res) => {
@@ -172,14 +182,14 @@ const autenticaPersonal = async (req, res) => {
 };
 
 module.exports = {
-  criarAluno,
-  listarAlunos,
-  buscarAluno,
-  deletarAluno,
-  atualizarAluno,
-  //   renderizaLogin,
+  criarPersonal,
+  listarPersonais,
+  buscarPersonal,
+  deletarPersonal,
+  atualizarPersonal,
+  renderizaLogin,
   renderizaCadastro,
   renderizaMenu,
-  renderizaPerfil,
-  autenticaAluno,
+  //   renderizaPerfil,
+  autenticaPersonal,
 };

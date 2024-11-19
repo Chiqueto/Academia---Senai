@@ -23,8 +23,9 @@ const cadastrar = async (req, res) => {
   const cnpjFormatado = cnpj.replace(/[.\-\/]/g, "");
   const cepFormatado = cep.replace(/[-]/g, "");
 
-  const db_cnpj = Academia.findByCnpj(cnpjFormatado);
-  const db_email = Academia.findByEmail(email);
+  const db_cnpj = await Academia.findByCnpj(cnpjFormatado);
+  console.log(db_cnpj);
+  const db_email = await Academia.findByEmail(email);
 
   //validações de campos em branco
   if (
