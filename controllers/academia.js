@@ -196,6 +196,13 @@ const renderizaMenu = (req, res) => {
   res.render(`academia/menuAcademia`, { id });
 };
 
+const renderizaListaAlunos = async (req, res) => {
+  const { id } = req.params;
+  const alunos = await Academia.findStudents(id);
+  console.log(alunos);
+  res.render("academia/alunos", { alunos });
+};
+
 module.exports = {
   cadastrar,
   listarAcademias,
@@ -205,4 +212,5 @@ module.exports = {
   autenticaAcademia,
   renderizaMenu,
   renderizaPerfil,
+  renderizaListaAlunos,
 };

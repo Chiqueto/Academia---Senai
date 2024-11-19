@@ -15,9 +15,7 @@ router.get("/menu/:id", academiaController.renderizaMenu);
 
 router.get("/perfil/:id", academiaController.renderizaPerfil);
 
-router.get("/alunos", (req, res) => {
-  res.render("academia/alunos");
-});
+router.get("/alunos/:id", academiaController.renderizaListaAlunos);
 
 router.get("/personais", (req, res) => {
   res.render("academia/personais");

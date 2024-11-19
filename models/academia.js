@@ -48,6 +48,15 @@ const findById = async (id) => {
   return result.rows[0];
 };
 
+const findStudents = async (id) => {
+  const result = await pool.query(
+    "SELECT * FROM tb_aluno WHERE id in (SELECT id_aluno FROM tb_alunos_academias WHERE id_academia = $1)",
+    [id]
+  );
+
+  return result.rows;
+};
+
 const updateAcademia = async (id, academiaData) => {
   const { nome, cep, cidade, bairro, logradouro, numero, uf, telefone } =
     academiaData;
@@ -113,4 +122,5 @@ module.exports = {
   findByCnpj,
   findByEmail,
   loginAcademia,
+  findStudents,
 };
