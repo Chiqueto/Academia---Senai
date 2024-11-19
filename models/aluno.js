@@ -52,6 +52,14 @@ const findByEmail = async (email) => {
   return result.rows[0];
 };
 
+const insertInGym = async (idAluno, idAcademia) => {
+  const result = await pool.query(
+    "Insert INTO tb_alunos_academia VALUES ($1, $2) RETURNING *",
+    [idAluno, idAcademia]
+  );
+  return result.rows[0];
+};
+
 module.exports = {
   findAll,
   findById,
@@ -60,4 +68,5 @@ module.exports = {
   updateAluno,
   loginAluno,
   findByEmail,
+  insertInGym,
 };
