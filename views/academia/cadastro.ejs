@@ -28,7 +28,7 @@
             <label class="text-start" for="nome">Nome</label>
             <input
               class="border-2 border-black rounded-full bg-pink-50 text-lg px-2 py-1 text-center"
-              type="text" name="nome" required minlength="3" maxlength="40"    placeholder="O nome deve conter apenas letras e espaços"
+              type="text" name="nome" required minlength="3" maxlength="50"
             />
           </div>
 
@@ -38,7 +38,7 @@
               class="border-2 border-black rounded-full bg-pink-50 text-lg px-2 py-1 text-center"
               type="text"
               name="cnpj"
-              required maxlength="18"  title="Digite um cnpj com 14 digitos" placeholder="00.000.000/0000-00"
+              placeholder="00.000.000/0000-00"
             />
           </div>
 
@@ -48,7 +48,7 @@
               class="border-2 border-black rounded-full bg-pink-50 text-lg px-2 py-1 text-center"
               type="email"
               name="email"
-              placeholder="seuemail@exemplo.com" required
+              placeholder="seuemail@exemplo.com.br"
             />
           </div>
 
@@ -58,7 +58,7 @@
               class="border-2 border-black rounded-full bg-pink-50 text-lg px-2 py-1 text-center"
               type="password"
               name="senha"
-              placeholder="*****" required minlength="4"
+              placeholder="*********"
             />
           </div>
 
@@ -124,7 +124,7 @@
               class="border-2 border-black rounded-full bg-pink-50 text-lg px-2 py-1 text-center"
               type="text"
               name="cep"
-               required maxlength="9" title="digite um cep com 8 digitos" placeholder="0000-000"
+              placeholder="cep"
             />
           </div>
 
@@ -134,13 +134,14 @@
               class="border-2 border-black rounded-full bg-pink-50 text-lg px-2 py-1 text-center"
               type="tel"
               name="telefone"
-              required maxlength="15" title="Digite um telefone com 10 ou 11 digitos"  placeholder="(00) 00000-0000"
+              placeholder="(16) 999968-6044"
               
             />
           </div>
 
           <button
-            class="bg-neonGreen rounded-xl py-2 hover:bg-neonGreenHover transition-colors text-zinc-50 font-zain text-4xl mx-12">
+            class="bg-neonGreen rounded-xl py-2 hover:bg-neonGreenHover transition-colors text-zinc-50 font-zain text-4xl mx-12"
+          >
             Cadastrar
           </button>
           

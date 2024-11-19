@@ -43,7 +43,7 @@ const updatePersonal = async (id, personalData) => {
   const { nome, cep, cidade, uf, descricao, especialidade, telefone } =
     personalData;
   const result = await pool.query(
-    "UPDATE tb_personal SET nome = $1, cep = $2, cidade = $3, uf = $4, descricao = $5, especialidade = $6, telefone = $7 WHERE id = $8RETURNING *",
+    "UPDATE tb_personal SET nome = $1, cep = $2, cidade = $3, uf = $4, descricao = $5, especialidade = $6, telefone = $7 WHERE id = $8 RETURNING *",
     [nome, cep, cidade, uf, descricao, especialidade, telefone, id]
   );
   return result.rows[0];

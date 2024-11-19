@@ -2,8 +2,9 @@ const express = require("express");
 const router = express.Router();
 const academiaController = require("../controllers/academia");
 const { authMiddleware } = require("../middleware/authMiddleware");
-const {body} = require("express-validator"); 
 
+router.get("/", academiaController.renderizaLogin);
+router.get("/cadastro", academiaController.renderizaCadastro);
 
 router.get("/", (req, res) => {
   res.render("academia/login");
@@ -13,13 +14,9 @@ router.get("/cadastro", (req, res) => {
   res.render("academia/cadastro");
 });
 
-router.get("/menu", (req, res) => {
-  res.render("academia/menuAcademia");
-});
+router.get("/menu/:id", academiaController.renderizaMenu);
 
-router.get("/perfil", (req, res) => {
-  res.render("academia/perfil");
-});
+router.get("/perfil/:id", academiaController.renderizaPerfil);
 
 router.get("/alunos", (req, res) => {
   res.render("academia/alunos");

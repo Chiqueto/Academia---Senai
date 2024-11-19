@@ -52,6 +52,39 @@ const findByEmail = async (email) => {
   return result.rows[0];
 };
 
+const insertInGym = async (idAluno, idAcademia) => {
+  const result = await pool.query(
+    "Insert INTO tb_alunos_academias (id_aluno, id_academia) VALUES ($1, $2) RETURNING *",
+    [idAluno, idAcademia]
+  );
+  return result.rows[0];
+};
+
+const removeFromGyn = async (idAluno, idAcademia) => {
+  const result = await pool.query(
+    "DELETE FROM tb_alunos_academias WHERE id_aluno = $1 AND id_academia = $2",
+    [idAluno, idAcademia]
+  );
+  return result.rowCount;
+};
+
+const addPersonal = async (idAluno, idPersonal) => {
+  const result = await pool.query(
+    "INSERT INTO tb_alunos_personais (id_aluno, id_personal) VALUES ($1, $2) RETURNING *",
+    [idAluno, idPersonal]
+  );
+
+  return result.rows[0];
+};
+
+const removePersonal = async (idAluno, idPersonal) => {
+  const result = await pool.query(
+    "DELETE FROM tb_alunos_personais WHERE id_aluno = $1 AND id_personal = $2",
+    [idAluno, idPersonal]
+  );
+  return result.rowCount;
+};
+
 module.exports = {
   findAll,
   findById,
@@ -60,4 +93,8 @@ module.exports = {
   updateAluno,
   loginAluno,
   findByEmail,
+  insertInGym,
+  removeFromGyn,
+  addPersonal,
+  removePersonal,
 };

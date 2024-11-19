@@ -45,7 +45,7 @@ const findById = async (id) => {
     id,
   ]);
 
-  return result.rows;
+  return result.rows[0];
 };
 
 const updateAcademia = async (id, academiaData) => {
