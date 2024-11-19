@@ -6,14 +6,6 @@ const { authMiddleware } = require("../middleware/authMiddleware");
 router.get("/", academiaController.renderizaLogin);
 router.get("/cadastro", academiaController.renderizaCadastro);
 
-router.get("/", (req, res) => {
-  res.render("academia/login");
-});
-
-router.get("/cadastro", (req, res) => {
-  res.render("academia/cadastro");
-});
-
 router.get("/menu/:id", academiaController.renderizaMenu);
 
 router.get("/perfil/:id", academiaController.renderizaPerfil);

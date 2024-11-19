@@ -183,6 +183,14 @@ const autenticaAcademia = async (req, res) => {
   }
 };
 
+const renderizaLogin = (req, res) => {
+  res.render("academia/login");
+};
+
+const renderizaCadastro = (req, res) => {
+  res.render("academia/cadastro");
+};
+
 const renderizaPerfil = async (req, res) => {
   const { id } = req.params;
   const academia = await Academia.findById(id);
@@ -212,4 +220,6 @@ module.exports = {
   renderizaMenu,
   renderizaPerfil,
   renderizaListaAlunos,
+  renderizaLogin,
+  renderizaCadastro,
 };
