@@ -26,7 +26,7 @@
             <label class="text-start" for="email">Email</label>
             <input
               class="border-2 border-black rounded-full bg-pink-50 text-lg px-2 py-1 text-center"
-              type="text"
+              type="email"
               name="email"
               id="email"
               placeholder="seuemail@exemplo.com.br"
@@ -40,12 +40,11 @@
               type="password"
               name="senha"
               id="senha"
-              placeholder="*********"
+              placeholder="***" required minlength="4"
             />
           </div>
           <button
-            type="submit" class="bg-neonGreen rounded-xl py-2 hover:bg-neonGreenHover transition-colors text-zinc-50 font-zain text-4xl mx-12"
-          >
+            type="submit" class="bg-neonGreen rounded-xl py-2 hover:bg-neonGreenHover transition-colors text-zinc-50 font-zain text-4xl mx-12">
             Login
           </button>
         </form>
@@ -56,10 +55,7 @@
     </main>
    <script src="/scripts/academiaLogin.js"></script>
    
-    <footer class="text-zinc-200 p-4 text-center">
-      <p>&copy Luís Felipe, Edney Araujo, Marília</p>
-    </footer>
 
-    <script src="./scripts/academiaLogin.js"></script>
+    
   </body>
 </html>

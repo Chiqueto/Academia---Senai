@@ -23,8 +23,8 @@ const cadastrar = async (req, res) => {
   const cnpjFormatado = cnpj.replace(/[.\-\/]/g, "");
   const cepFormatado = cep.replace(/[-]/g, "");
 
-  const db_cnpj = Academia.findByCnpj(cnpjFormatado);
-  const db_email = Academia.findByEmail(email);
+  const db_cnpj = await Academia.findByCnpj(cnpjFormatado);
+  const db_email = await Academia.findByEmail(email);
 
   //validações de campos em branco
   if (
@@ -64,9 +64,7 @@ const cadastrar = async (req, res) => {
       uf,
       telefone: telefoneFormatado,
     });
-    res
-      .status(201)
-      .json({ novaAcademia, message: "Academia inserida com sucesso!" });
+    return res.redirect("/academia?success=1");
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

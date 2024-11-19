@@ -2,9 +2,8 @@ const express = require("express");
 const router = express.Router();
 const academiaController = require("../controllers/academia");
 const { authMiddleware } = require("../middleware/authMiddleware");
+const {body} = require("express-validator"); 
 
-router.get("/", academiaController.renderizaLogin);
-router.get("/cadastro", academiaController.renderizaCadastro);
 
 router.get("/", (req, res) => {
   res.render("academia/login");
