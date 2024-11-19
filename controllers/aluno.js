@@ -1,4 +1,6 @@
 const Aluno = require("../models/aluno.js");
+const Personal = require("../models/personal.js");
+const Academia = require("../models/academia.js");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
@@ -123,6 +125,20 @@ const renderizaPerfil = async (req, res) => {
   res.render("aluno/perfilAluno", { aluno });
 };
 
+const renderizaEncontrarAcademias = async (req, res) => {
+  // const { id } = req.params;
+  // const aluno = await Aluno.findById(id);
+  const academias = await Academia.findAll();
+  res.render("aluno/encontrarAcademia", academias);
+};
+
+const renderizaEncontrarPersonais = async (req, res) => {
+  // const { id } = req.params;
+  // const aluno = await Aluno.findById(id);
+  const personais = await Personal.findAll();
+  res.render("aluno/encontrarPersonal", personais);
+};
+
 const autenticaAluno = async (req, res) => {
   const { email, senha } = req.body;
   try {
@@ -219,4 +235,6 @@ module.exports = {
   desmatriculaAlunoAcademia,
   contrataPersonal,
   removePersonal,
+  renderizaEncontrarAcademias,
+  renderizaEncontrarPersonais,
 };
