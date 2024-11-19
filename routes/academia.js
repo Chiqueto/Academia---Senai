@@ -11,13 +11,9 @@ router.get("/cadastro", (req, res) => {
   res.render("academia/cadastro");
 });
 
-router.get("/menu", (req, res) => {
-  res.render("academia/menuAcademia");
-});
+router.get("/menu/:id", academiaController.renderizaMenu);
 
-router.get("/perfil", (req, res) => {
-  res.render("academia/perfil");
-});
+router.get("/perfil/:id", academiaController.renderizaPerfil);
 
 router.get("/alunos", (req, res) => {
   res.render("academia/alunos");

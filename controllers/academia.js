@@ -3,6 +3,8 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
+const SECRET_KEY = process.env.SECRET_KEY;
+
 const cadastrar = async (req, res) => {
   const {
     nome,
@@ -174,12 +176,24 @@ const autenticaAcademia = async (req, res) => {
     return res.status(200).json({
       message: "Academia autenticada com sucesso!",
       token,
-      redirectTo: "/academia/menu",
+      redirectTo: `/academia/menu/${academia.id}`,
     });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: "Erro interno do servidor" });
   }
+};
+
+const renderizaPerfil = async (req, res) => {
+  const { id } = req.params;
+  const academia = await Academia.findById(id);
+  // console.log(academia);
+  res.render(`academia/perfil`, { academia });
+};
+
+const renderizaMenu = (req, res) => {
+  const { id } = req.params;
+  res.render(`academia/menuAcademia`, { id });
 };
 
 module.exports = {
@@ -189,4 +203,6 @@ module.exports = {
   atualizaAcademia,
   deletar,
   autenticaAcademia,
+  renderizaMenu,
+  renderizaPerfil,
 };

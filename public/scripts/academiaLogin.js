@@ -1,8 +1,8 @@
 async function autenticar(event) {
   event.preventDefault(); // Evita o envio padrão do formulário
 
-  const email = document.getElementById("email").value;
-  const senha = document.getElementById("senha").value;
+  const email = document.getElementById("emailAcademia").value;
+  const senha = document.getElementById("senhaAcademia").value;
 
   try {
     const response = await fetch("/academia/login", {
@@ -34,4 +34,4 @@ async function autenticar(event) {
 }
 
 // Adiciona o evento de submit ao formulário de login
-document.getElementById("loginForm").addEventListener("submit", autenticar);
+document.getElementById("loginFormAcad").addEventListener("submit", autenticar);
