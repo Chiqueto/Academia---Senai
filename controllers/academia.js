@@ -25,9 +25,6 @@ const cadastrar = async (req, res) => {
   const cnpjFormatado = cnpj.replace(/[.\-\/]/g, "");
   const cepFormatado = cep.replace(/[-]/g, "");
 
-  const db_cnpj = Academia.findByCnpj(cnpjFormatado);
-  const db_email = Academia.findByEmail(email);
-
   //validações de campos em branco
   if (
     !nome ||
@@ -44,6 +41,9 @@ const cadastrar = async (req, res) => {
   ) {
     return res.status(400).json({ message: "Preencha todos os campos!" });
   }
+
+  const db_cnpj = await Academia.findByCnpj(cnpjFormatado);
+  const db_email = await Academia.findByEmail(email);
 
   if (db_cnpj) {
     return res.status(400).json({ message: "CNPJ já cadastrado!" });
@@ -66,9 +66,9 @@ const cadastrar = async (req, res) => {
       uf,
       telefone: telefoneFormatado,
     });
-    res
-      .status(201)
-      .json({ novaAcademia, message: "Academia inserida com sucesso!" });
+    res.redirect("/academia");
+    // .status(201)
+    //.json({ novaAcademia, message: "Academia inserida com sucesso!" });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
