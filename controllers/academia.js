@@ -210,6 +210,24 @@ const renderizaListaAlunos = async (req, res) => {
   res.render("academia/alunos", { alunos });
 };
 
+const renderizaListaPersonais = async (req, res) => {
+  const { id } = req.params;
+  const personais = await Academia.findPersonais(id);
+  console.log(personais);
+  res.render("academia/personais", { personais });
+};
+
+const inserirPersonal = async (req, res) => {
+  const { id_academia, id_personal } = req.body;
+
+  try {
+    const personal = await Academia.insertPersonal(id_academia, id_personal);
+    res.status(201).json({ message: "Personal inserido com sucesso!" });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 module.exports = {
   cadastrar,
   listarAcademias,
@@ -222,4 +240,6 @@ module.exports = {
   renderizaListaAlunos,
   renderizaLogin,
   renderizaCadastro,
+  renderizaListaPersonais,
+  inserirPersonal,
 };
