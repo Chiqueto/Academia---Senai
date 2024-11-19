@@ -9,8 +9,8 @@ router.get("/cadastro", alunoController.renderizaCadastro);
 // router.get("/perfilAluno", alunoController.renderizaPerfil, authMiddleware)
 //Sem a autenticação
 
-router.get("/menu", alunoController.renderizaMenu);
-router.get("/perfilAluno", alunoController.renderizaPerfil);
+router.get("/menu/:id", alunoController.renderizaMenu);
+router.get("/perfilAluno/:id", alunoController.renderizaPerfil);
 
 router.get("/opcaoTreinoAluno", (req, res) => {
   res.render("aluno/opcaoTreinoAluno");

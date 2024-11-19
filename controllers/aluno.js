@@ -112,11 +112,15 @@ const renderizaCadastro = (req, res) => {
 };
 
 const renderizaMenu = (req, res) => {
-  res.render("aluno/menuAluno");
+  const { id } = req.params;
+  // const aluno = await Aluno.findById(id);
+  res.render("aluno/menuAluno", { id });
 };
 
-const renderizaPerfil = (req, res) => {
-  res.render("aluno/perfilAluno");
+const renderizaPerfil = async (req, res) => {
+  const { id } = req.params;
+  const aluno = await Aluno.findById(id);
+  res.render("aluno/perfilAluno", { aluno });
 };
 
 const autenticaAluno = async (req, res) => {
@@ -140,7 +144,7 @@ const autenticaAluno = async (req, res) => {
     return res.status(200).json({
       message: "Aluno autenticado com sucesso!",
       token,
-      redirectTo: "/aluno/menu",
+      redirectTo: `/aluno/menu/${aluno.id}`,
     });
   } catch (error) {
     console.error(error);
