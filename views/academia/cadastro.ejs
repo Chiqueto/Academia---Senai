@@ -6,6 +6,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="/styles/output.css" />
+    <script src="/scripts/academiaCadastro.js" defer></script>
     <title>Cadastro</title>
   </head>
   <body class="flex flex-col min-h-screen">
@@ -22,12 +23,20 @@
     <main class="text-center my-10 text-white mx-4 flex-grow">
       <section class="font-zain bg-zinc-50 text-zinc-950 py-4 rounded-2xl">
         <h2 class="text-4xl">Cadastrar</h2>
-        <form onsubmit="/academia/cadastro" method="post" class="flex flex-col text-2xl gap-6 text-black max-w-screen-sm">
+        <form
+          onsubmit="/academia/cadastro"
+          method="post"
+          class="flex flex-col text-2xl gap-6 text-black max-w-screen-sm"
+        >
           <div class="flex flex-col gap-2 px-6">
             <label class="text-start" for="nome">Nome</label>
             <input
               class="border-2 border-black rounded-full bg-pink-50 text-lg px-2 py-1 text-center"
-              type="text" name="nome" required minlength="3" maxlength="50"
+              type="text"
+              name="nome"
+              required
+              minlength="3"
+              maxlength="50"
             />
           </div>
 
@@ -37,7 +46,10 @@
               class="border-2 border-black rounded-full bg-pink-50 text-lg px-2 py-1 text-center"
               type="text"
               name="cnpj"
-              required pattern="\d{14}" title="Digite um cnpj com 14 digitos"
+              placeholder="00.000.000/0000-00"
+              required
+              pattern="\d{14}"
+              title="Digite um cnpj com 14 digitos"
             />
           </div>
 
@@ -47,7 +59,8 @@
               class="border-2 border-black rounded-full bg-pink-50 text-lg px-2 py-1 text-center"
               type="email"
               name="email"
-              placeholder="seuemail@exemplo.com.br" required
+              placeholder="seuemail@exemplo.com.br"
+              required
             />
           </div>
 
@@ -57,7 +70,9 @@
               class="border-2 border-black rounded-full bg-pink-50 text-lg px-2 py-1 text-center"
               type="password"
               name="senha"
-              placeholder="*********" required minlength="4"
+              placeholder="*********"
+              required
+              minlength="4"
             />
           </div>
 
@@ -69,6 +84,8 @@
                 type="text"
                 name="cidade"
                 placeholder="Cidade"
+                required
+                minlength="3"
               />
             </div>
             <div class="flex flex-col w-1/3 gap-2">
@@ -93,6 +110,8 @@
                 type="text"
                 name="logradouro"
                 placeholder="Logradouro"
+                required
+                minlength="3"
               />
             </div>
             <div class="flex flex-col w-1/3 gap-2">
@@ -102,28 +121,33 @@
                 type="text"
                 name="numero"
                 placeholder="123"
+                required
+                maxlength="4"
               />
             </div>
           </div>
 
-          
           <div class="flex flex-col gap-2 px-6">
-            <label class="text-start" for="nome">Bairro</label>
+            <label class="text-start" for="bairro">Bairro</label>
             <input
               class="border-2 border-black rounded-full bg-pink-50 text-lg px-2 py-1 text-center"
               type="text"
               name="bairro"
               placeholder="Bairro"
+              required
+              minlength="3"
             />
           </div>
-         
+
           <div class="flex flex-col gap-2 px-6">
             <label class="text-start" for="cep">Cep</label>
             <input
               class="border-2 border-black rounded-full bg-pink-50 text-lg px-2 py-1 text-center"
               type="text"
               name="cep"
-               required pattern="\d{8}" title="digite um cep com 8 digitos"
+              required
+              pattern="\d{8}"
+              title="digite um cep com 8 digitos"
             />
           </div>
 
@@ -133,23 +157,22 @@
               class="border-2 border-black rounded-full bg-pink-50 text-lg px-2 py-1 text-center"
               type="text"
               name="telefone"
-              required pattern="\d{10,11}" title="Digite um telefone com 10 ou 11 digitos"
-              
+              required
+              pattern="\d{10,11}"
+              title="Digite um telefone com 10 ou 11 digitos"
             />
           </div>
 
           <button
-           
             class="bg-neonGreen rounded-xl py-2 hover:bg-neonGreenHover transition-colors text-zinc-50 font-zain text-4xl mx-12"
           >
             Cadastrar
           </button>
         </form>
       </section>
+      <footer class="text-zinc-200 p-4 text-center">
+        <p>&copy Luís Felipe, Edney Araujo, Marília</p>
+      </footer>
     </main>
-
-    <footer class="text-zinc-200 p-4 text-center">
-      <p>&copy Luís Felipe, Edney Araujo, Marília</p>
-    </footer>
   </body>
 </html>

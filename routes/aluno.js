@@ -16,9 +16,7 @@ router.get("/opcaoTreinoAluno", (req, res) => {
   res.render("aluno/opcaoTreinoAluno");
 });
 
-router.get("/encontrarAcademia", (req, res) => {
-  res.render("aluno/encontrarAcademia");
-});
+router.get("/encontrarAcademias", alunoController.renderizaEncontrarAcademias);
 
 router.get("/encontrarPersonal", (req, res) => {
   res.render("aluno/encontrarPersonal");

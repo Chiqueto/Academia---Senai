@@ -3,6 +3,8 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
+const SECRET_KEY = process.env.SECRET_KEY;
+
 const cadastrar = async (req, res) => {
   const {
     nome,
@@ -23,10 +25,6 @@ const cadastrar = async (req, res) => {
   const cnpjFormatado = cnpj.replace(/[.\-\/]/g, "");
   const cepFormatado = cep.replace(/[-]/g, "");
 
-  const db_cnpj = await Academia.findByCnpj(cnpjFormatado);
-  console.log(db_cnpj);
-  const db_email = await Academia.findByEmail(email);
-
   //validações de campos em branco
   if (
     !nome ||
@@ -43,6 +41,9 @@ const cadastrar = async (req, res) => {
   ) {
     return res.status(400).json({ message: "Preencha todos os campos!" });
   }
+
+  const db_cnpj = await Academia.findByCnpj(cnpjFormatado);
+  const db_email = await Academia.findByEmail(email);
 
   if (db_cnpj) {
     return res.status(400).json({ message: "CNPJ já cadastrado!" });
@@ -174,11 +175,56 @@ const autenticaAcademia = async (req, res) => {
     return res.status(200).json({
       message: "Academia autenticada com sucesso!",
       token,
-      redirectTo: "/academia/menu",
+      redirectTo: `/academia/menu/${academia.id}`,
     });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: "Erro interno do servidor" });
+  }
+};
+
+const renderizaLogin = (req, res) => {
+  res.render("academia/login");
+};
+
+const renderizaCadastro = (req, res) => {
+  res.render("academia/cadastro");
+};
+
+const renderizaPerfil = async (req, res) => {
+  const { id } = req.params;
+  const academia = await Academia.findById(id);
+  // console.log(academia);
+  res.render(`academia/perfil`, { academia });
+};
+
+const renderizaMenu = (req, res) => {
+  const { id } = req.params;
+  res.render(`academia/menuAcademia`, { id });
+};
+
+const renderizaListaAlunos = async (req, res) => {
+  const { id } = req.params;
+  const alunos = await Academia.findStudents(id);
+  console.log(alunos);
+  res.render("academia/alunos", { alunos });
+};
+
+const renderizaListaPersonais = async (req, res) => {
+  const { id } = req.params;
+  const personais = await Academia.findPersonais(id);
+  console.log(personais);
+  res.render("academia/personais", { personais });
+};
+
+const inserirPersonal = async (req, res) => {
+  const { id_academia, id_personal } = req.body;
+
+  try {
+    const personal = await Academia.insertPersonal(id_academia, id_personal);
+    res.status(201).json({ message: "Personal inserido com sucesso!" });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
 };
 
@@ -189,4 +235,11 @@ module.exports = {
   atualizaAcademia,
   deletar,
   autenticaAcademia,
+  renderizaMenu,
+  renderizaPerfil,
+  renderizaListaAlunos,
+  renderizaLogin,
+  renderizaCadastro,
+  renderizaListaPersonais,
+  inserirPersonal,
 };
