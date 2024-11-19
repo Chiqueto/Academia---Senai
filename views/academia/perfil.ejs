@@ -12,7 +12,7 @@
     <header>
       <nav class="flex flex-grow bg-zinc-800 py-5 px-4">
         <div class="flex items-center gap-4">
-          <a href="/academia/menu"><img src="/icons/back_arrow.svg" /></a>
+          <a href="/academia/menu/"><img src="/icons/back_arrow.svg" /></a>
           <h1 class="font-jaro text-zinc-50 text-3xl">GymFit</h1>
         </div>
       </nav>
@@ -26,11 +26,11 @@
         >
           <img src="/icons/upload.svg" class="w-25 h-25" />
         </div>
-        <div class="p-4 text-2xl">
-          <h2>Cidade: <%= academia.cidade %></h2>
-          <h2>Rua:</h2>
-          <h2>Bairro:</h2>
-          <h2>Contato:</h2>
+        <div class="p-2 text-2xl ">
+          <h2 class="font-bold"><%= academia.cidade %></h2>
+          <h2 class="mx-4">Rua: <%= academia.logradouro %></h2>
+          <h2 class="mx-4">Bairro: <%= academia.bairro %></h2>
+          <h2 class="mx-4">Contato: <%= academia.telefone %></h2>
         </div>
         <div
           class="bg-slate-300 shadow-md rounded-lg mt-auto flex flex-col items-center"
