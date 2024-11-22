@@ -10,15 +10,39 @@ const createAluno = async (alunoData) => {
   return resut.rows[0];
 };
 
+
+const calcularIdade = (dataNascimento) => {
+  const hoje = new Date();
+  const nascimento = new Date(dataNascimento);
+  let idade = hoje.getFullYear() - nascimento.getFullYear();
+  const mes = hoje.getMonth() - nascimento.getMonth();
+
+  if (mes < 0 || (mes === 0 && hoje.getDate() < nascimento.getDate())) {
+    idade--;
+  }
+
+  return idade;
+};
+
+const findById = async (id) => {
+  const result = await pool.query("SELECT * FROM tb_aluno WHERE id = $1", [id]);
+  if (result.rows.length > 0) {
+    const aluno = result.rows[0];
+    aluno.idade = calcularIdade(aluno.dt_nascimento);
+    return aluno;
+  }
+  return null;
+};
 const findAll = async () => {
   const result = await pool.query("SELECT * FROM tb_aluno");
   return result.rows;
 };
 
-const findById = async (id) => {
-  const result = await pool.query("SELECT * FROM tb_aluno WHERE id = $1", [id]);
-  return result.rows[0];
-};
+
+// const findById = async (id) => {
+//   const result = await pool.query("SELECT * FROM tb_aluno WHERE id = $1", [id]);
+//   return result.rows[0];
+// };
 
 const deleteAluno = async (id) => {
   const result = await pool.query("DELETE FROM tb_aluno WHERE id = $1", [id]);
@@ -26,10 +50,11 @@ const deleteAluno = async (id) => {
 };
 
 const updateAluno = async (id, alunoData) => {
-  const { nome, telefone } = alunoData;
+  const { nome, telefone, fotoPerfil } = alunoData;
   const result = await pool.query(
     "UPDATE tb_aluno SET nome = $1, telefone = $2 WHERE id = $3 RETURNING *",
-    [nome, telefone, id]
+    "ALTER TABLE tb_aluno ADD COLUMN foto_perfil VARCHAR(255);",
+    [nome, telefone, fotoPerfil, id]
   );
   return result.rows[0];
 };

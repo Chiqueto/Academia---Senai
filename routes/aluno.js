@@ -1,6 +1,9 @@
 const express = require("express");
-const router = express.Router();
+const multer = require("multer");
+const { upload } = require("../uploadConfig");
 const alunoController = require("../controllers/aluno");
+const router = express.Router();
+
 const { authMiddleware } = require("../middleware/authMiddleware");
 
 router.get("/", alunoController.renderizaLogin);
@@ -42,6 +45,10 @@ router.post("/cadastro", alunoController.criarAluno);
 // router.delete("/deletar/:id", authMiddleware, alunoController.deletarAluno);
 // router.put("/atualizar/:id", authMiddleware, alunoController.atualizarAluno);
 router.post("/login", alunoController.autenticaAluno);
+
+// Rota para upload de foto de perfil
+router.post("/uploadFoto/:id", upload.single("fotoPerfil"), alunoController.uploadFoto);
+
 
 //Sem a autenticação
 router.get("/listaAlunos", alunoController.listarAlunos);
