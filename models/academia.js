@@ -45,6 +45,24 @@ const findById = async (id) => {
     id,
   ]);
 
+  return result.rows[0];
+};
+
+const findStudents = async (id) => {
+  const result = await pool.query(
+    "SELECT * FROM tb_aluno WHERE id in (SELECT id_aluno FROM tb_alunos_academias WHERE id_academia = $1)",
+    [id]
+  );
+
+  return result.rows;
+};
+
+const findPersonais = async (id) => {
+  const result = await pool.query(
+    "SELECT * FROM tb_personal WHERE id in (SELECT id_personal FROM tb_academias_personais WHERE id_academia = $1)",
+    [id]
+  );
+
   return result.rows;
 };
 
@@ -104,6 +122,15 @@ const loginAcademia = async (email) => {
   return result.rows[0];
 };
 
+const insertPersonal = async (id_academia, id_personal) => {
+  const result = await pool.query(
+    "INSERT INTO tb_academias_personais (id_academia, id_personal) VALUES ($1, $2) RETURNING *",
+    [id_academia, id_personal]
+  );
+
+  return result.rows[0];
+};
+
 module.exports = {
   createAcademia,
   findAll,
@@ -113,4 +140,7 @@ module.exports = {
   findByCnpj,
   findByEmail,
   loginAcademia,
+  findStudents,
+  findPersonais,
+  insertPersonal,
 };

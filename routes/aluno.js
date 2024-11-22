@@ -7,18 +7,16 @@ router.get("/", alunoController.renderizaLogin);
 router.get("/cadastro", alunoController.renderizaCadastro);
 // router.get("/menu", alunoController.renderizaMenu, authMiddleware);
 // router.get("/perfilAluno", alunoController.renderizaPerfil, authMiddleware)
-
 //Sem a autenticação
-router.get("/menu", alunoController.renderizaMenu);
-router.get("/perfilAluno", alunoController.renderizaPerfil);
+
+router.get("/menu/:id", alunoController.renderizaMenu);
+router.get("/perfilAluno/:id", alunoController.renderizaPerfil);
 
 router.get("/opcaoTreinoAluno", (req, res) => {
   res.render("aluno/opcaoTreinoAluno");
 });
 
-router.get("/encontrarAcademia", (req, res) => {
-  res.render("aluno/encontrarAcademia");
-});
+router.get("/encontrarAcademias", alunoController.renderizaEncontrarAcademias);
 
 router.get("/encontrarPersonal", (req, res) => {
   res.render("aluno/encontrarPersonal");
@@ -50,5 +48,8 @@ router.get("/listaAlunos", alunoController.listarAlunos);
 router.get("/buscarAluno/:id", alunoController.buscarAluno);
 router.delete("/deletar/:id", alunoController.deletarAluno);
 router.put("/atualizar/:id", alunoController.atualizarAluno);
-
+router.post("/matricula", alunoController.matriculaAlunoAcademia);
+router.delete("/desmatricula", alunoController.desmatriculaAlunoAcademia);
+router.post("/contrataPersonal", alunoController.contrataPersonal);
+router.delete("/removePersonal", alunoController.removePersonal);
 module.exports = router;

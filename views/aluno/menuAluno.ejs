@@ -1,83 +1,91 @@
 <!DOCTYPE html>
 
 <html>
+  <head>
+    <meta lang="pt-br" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="/styles/output.css" rel="stylesheet" />
+    <title>Menu Aluno</title>
+  </head>
 
-<head>
-  <meta lang="pt-br" />
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link href="/styles/output.css" rel="stylesheet" />
-  <title>Menu Aluno</title>
-</head>
+  <body class="flex flex-col min-h-screen">
+    <header>
+      <nav class="flex justify-between bg-zinc-800 py-5 px-4">
+        <div class="flex items-center gap-4">
+          <a href="/"><img src="/icons/back_arrow.svg" /></a>
+          <h1 class="font-jaro text-zinc-50 text-3xl">GymFit</h1>
+          <!-- <img src="/icons/GymFit.svg" /> -->
+        </div>
+      </nav>
+    </header>
 
-<body class="flex flex-col min-h-screen">
-  <header>
-    <nav class="flex justify-between bg-zinc-800 py-5 px-4">
-      <div class="flex items-center gap-4">
-        <a href="/"><img src="/icons/back_arrow.svg" /></a>
-        <h1 class="font-jaro text-zinc-50 text-3xl">GymFit</h1>
-        <!-- <img src="/icons/GymFit.svg" /> -->
+    <main class="text-center mt-10 text-white mx-4 flex-grow">
+      <div class="container mx-auto bg-zinc-600 p-3 rounded-md">
+        <div class="grid grid-cols-2 gap-4 text-xl">
+          <a href="/aluno/perfilAluno/<%= id %>">
+            <div
+              class="bg-white shadow-md rounded p-3 flex flex-col justify-center items-center"
+            >
+              <div class="rounded-full p-2 bg-pink-200">
+                <img src="/icons/user.svg" class="w-8 h-8" />
+              </div>
+              <p class="font-zain text-black mt-2">Perfil</p>
+            </div>
+          </a>
+
+          <a href="/aluno/opcaoTreinoAluno">
+            <div
+              class="bg-white shadow-md rounded p-3 flex flex-col justify-center items-center"
+            >
+              <div class="rounded-full p-2 bg-pink-200">
+                <img src="/icons/user.svg" class="w-8 h-8" />
+              </div>
+              <p class="font-zain text-black mt-2">Meu Treino</p>
+            </div>
+          </a>
+
+          <a href="/aluno/montarTreino">
+            <div
+              class="bg-white shadow-md rounded p-3 flex flex-col justify-center items-center"
+            >
+              <div class="rounded-full p-2 bg-pink-200">
+                <img src="/icons/user.svg" class="w-8 h-8" />
+              </div>
+              <p class="font-zain text-black mt-2">Montar Treinos</p>
+            </div>
+          </a>
+
+          <a href="/aluno/encontrarPersonal">
+            <div
+              class="bg-white shadow-md rounded p-3 flex flex-col justify-center items-center"
+            >
+              <div class="rounded-full p-2 bg-pink-200">
+                <img src="/icons/user.svg" class="w-8 h-8" />
+              </div>
+              <p class="font-zain text-black mt-2">Encontrar Personal</p>
+            </div>
+          </a>
+
+          <a href="/aluno/encontrarAcademia">
+            <div
+              class="bg-white shadow-md rounded p-3 flex flex-col justify-center items-center"
+            >
+              <div class="rounded-full p-2 bg-pink-200">
+                <img src="/icons/user.svg" class="w-8 h-8" />
+              </div>
+              <p class="font-zain text-black mt-2">Encontrar Academia</p>
+            </div>
+          </a>
+        </div>
       </div>
-    </nav>
-  </header>
+    </main>
 
-  <main class="text-center mt-10 text-white mx-4 flex-grow">
-    <div class="container mx-auto bg-zinc-600 p-3 rounded-md ">
-      <div class="grid grid-cols-2 gap-4 text-xl">
-        <a href="/aluno/perfilAluno">
-          <div class="bg-white shadow-md rounded p-3 flex flex-col justify-center items-center">
-            <div class="rounded-full p-2 bg-pink-200">
-              <img src="/icons/user.svg" class="w-8 h-8" />
-            </div>
-            <p class="font-zain text-black mt-2">Perfil</p>
-          </div>
-        </a>
+    <footer class="text-zinc-200 p-4 text-center">
+      <p>&copy Luís Felipe, Edney Araujo, Marília</p>
+    </footer>
 
-        <a href="/aluno/opcaoTreinoAluno">
-          <div class="bg-white shadow-md rounded p-3 flex flex-col justify-center items-center">
-            <div class="rounded-full p-2 bg-pink-200">
-              <img src="/icons/user.svg" class="w-8 h-8" />
-            </div>
-            <p class="font-zain text-black mt-2">Meu Treino</p>
-          </div>
-        </a>
-
-
-        <a href="/aluno/montarTreino">
-          <div class="bg-white shadow-md rounded p-3 flex flex-col justify-center items-center">
-            <div class="rounded-full p-2 bg-pink-200">
-              <img src="/icons/user.svg" class="w-8 h-8" />
-            </div>
-            <p class="font-zain text-black mt-2">Montar Treinos</p>
-          </div>
-        </a>
-
-        <a href="/aluno/encontrarPersonal">
-          <div class="bg-white shadow-md rounded p-3 flex flex-col justify-center items-center">
-            <div class="rounded-full p-2 bg-pink-200">
-              <img src="/icons/user.svg" class="w-8 h-8" />
-            </div>
-            <p class="font-zain text-black mt-2">Encontrar Personal</p>
-          </div>
-        </a>
-
-        <a href="/aluno/encontrarAcademia">
-          <div class="bg-white shadow-md rounded p-3 flex flex-col justify-center items-center">
-            <div class="rounded-full p-2 bg-pink-200">
-              <img src="/icons/user.svg" class="w-8 h-8" />
-            </div>
-            <p class="font-zain text-black mt-2">Encontrar Academia</p>
-          </div>
-        </a>
-      </div>
-    </div>
-  </main>
-
-  <footer class="text-zinc-200 p-4 text-center">
-    <p>&copy Luís Felipe, Edney Araujo, Marília</p>
-  </footer>
-
-  <script>
+    <!-- <script>
     // Recupera o token usando a função getToken
     const token = localStorage.getItem("authorization");
     console.log({ token });
@@ -107,7 +115,6 @@
           window.location.href = "/aluno";
         });
     }
-  </script>
-</body>
-
+  </script> -->
+  </body>
 </html>
