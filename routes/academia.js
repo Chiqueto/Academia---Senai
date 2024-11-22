@@ -5,6 +5,7 @@ const academiaController = require("../controllers/academia");
 const { authMiddleware } = require("../middleware/authMiddleware");
 
 
+
 router.get("/menu/:id", academiaController.renderizaMenu);
 
 router.get("/perfil/:id", academiaController.renderizaPerfil);
