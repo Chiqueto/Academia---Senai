@@ -3,7 +3,13 @@ const router = express.Router();
 const academiaController = require("../controllers/academia");
 const { authMiddleware } = require("../middleware/authMiddleware");
 
+router.get("/", (req, res) => {
+  res.render("academia/login");
+});
 
+router.get("/cadastro", (req, res) => {
+  res.render("academia/cadastro");
+});
 
 router.get("/menu/:id", academiaController.renderizaMenu);
 
@@ -12,6 +18,7 @@ router.get("/perfil/:id", academiaController.renderizaPerfil);
 router.get("/alunos/:id", academiaController.renderizaListaAlunos);
 
 router.get("/personais/:id", academiaController.renderizaListaPersonais);
+
 
 router.get("/aparelhos", (req, res) => {
   res.render("academia/aparelhos");
