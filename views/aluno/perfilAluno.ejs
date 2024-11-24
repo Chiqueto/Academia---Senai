@@ -19,6 +19,17 @@
           <!-- <img src="/icons/GymFit.svg" /> -->
         </div>
       </nav>
+      <form
+        action="/aluno/uploadFoto/<%= aluno.id %>"
+        method="POST"
+        enctype="multipart/form-data"
+      >
+        <label for="fotoPerfil">Escolher imagem:</label>
+        <input type="file" id="fotoPerfil" name="fotoPerfil" accept="image/*" />
+        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">
+          Enviar
+        </button>
+      </form>
     </header>
 
     <main class="flex flex-col">
@@ -26,17 +37,22 @@
         class="shadow-md rounded p-3 flex flex-col justify-center items-center"
       >
         <div class="rounded-full p-2 bg-slate-300">
-          <img src="/icons/user.svg" class="w-14 h-14" />
+          <img
+            src="<%= aluno.foto_perfil ? aluno.foto_perfil : '/icons/user.svg' %>"
+            alt="Foto de Perfil"
+            class="w-14 h-14"
+          />
         </div>
+        <h4 class="ml-3"><%= aluno.nome %></h4>
         <p class="font-zain text-lg text-white mt-2"></p>
       </div>
       <div class="font-zain text-white p-5">
         <h3>Dados Pessoais</h3>
-        <h4 class="ml-3">Idade: <%= aluno.dt_nascimento %></h4>
+        <h4 class="ml-3">Idade: <%= aluno.idade %></h4>
         <h4 class="ml-3">
           Sexo: <%= aluno.genero == "M" ? "Masculino" : "Feminino" %>
         </h4>
-        <h4 class="ml-3">Telefone:</h4>
+        <h4 class="ml-3">Telefone: <%= aluno.telefone %></h4>
       </div>
     </main>
 

@@ -7,6 +7,27 @@ require("dotenv").config();
 
 const SECRET_KEY = process.env.SECRET_KEY;
 
+const formatarTelefone = (telefone) => {
+  const telefoneFormatado = telefone.replace(/\D/g, ""); // Remove caracteres não numéricos
+  return telefoneFormatado.replace(
+    /^(\d{3})(\d{5})(\d{4})$/,
+    "($1) $2-$3"
+  );
+};
+
+const calcularIdade = (dataNascimento) => {
+  const hoje = new Date();
+  const nascimento = new Date(dataNascimento);
+  let idade = hoje.getFullYear() - nascimento.getFullYear();
+  const mes = hoje.getMonth() - nascimento.getMonth();
+
+  if (mes < 0 || (mes === 0 && hoje.getDate() < nascimento.getDate())) {
+    idade--;
+  }
+
+  return idade;
+};
+
 const criarAluno = async (req, res) => {
   const { nome, email, senha, genero, telefone, dt_nascimento } = req.body;
 
@@ -33,6 +54,7 @@ const criarAluno = async (req, res) => {
       telefone: telefoneFormatado,
       dt_nascimento,
     });
+    
 
     if (!novoAluno) {
       return res.status(400).json({ message: "Erro ao cadastrar aluno" });
@@ -119,11 +141,28 @@ const renderizaMenu = (req, res) => {
   res.render("aluno/menuAluno", { id });
 };
 
+// const renderizaPerfil = async (req, res) => {
+//   const { id } = req.params;
+//   const aluno = await Aluno.findById(id);
+//   res.render("aluno/perfilAluno", { aluno });
+// };
+
+
 const renderizaPerfil = async (req, res) => {
   const { id } = req.params;
-  const aluno = await Aluno.findById(id);
-  res.render("aluno/perfilAluno", { aluno });
+  try {
+    const aluno = await Aluno.findById(id);
+    if (!aluno) {
+      return res.status(404).json({ message: "Aluno não encontrado" });
+    }
+    aluno.telefone = formatarTelefone(aluno.telefone); // Atualiza o campo com o número formatado
+    aluno.idade = calcularIdade(aluno.dt_nascimento); // Adiciona a idade
+    res.render("aluno/perfilAluno", { aluno });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 };
+
 
 const renderizaEncontrarAcademias = async (req, res) => {
   // const { id } = req.params;
@@ -138,6 +177,22 @@ const renderizaEncontrarPersonais = async (req, res) => {
   const personais = await Personal.findAll();
   res.render("aluno/encontrarPersonal", personais);
 };
+
+
+// const renderizaPerfil = async (req, res) => {
+//   const { id } = req.params;
+//   try {
+//     const aluno = await Aluno.findById(id);
+//     if (!aluno) {
+//       return res.status(404).json({ message: "Aluno não encontrado" });
+//     }
+//     aluno.idade = calcularIdade(aluno.dt_nascimento); // Adiciona a idade ao objeto do aluno
+//     res.render("aluno/perfilAluno", { aluno });
+//   } catch (error) {
+//     res.status(500).json({ error: error.message });
+//   }
+// };
+
 
 const autenticaAluno = async (req, res) => {
   const { email, senha } = req.body;
@@ -237,4 +292,5 @@ module.exports = {
   removePersonal,
   renderizaEncontrarAcademias,
   renderizaEncontrarPersonais,
+  formatarTelefone,
 };
