@@ -5,6 +5,8 @@ const baseApi = require("./routes/base");
 const aluno = require("./routes/aluno");
 const personal = require("./routes/personal");
 const academia = require("./routes/academia");
+const treino = require("./routes/treino");
+const exercicio = require("./routes/exercicio");
 const cors = require("cors");
 
 app.use(bodyParser.json());
@@ -19,6 +21,8 @@ app.use("/", baseApi);
 app.use("/aluno", aluno);
 app.use("/personal", personal);
 app.use("/academia", academia);
+app.use("/treino", treino);
+app.use("/exercicio", exercicio);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
