@@ -62,4 +62,6 @@ router.post("/login", academiaController.autenticaAcademia);
 
 router.post("/inserirPersonal", academiaController.inserirPersonal);
 
+
+
 module.exports = router;

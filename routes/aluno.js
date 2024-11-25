@@ -47,7 +47,7 @@ router.post("/cadastro", alunoController.criarAluno);
 router.post("/login", alunoController.autenticaAluno);
 
 // Rota para upload de foto de perfil
-router.post("/uploadFoto/:id", upload.single("fotoPerfil"), alunoController.uploadFoto);
+//router.post("/uploadFoto/:id", upload.single("fotoPerfil"), alunoController.uploadFoto);
 
 
 //Sem a autenticação

@@ -2,8 +2,11 @@ const Academia = require("../models/academia.js");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
+const { findAvailablePersonais } = require("../models/academia.js");
 
 const SECRET_KEY = process.env.SECRET_KEY;
+
+
 
 const cadastrar = async (req, res) => {
   const {
@@ -242,4 +245,5 @@ module.exports = {
   renderizaCadastro,
   renderizaListaPersonais,
   inserirPersonal,
+
 };
