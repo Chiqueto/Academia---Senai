@@ -19,11 +19,13 @@ router.get("/opcaoTreinoAluno", (req, res) => {
   res.render("aluno/opcaoTreinoAluno");
 });
 
-router.get("/encontrarAcademias", alunoController.renderizaEncontrarAcademias);
+router.get("/encontrarAcademia", alunoController.renderizaEncontrarAcademias);
 
-router.get("/encontrarPersonal", (req, res) => {
-  res.render("aluno/encontrarPersonal");
-});
+// router.get("/encontrarPersonal", (req, res) => {
+//   res.render("aluno/encontrarPersonal");
+// });
+
+router.get("/encontrarPersonal", alunoController.renderizaListaPersonais);
 
 router.get("/montarTreino", (req, res) => {
   res.render("aluno/montarTreino");
@@ -43,15 +45,17 @@ router.post("/cadastro", alunoController.criarAluno);
 // router.get("/listaAlunos", authMiddleware, alunoController.listarAlunos);
 // router.get("/buscarAluno/:id", authMiddleware, alunoController.buscarAluno);
 // router.delete("/deletar/:id", authMiddleware, alunoController.deletarAluno);
-// router.put("/atualizar/:id", authMiddleware, alunoController.atualizarAluno);
+router.put("/atualizar/:id", authMiddleware, alunoController.atualizarAluno);
 router.post("/login", alunoController.autenticaAluno);
 
 // Rota para upload de foto de perfil
 // router.post("/uploadFoto/:id", upload.single("fotoPerfil"), alunoController.uploadFoto);
+//router.post("/uploadFoto/:id", upload.single("fotoPerfil"), alunoController.uploadFoto);
 
 //Sem a autenticação
 router.get("/listaAlunos", alunoController.listarAlunos);
 router.get("/buscarAluno/:id", alunoController.buscarAluno);
+
 router.delete("/deletar/:id", alunoController.deletarAluno);
 router.put("/atualizar/:id", alunoController.atualizarAluno);
 router.post("/matricula", alunoController.matriculaAlunoAcademia);

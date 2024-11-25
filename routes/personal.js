@@ -6,7 +6,7 @@ const { authMiddleware } = require("../middleware/authMiddleware");
 
 router.get("/", personalController.renderizaLogin);
 router.get("/cadastro", personalController.renderizaCadastro);
-// router.get("/menu", personalController.renderizaMenu, authMiddleware);
+//router.get("/menu", personalController.renderizaMenu, authMiddleware);
 // router.get("/perfilPersonal", personalController.renderizaPerfil, authMiddleware)
 
 //Sem a autenticação

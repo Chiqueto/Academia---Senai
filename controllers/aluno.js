@@ -31,13 +31,13 @@ const calcularIdade = (dataNascimento) => {
 const criarAluno = async (req, res) => {
   const { nome, email, senha, genero, telefone, dt_nascimento } = req.body;
 
-  const telefoneFormatado = telefone.replace(/\D/g, "");
-  const senhaCriptografada = await bcrypt.hash(senha, 10);
-
   //validações de campos em branco
   if (!nome || !email || !senha || !genero || !telefone || !dt_nascimento) {
     return res.status(400).json({ message: "Preencha todos os campos!" });
   }
+
+  const telefoneFormatado = telefone.replace(/\D/g, "");
+  const senhaCriptografada = await bcrypt.hash(senha, 10);
 
   //verifica email
   const db_email = await Aluno.findByEmail(email);
@@ -70,22 +70,40 @@ const criarAluno = async (req, res) => {
 const listarAlunos = async (req, res) => {
   try {
     const alunos = await Aluno.findAll();
-    res.status(201).json(alunos);
+    res.status(200).json(alunos);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 };
+
+// const buscarAluno = async (req, res) => {
+//   const { id } = req.params;
+
+//   try {
+//     const aluno = await Aluno.findById(id);
+//     if (aluno) {
+//       res.status(200).json(aluno);
+//     } else {
+//       res.status(404).json({ message: "Aluno não encontrado" });
+//     }
+//   } catch (error) {
+//     res.status(500).json({ error: error.message });
+//   }
+// };
 
 const buscarAluno = async (req, res) => {
   const { id } = req.params;
 
   try {
     const aluno = await Aluno.findById(id);
-    if (aluno) {
-      res.status(200).json(aluno);
-    } else {
-      res.status(404).json({ message: "Aluno não encontrado" });
+    if (!aluno) {
+      return res.status(404).json({ message: "Aluno não encontrado" });
     }
+
+    aluno.telefone = formatarTelefone(aluno.telefone);
+    aluno.idade = calcularIdade(aluno.dt_nascimento);
+
+    res.render("aluno/perfilAluno", { aluno });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -114,6 +132,7 @@ const atualizarAluno = async (req, res) => {
   if (!nome || !telefone) {
     return res.status(400).json({ message: "Preencha todos os campos!" });
   }
+
   const telefoneFormatado = telefone.replace(/\D/g, "");
   try {
     const result = await Aluno.updateAluno(id, { nome, telefoneFormatado });
@@ -164,11 +183,14 @@ const renderizaPerfil = async (req, res) => {
 };
 
 
-const renderizaEncontrarAcademias = async (req, res) => {
-  // const { id } = req.params;
-  // const aluno = await Aluno.findById(id);
-  const academias = await Academia.findAll();
-  res.render("aluno/encontrarAcademia", academias);
+const renderizaEncontrarAcademias = (req, res) => {
+  try {
+    // Aqui você pode passar dados para a página, se necessário
+    res.render('aluno/encontrarAcademia', { academia: [] }); // Passe 'academias' se estiver renderizando dinamicamente
+  } catch (error) {
+    console.error('Erro ao carregar a página encontrarAcademia:', error.message);
+    res.status(500).send('Erro ao carregar a página');
+  }
 };
 
 const renderizaEncontrarPersonais = async (req, res) => {
@@ -176,6 +198,16 @@ const renderizaEncontrarPersonais = async (req, res) => {
   // const aluno = await Aluno.findById(id);
   const personais = await Personal.findAll();
   res.render("aluno/encontrarPersonal", personais);
+};
+
+const renderizaListaPersonais = async (req, res) => {
+  try {
+    const personais = await Personal.findAll(); // Supondo que esta função retorne os personais cadastrados no banco de dados
+    res.render("aluno/encontrarPersonal", { personais }); // Passa 'personais' para o template
+  } catch (error) {
+    console.error("Erro ao buscar os personais:", error.message);
+    res.status(500).json({ error: "Erro interno ao buscar personais" });
+  }
 };
 
 
@@ -212,14 +244,14 @@ const autenticaAluno = async (req, res) => {
       expiresIn: "1h",
     });
 
-    return res.status(200).json({
+    res.status(200).json({
       message: "Aluno autenticado com sucesso!",
       token,
       redirectTo: `/aluno/menu/${aluno.id}`,
     });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ error: "Erro interno do servidor" });
+    res.status(500).json({ error: "Erro interno do servidor" });
   }
 };
 
@@ -293,4 +325,5 @@ module.exports = {
   renderizaEncontrarAcademias,
   renderizaEncontrarPersonais,
   formatarTelefone,
+  renderizaListaPersonais,
 };
