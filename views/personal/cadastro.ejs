@@ -31,6 +31,7 @@
               type="text"
               name="nome"
               placeholder="Nome"
+              required minlength="5" maxlength="50"
             />
           </div>
 
@@ -41,6 +42,7 @@
               type="email"
               name="email"
               placeholder="seuemail@exemplo.com.br"
+              required minlength="5" maxlength="25"
             />
           </div>
 
@@ -51,6 +53,7 @@
               type="password"
               name="senha"
               placeholder="*********"
+              required minlength="4" maxlength="30"
             />
           </div>
 
@@ -61,6 +64,7 @@
               type="text"
               name="cref"
               placeholder="0000-G/SC"
+              required minlength="6" maxlength="6"
             />
           </div>
 
@@ -71,6 +75,7 @@
               type="text"
               name="cidade"
               placeholder="Cidade"
+              required
             />
           </div>
 
@@ -82,6 +87,7 @@
               id="especialidade"
               class="border-2 border-black rounded-full bg-pink-50 text-lg px-2 py-1 text-center"
               placeholder="Especialidade"
+              required
             >
               >
               <option class="text-sm" value="teste">Hipertrofia</option>
@@ -97,6 +103,12 @@
               type="text"
               name="telefone"
               placeholder="(16) 999968-6044"
+              required minlength="11" maxlength="12"
+              pattern="\d{11,12}"
+              title="Digite um telefone com 11 ou 12 dígitos"
+              id="telefone"
+              inputmode="numeric"
+              oninput="this.value = this.value.replace(/[^0-9]/g, '')"
             />
           </div>
           <button
