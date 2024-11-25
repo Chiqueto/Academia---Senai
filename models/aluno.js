@@ -24,6 +24,11 @@ const calcularIdade = (dataNascimento) => {
   return idade;
 };
 
+const findAll = async () => {
+  const result = await pool.query("SELECT * FROM tb_aluno");
+  return result.rows;
+};
+
 const findById = async (id) => {
   const result = await pool.query("SELECT * FROM tb_aluno WHERE id = $1", [id]);
   if (result.rows.length > 0) {
@@ -33,10 +38,7 @@ const findById = async (id) => {
   }
   return null;
 };
-const findAll = async () => {
-  const result = await pool.query("SELECT * FROM tb_aluno");
-  return result.rows;
-};
+
 
 
 // const findById = async (id) => {
@@ -50,11 +52,10 @@ const deleteAluno = async (id) => {
 };
 
 const updateAluno = async (id, alunoData) => {
-  const { nome, telefone, fotoPerfil } = alunoData;
+  const { nome, telefone } = alunoData;
   const result = await pool.query(
     "UPDATE tb_aluno SET nome = $1, telefone = $2 WHERE id = $3 RETURNING *",
-    "ALTER TABLE tb_aluno ADD COLUMN foto_perfil VARCHAR(255);",
-    [nome, telefone, fotoPerfil, id]
+    [nome, telefone, id]
   );
   return result.rows[0];
 };

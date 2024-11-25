@@ -1,7 +1,7 @@
 const express = require("express");
 const multer = require("multer");
 const { upload } = require("../uploadConfig");
-const alunoController = require("../controllers/aluno");
+const alunoController = require("../controllers/aluno")
 const router = express.Router();
 
 const { authMiddleware } = require("../middleware/authMiddleware");
@@ -43,7 +43,7 @@ router.post("/cadastro", alunoController.criarAluno);
 // router.get("/listaAlunos", authMiddleware, alunoController.listarAlunos);
 // router.get("/buscarAluno/:id", authMiddleware, alunoController.buscarAluno);
 // router.delete("/deletar/:id", authMiddleware, alunoController.deletarAluno);
-// router.put("/atualizar/:id", authMiddleware, alunoController.atualizarAluno);
+router.put("/atualizar/:id", authMiddleware, alunoController.atualizarAluno);
 router.post("/login", alunoController.autenticaAluno);
 
 // Rota para upload de foto de perfil
