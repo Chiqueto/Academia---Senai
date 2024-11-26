@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const personalController = require("../controllers/personal");
-const Exercicio = require("../controllers/exercicio");
+const ExercicioController = require("../controllers/exercicio");
 const TreinoController = require("../controllers/treino");
 const { authMiddleware } = require("../middleware/authMiddleware");
 
@@ -32,18 +32,21 @@ router.delete("/deletar/:id", personalController.deletarPersonal);
 router.put("/atualizar/:id", personalController.atualizarPersonal);
 
 //exercicios para personais
-router.post("/criarExercicio/:id_personal", Exercicio.criarExercicio);
+router.post("/criarExercicio/:id_personal", ExercicioController.criarExercicio);
 router.put(
   "/atualizarExercicio/:id_personal/:id_exercicio",
-  Exercicio.atualizarExercicio
+  ExercicioController.atualizarExercicio
 );
-router.delete("/deletarExercicio/:id", Exercicio.deletarExercicio);
-router.get("/exercicios/:id_personal", Exercicio.listarExerciciosByPersonal);
+router.delete("/deletarExercicio/:id", ExercicioController.deletarExercicio);
+router.get(
+  "/exercicios/:id_personal",
+  ExercicioController.listarExerciciosByPersonal
+);
 router.get("/:id_personal/treinos", TreinoController.listaTreinoPersonal);
-// router.get(
-//   "/:id_personal/treino/:id_treino",
-//   TreinoController.listaTreinoAlunoComExercicios
-// );
+router.get(
+  "/:id_personal/treino/:id_treino",
+  ExercicioController.listarExerciciosPorTreino
+);
 router.post(
   "/:id_aluno/treino/:id_treino/addExercicio",
   TreinoController.adicionarExercicio
