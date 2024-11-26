@@ -155,9 +155,9 @@ const renderizaMenu = (req, res) => {
   res.render("personal/menuPersonal");
 };
 
-// const renderizaPerfil = (req, res) => {
-//   res.render("personal/perfilPersonal");
-// };
+ const renderizaPerfil = (req, res) => {
+   res.render("personal/perfilPersonal");
+ };
 
 const autenticaPersonal = async (req, res) => {
   const { email, senha } = req.body;
@@ -201,6 +201,6 @@ module.exports = {
   renderizaLogin,
   renderizaCadastro,
   renderizaMenu,
-  //   renderizaPerfil,
+  renderizaPerfil,
   autenticaPersonal,
 };
