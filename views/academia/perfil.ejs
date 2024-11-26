@@ -29,7 +29,10 @@
           <h2 class="font-bold"><%= academia.cidade %></h2>
           <h2 class="mx-4">Rua: <%= academia.logradouro %></h2>
           <h2 class="mx-4">Bairro: <%= academia.bairro %></h2>
-          <h2 class="mx-4">Contato: <%= academia.telefone %></h2>
+          <h2 class="mx-4">Contato: <%= academia.telefone %>
+            <a href="/editar/<%= academia.id %>" class="ml-2">
+            <img src="/icons/edit.svg" alt="Editar" class="inline-block w-6 h-6 cursor-pointer hover:opacity-80">
+            </a></h2>
         </div>
         <div
           class="bg-slate-300 shadow-md rounded-lg mt-auto flex flex-col items-center"

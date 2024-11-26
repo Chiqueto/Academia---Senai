@@ -698,6 +698,14 @@ video {
   margin-top: auto;
 }
 
+.ml-2{
+  margin-left: 0.5rem;
+}
+
+.inline-block{
+  display: inline-block;
+}
+
 .flex{
   display: flex;
 }
@@ -724,6 +732,10 @@ video {
 
 .h-8{
   height: 2rem;
+}
+
+.h-6{
+  height: 1.5rem;
 }
 
 .min-h-screen{
@@ -766,6 +778,10 @@ video {
   width: 100%;
 }
 
+.w-6{
+  width: 1.5rem;
+}
+
 .max-w-lg{
   max-width: 32rem;
 }
@@ -789,6 +805,10 @@ video {
 
 .transform{
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+}
+
+.cursor-pointer{
+  cursor: pointer;
 }
 
 .grid-cols-1{
@@ -1194,6 +1214,10 @@ body{
 
 .hover\:bg-neonGreenHover:hover{
   background-color: rgba(57, 255, 20, 0.9);
+}
+
+.hover\:opacity-80:hover{
+  opacity: 0.8;
 }
 
 .focus\:outline-none:focus{
