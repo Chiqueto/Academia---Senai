@@ -175,18 +175,18 @@ const listaTreinoAluno = async (req, res) => {
   }
 };
 
-const adicionarExercicio = async (req, res) => {
-  const { id_treino } = req.params;
-  const { id_exercicio } = req.body;
+const adicionarExercicios = async (req, res) => {
+  const { id_treino, ids_exercicios } = req.body; // Recebe um array de IDs
 
   try {
-    const exercicioAdicionado = await Treino.setExercise(
+    const exerciciosAdicionados = await Treino.setExercises(
       id_treino,
-      id_exercicio
+      ids_exercicios
     );
+
     res.status(201).json({
-      message: "Exercício adicionado ao treino!",
-      exercicioAdicionado,
+      message: "Exercícios adicionados ao treino!",
+      exerciciosAdicionados,
     });
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -204,5 +204,5 @@ module.exports = {
   listarTreinos,
   listaTreinoPersonal,
   listaTreinoAluno,
-  adicionarExercicio,
+  adicionarExercicios,
 };

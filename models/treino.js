@@ -68,13 +68,18 @@ const setTreino = async (idAluno, idTreino) => {
   return result.rows[0];
 };
 
-const setExercise = async (id_treino, id_exercicio) => {
-  const result = await pool.query(
-    "INSERT INTO tb_treino_exercicio (id_treino, id_exercicio) VALUES ($1, $2) RETURNING *",
-    [id_treino, id_exercicio]
-  );
+const setExercises = async (id_treino, ids_exercicios) => {
+  const values = ids_exercicios
+    .map((id_exercicio) => `(${id_treino}, ${id_exercicio})`)
+    .join(", ");
+  const query = `
+    INSERT INTO tb_treino_exercicio (id_treino, id_exercicio)
+    VALUES ${values}
+    RETURNING *;
+  `;
 
-  return result.rows[0];
+  const result = await pool.query(query);
+  return result.rows;
 };
 
 const setRepeticao = async (id_treino, id_aluno, id_exercicio, carga, reps) => {

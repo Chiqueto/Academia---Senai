@@ -3,16 +3,14 @@ const Personal = require("../models/personal.js");
 const Academia = require("../models/academia.js");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const Treino = require("../models/treino.js");
 require("dotenv").config();
 
 const SECRET_KEY = process.env.SECRET_KEY;
 
 const formatarTelefone = (telefone) => {
   const telefoneFormatado = telefone.replace(/\D/g, ""); // Remove caracteres não numéricos
-  return telefoneFormatado.replace(
-    /^(\d{3})(\d{5})(\d{4})$/,
-    "($1) $2-$3"
-  );
+  return telefoneFormatado.replace(/^(\d{3})(\d{5})(\d{4})$/, "($1) $2-$3");
 };
 
 const calcularIdade = (dataNascimento) => {
@@ -54,7 +52,6 @@ const criarAluno = async (req, res) => {
       telefone: telefoneFormatado,
       dt_nascimento,
     });
-    
 
     if (!novoAluno) {
       return res.status(400).json({ message: "Erro ao cadastrar aluno" });
@@ -150,6 +147,16 @@ const renderizaLogin = (req, res) => {
   res.render("aluno/login");
 };
 
+const renderizaMontarTreino = async (req, res) => {
+  const { id_aluno } = req.params;
+
+  const treinos = await Treino.getTreinosByAluno(id_aluno);
+
+  console.log(treinos);
+
+  res.render("aluno/montarTreino", { id_aluno, treinos });
+};
+
 const renderizaCadastro = (req, res) => {
   res.render("aluno/cadastro");
 };
@@ -166,7 +173,6 @@ const renderizaMenu = (req, res) => {
 //   res.render("aluno/perfilAluno", { aluno });
 // };
 
-
 const renderizaPerfil = async (req, res) => {
   const { id } = req.params;
   try {
@@ -182,14 +188,16 @@ const renderizaPerfil = async (req, res) => {
   }
 };
 
-
 const renderizaEncontrarAcademias = (req, res) => {
   try {
     // Aqui você pode passar dados para a página, se necessário
-    res.render('aluno/encontrarAcademia', { academia: [] }); // Passe 'academias' se estiver renderizando dinamicamente
+    res.render("aluno/encontrarAcademia", { academia: [] }); // Passe 'academias' se estiver renderizando dinamicamente
   } catch (error) {
-    console.error('Erro ao carregar a página encontrarAcademia:', error.message);
-    res.status(500).send('Erro ao carregar a página');
+    console.error(
+      "Erro ao carregar a página encontrarAcademia:",
+      error.message
+    );
+    res.status(500).send("Erro ao carregar a página");
   }
 };
 
@@ -210,7 +218,6 @@ const renderizaListaPersonais = async (req, res) => {
   }
 };
 
-
 // const renderizaPerfil = async (req, res) => {
 //   const { id } = req.params;
 //   try {
@@ -224,7 +231,6 @@ const renderizaListaPersonais = async (req, res) => {
 //     res.status(500).json({ error: error.message });
 //   }
 // };
-
 
 const autenticaAluno = async (req, res) => {
   const { email, senha } = req.body;
@@ -326,4 +332,5 @@ module.exports = {
   renderizaEncontrarPersonais,
   formatarTelefone,
   renderizaListaPersonais,
+  renderizaMontarTreino,
 };
