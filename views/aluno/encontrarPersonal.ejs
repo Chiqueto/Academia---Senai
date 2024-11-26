@@ -1,130 +1,83 @@
 <!DOCTYPE html>
-
 <html>
   <head>
     <meta lang="pt-br" />
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link href="/styles/output.css" rel="stylesheet" />
-    <title>Perfil do Aluno</title>
+    <link rel="stylesheet" href="/styles/output.css" />
+    <title>Lista de Personal</title>
   </head>
+
   <body class="flex flex-col min-h-screen">
     <header>
       <nav class="flex justify-between bg-zinc-800 py-5 px-4">
         <div class="flex items-center gap-4">
           <a href="/aluno/menu"><img src="/icons/back_arrow.svg" /></a>
           <h1 class="font-jaro text-zinc-50 text-3xl">GymFit</h1>
-          <!-- <img src="/icons/GymFit.svg" /> -->
         </div>
       </nav>
-    </header>
-
-     <main class="flex flex-col">
-        <div class="shadow-md rounded p-3 flex flex-col justify-center items-center">
-          <div class="rounded-full p-2 bg-slate-300">
-            <img src="/icons/user.svg" class="w-14 h-14">
+    </header> 
+    <main class=" mx-4 flex-grow"><!--Começo do perfil-->
+      <section class="font-zain  px-4">
+          <h2 class="text-3xl text-center text-white py-2">Lista de Personal</h2>
+          <div class="relative w-full ">
+            <input type="text" placeholder="Pesquisar pelo nome do personal..."
+              class="w-full py-1 pl-10 pr-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-gray-700 placeholder-gray-400">
+            <div class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none">
+              <img src="/icons/lupa.svg" class="w-5 h-5">
+            </div>
+          </div><br>
+            <div id="">
+           <!-- Renderizar alunos dinamicamente -->
+        <% if (personais && personais.length > 0) { %>
+          <% personais.forEach(personais => { %>
+            <div class="container bg-white rounded-lg flex items-center p-3 shadow-md w-auto mb-2">
+              <div class="rounded-full bg-pink-200 flex-shrink-0 w-10 h-10">
+                <img src="/icons/user.svg" class="w-10 h-8" alt="Usuário">
+              </div>
+              <span class="ml-4 text-2xl text-gray-900 font-semibold"><%= personais.nome %></span>
+            </div>
+          <% }) %>
+        <% } else { %>
+          <p class="text-gray-500">Nenhum personal encontrado.</p>
+        <% } %></div>
+    
+      </section>
+    <div id="abaSuspensa" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-10">
+      <div class="bg-white p-6 rounded-lg w-96">
+        <h3 class="text-2xl font-semibold text-center mb-4">Pesquisar Personal</h3>
+        <div class="relative w-full mb-4">
+          <input type="text" id="nomePersonal" placeholder="Digite o nome do personal..."
+            class="w-full py-1 pl-10 pr-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-gray-700 placeholder-gray-400">
+          <div class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none">
+            <img src="/icons/lupa.svg" class="w-5 h-5">
           </div>
-          <p class="font-zain text-lg text-white mt-2 ">Nome do Aluno</p>
         </div>
-        <div class="font-zain text-white p-5">
-            <h3>Dados Pessoais </h3>
-            <h4 class="ml-3">Idade: </h4>
-            <h4 class="ml-3">Sexo: </h4>
-            <h4 class="ml-3">Telefone: </h4>
+        <div class="flex justify-between">
+          <button onclick="BuscarPersonal()" class="bg-neonGreen text-white px-4 py-2 rounded-lg">
+            Adicionar Personal
+          </button>
+          <button onclick="toggleAbaSuspensa()" class="bg-red-500 text-white px-4 py-2 rounded-lg">
+            Fechar
+          </button>
         </div>
     </main>
-
-        <!-- Calendário Automático -->
-      <div class="w-45 max-w-lg bg-zinc-700 p-4 rounded-lg shadow-md">
-        <div id="calendar" class="grid grid-cols-7 gap-2 text-center text-white"></div>
-      </div>
-<script>
-  function generateCalendar() {
-    const calendarContainer = document.getElementById("calendar");
-    calendarContainer.innerHTML = ""; // Limpa o calendário para recriação
-
-    const today = new Date();
-    const currentYear = today.getFullYear();
-    const currentMonth = today.getMonth();
-
-    const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
-    const firstDayOfMonth = new Date(currentYear, currentMonth, 1).getDay();
-
-    // Dias da semana
-    const daysOfWeek = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
-    daysOfWeek.forEach(day => {
-      const dayElement = document.createElement("div");
-      dayElement.classList.add("font-bold");
-      dayElement.innerText = day;
-      calendarContainer.appendChild(dayElement);
-    });
-
-    // Espaço inicial para alinhar o primeiro dia do mês
-    for (let i = 0; i < firstDayOfMonth; i++) {
-      const emptyCell = document.createElement("div");
-      calendarContainer.appendChild(emptyCell);
-    }
-
-    // Dias do mês
-    for (let day = 1; day <= daysInMonth; day++) {
-      const dayElement = document.createElement("div");
-      dayElement.innerText = day;
-      dayElement.classList.add("p-2", "rounded-lg");
-      
-      // Destaque para o dia atual
-      if (day === today.getDate()) {
-        dayElement.classList.add("bg-blue-500");
-      } else {
-        dayElement.classList.add("bg-zinc-600");
+   <button onclick="toggleAbaSuspensa()" class="mx-auto bg-neonGreen rounded-xl px-4 py-2 hover:bg-neonGreenHover transition-colors text-zinc-50 font-zain text-4xl ">
+      Adicionar
+    </button><br>
+    <script>// separar o script depois
+      function toggleAbaSuspensa() {
+        const abaSuspensa = document.getElementById("abaSuspensa");
+        abaSuspensa.classList.toggle("hidden");
       }
-      calendarContainer.appendChild(dayElement);
-    }
-  }
-  document.addEventListener("DOMContentLoaded", generateCalendar);
-</script>
 
-<div class="font-zain text-white p-5">
-    <h3>
-        <p class="text-lime-500">Treino concluído</p>
-        <p class="text-red-600">Marca falta</p>
-    </h3>
-    
-</div>
-<button type="submit" class="bg-neonGreen rounded-xl py-2 hover:bg-neonGreenHover transition-colors text-zinc-50 font-zain text-4xl mx-12">
-    Sair
-</button>
-
-
-<!-- <script>
-  // Recupera o token usando a função getToken
-  const token = localStorage.getItem("authorization");
-  console.log({ token });
-  if (!token) {
-    // Se não houver token, redireciona para a página de login
-    window.location.href = "/aluno";
-  } else {
-    // Faz a requisição autenticada
-    console.log(token);
-    fetch("/aluno/perfilAluno", {
-      method: "GET",
-      headers: {
-        authorization: `Bearer ${token}`, // Inclui o token no cabeçalho
-        "Content-Type": "application/json",
-      },
-    })
-      .then((response) => {
-        if (!response.ok) {
-          // Se a resposta não for OK (ex: token inválido), redireciona para o login
-          throw new Error("Token inválido ou expirado");
-        }
-        console.log(response);
-        return;
-      })
-      .catch((error) => {
-        console.error(error);
-        window.location.href = "/aluno";
-      });
-  }
-</script> -->
+      // Função para simular a busca do aluno
+     /* function BuscarAluno() {
+        const nomeAluno = document.getElementById("nomeAluno").value;
+        console.log("Buscando aluno:", personais.nome);
+        // Aqui você pode adicionar a lógica para buscar o aluno
+      }*/
+     
+    </script>
   </body>
 </html>
