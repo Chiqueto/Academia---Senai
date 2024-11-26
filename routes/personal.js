@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const personalController = require("../controllers/personal");
 const Exercicio = require("../controllers/exercicio");
+const TreinoController = require("../controllers/treino");
 const { authMiddleware } = require("../middleware/authMiddleware");
 
 router.get("/", personalController.renderizaLogin);
@@ -34,5 +35,14 @@ router.put(
 );
 router.delete("/deletarExercicio/:id", Exercicio.deletarExercicio);
 router.get("/exercicios/:id_personal", Exercicio.listarExerciciosByPersonal);
+router.get("/:id_personal/treinos", TreinoController.listaTreinoPersonal);
+// router.get(
+//   "/:id_personal/treino/:id_treino",
+//   TreinoController.listaTreinoAlunoComExercicios
+// );
+router.post(
+  "/:id_aluno/treino/:id_treino/addExercicio",
+  TreinoController.adicionarExercicio
+);
 
 module.exports = router;

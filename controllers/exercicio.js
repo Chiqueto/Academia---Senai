@@ -105,6 +105,17 @@ const listarExerciciosByPersonal = async (req, res) => {
   }
 };
 
+const listarExerciciosPorTreino = async (req, res) => {
+  const { id_treino } = req.params;
+
+  try {
+    const treinos = await Exercicio.getExerciciosByTreino(id_treino);
+    res.status(201).json(treinos);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 module.exports = {
   criarExercicio,
   atualizarExercicio,
@@ -112,4 +123,5 @@ module.exports = {
   listarExercicios,
   listarExerciciosById,
   listarExerciciosByPersonal,
+  listarExerciciosPorTreino,
 };
