@@ -131,6 +131,7 @@ const insertPersonal = async (id_academia, id_personal) => {
   return result.rows[0];
 };
 
+
 module.exports = {
   createAcademia,
   findAll,
@@ -143,4 +144,5 @@ module.exports = {
   findStudents,
   findPersonais,
   insertPersonal,
+
 };
