@@ -8,10 +8,14 @@ const { authMiddleware } = require("../middleware/authMiddleware");
 router.get("/", personalController.renderizaLogin);
 router.get("/cadastro", personalController.renderizaCadastro);
 //router.get("/menu", personalController.renderizaMenu, authMiddleware);
-// router.get("/perfilPersonal", personalController.renderizaPerfil, authMiddleware)
+//router.get("/perfilPersonal", personalController.renderizaPerfil, authMiddleware);
+
+router.get("/opcaoTreinoPersonal", (req, res) => {
+  res.render("personal/opcaoTreinoPersonal");
+});
 
 //Sem a autenticação
-router.get("/menu", personalController.renderizaMenu);
+router.get("/menuPersonal", personalController.renderizaMenu);
 // router.get("/perfilPersonal", personalController.renderizaPerfil);
 
 router.post("/cadastro", personalController.criarPersonal);

@@ -162,7 +162,7 @@ const renderizaMenu = (req, res) => {
 const autenticaPersonal = async (req, res) => {
   const { email, senha } = req.body;
   try {
-    const personal = await Personal.loginAluno(email);
+    const personal = await Personal.loginPersonal(email);
 
     if (!personal) {
       return res.status(404).json({ error: "Personal não encontrado" });
@@ -181,16 +181,25 @@ const autenticaPersonal = async (req, res) => {
       }
     );
 
-    return res.status(200).json({
-      message: "Personal autenticado com sucesso!",
-      token,
-      redirectTo: "/personal/menu",
-    });
+
+// Redireciona para a página do menu diretamente
+    res.cookie("authToken", token, { httpOnly: true }); // Opcional: Define o token como cookie
+    return res.redirect("/personal/menuPersonal");
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: "Erro interno do servidor" });
   }
 };
+//     return res.status(200).json({
+//       message: "Personal autenticado com sucesso!",
+//       token,
+//       redirectTo: "/personal/menuPersonal",
+//     });
+//   } catch (error) {
+//     console.error(error);
+//     return res.status(500).json({ error: "Erro interno do servidor" });
+//   }
+// };
 
 module.exports = {
   criarPersonal,
