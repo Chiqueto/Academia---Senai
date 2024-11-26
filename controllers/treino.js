@@ -175,6 +175,24 @@ const listaTreinoAluno = async (req, res) => {
   }
 };
 
+const adicionarExercicio = async (req, res) => {
+  const { id_treino } = req.params;
+  const { id_exercicio } = req.body;
+
+  try {
+    const exercicioAdicionado = await Treino.setExercise(
+      id_treino,
+      id_exercicio
+    );
+    res.status(201).json({
+      message: "Exercício adicionado ao treino!",
+      exercicioAdicionado,
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 module.exports = {
   criarTreinoPersonal,
   criarTreinoAluno,
@@ -186,4 +204,5 @@ module.exports = {
   listarTreinos,
   listaTreinoPersonal,
   listaTreinoAluno,
+  adicionarExercicio,
 };

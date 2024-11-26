@@ -5,6 +5,7 @@ const createPersonal = async (personalData) => {
     nome,
     email,
     senha,
+    cref,
     cep,
     cidade,
     uf,
@@ -14,8 +15,19 @@ const createPersonal = async (personalData) => {
   } = personalData;
 
   const resut = await pool.query(
-    "INSERT INTO tb_personal (nome, email, senha, cep, cidade, uf, descricao, especialidade, telefone) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *",
-    [nome, email, senha, cep, cidade, uf, descricao, especialidade, telefone]
+    "INSERT INTO tb_personal (nome, email, senha, cref, cep, cidade, uf, descricao, especialidade, telefone) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING *",
+    [
+      nome,
+      email,
+      senha,
+      cref,
+      cep,
+      cidade,
+      uf,
+      descricao,
+      especialidade,
+      telefone,
+    ]
   );
   return resut.rows[0];
 };

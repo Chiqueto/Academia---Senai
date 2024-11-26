@@ -68,6 +68,15 @@ const setTreino = async (idAluno, idTreino) => {
   return result.rows[0];
 };
 
+const setExercise = async (id_treino, id_exercicio) => {
+  const result = await pool.query(
+    "INSERT INTO tb_treino_exercicio (id_treino, id_exercicio) VALUES ($1, $2) RETURNING *",
+    [id_treino, id_exercicio]
+  );
+
+  return result.rows[0];
+};
+
 const setRepeticao = async (id_treino, id_aluno, id_exercicio, carga, reps) => {
   const serie =
     (await pool.query(
@@ -93,4 +102,5 @@ module.exports = {
   getTreinos,
   getTreinosByPersonal,
   getTreinosByAluno,
+  setExercise,
 };

@@ -52,6 +52,15 @@ const getExerciciosByPersonal = async (id_personal) => {
   return result.rows;
 };
 
+const getExerciciosByTreino = async (id_treino) => {
+  const result = await pool.query(
+    "SELECT e.* FROM tb_treino t, tb_exercicio e WHERE t.id = $1 AND e.id IN (SELECT id_exercicio FROM tb_treino_exercicio WHERE id_exercicio = e.id) ",
+    [id_treino]
+  );
+
+  return result.rows;
+};
+
 module.exports = {
   createExercicio,
   updateExercicio,
@@ -59,4 +68,5 @@ module.exports = {
   getExercicios,
   getExercicioById,
   getExerciciosByPersonal,
+  getExerciciosByTreino,
 };
