@@ -2,6 +2,8 @@ const express = require("express");
 const multer = require("multer");
 const { upload } = require("../uploadConfig");
 const alunoController = require("../controllers/aluno");
+const TreinoController = require("../controllers/treino");
+const ExercicioController = require("../controllers/exercicio");
 const router = express.Router();
 
 const { authMiddleware } = require("../middleware/authMiddleware");
@@ -20,6 +22,12 @@ router.get("/opcaoTreinoAluno", (req, res) => {
 });
 
 router.get("/encontrarAcademia", alunoController.renderizaEncontrarAcademias);
+
+//add exercicio a um treino
+router.post(
+  "/:id_aluno/treino/:id_treino/addExercicio",
+  TreinoController.adicionarExercicio
+);
 
 // router.get("/encontrarPersonal", (req, res) => {
 //   res.render("aluno/encontrarPersonal");
@@ -62,4 +70,10 @@ router.post("/matricula", alunoController.matriculaAlunoAcademia);
 router.delete("/desmatricula", alunoController.desmatriculaAlunoAcademia);
 router.post("/contrataPersonal", alunoController.contrataPersonal);
 router.delete("/removePersonal", alunoController.removePersonal);
+router.get("/:id_aluno/treinos", TreinoController.listaTreinoAluno);
+router.get(
+  "/:id_aluno/treino/:id_treino",
+  ExercicioController.listarExerciciosPorTreino
+);
+
 module.exports = router;

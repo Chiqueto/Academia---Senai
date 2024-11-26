@@ -10,6 +10,7 @@ const criarPersonal = async (req, res) => {
     nome,
     email,
     senha,
+    cref,
     cep,
     cidade,
     uf,
@@ -19,7 +20,16 @@ const criarPersonal = async (req, res) => {
   } = req.body;
 
   //validações de campos em branco
-  if (!nome || !email || !senha || !cep || !cidade || !uf || !telefone) {
+  if (
+    !nome ||
+    !email ||
+    !senha ||
+    !cref ||
+    !cep ||
+    !cidade ||
+    !uf ||
+    !telefone
+  ) {
     return res.status(400).json({ message: "Preencha todos os campos!" });
   }
 
@@ -37,6 +47,7 @@ const criarPersonal = async (req, res) => {
       nome,
       email,
       senha: senhaCriptografada,
+      cref,
       cep: cepFormatado,
       cidade,
       uf,
@@ -144,9 +155,9 @@ const renderizaMenu = (req, res) => {
   res.render("personal/menuPersonal");
 };
 
-// const renderizaPerfil = (req, res) => {
-//   res.render("personal/perfilPersonal");
-// };
+ const renderizaPerfil = (req, res) => {
+   res.render("personal/perfilPersonal");
+ };
 
 const autenticaPersonal = async (req, res) => {
   const { email, senha } = req.body;
@@ -190,6 +201,6 @@ module.exports = {
   renderizaLogin,
   renderizaCadastro,
   renderizaMenu,
-  //   renderizaPerfil,
+  renderizaPerfil,
   autenticaPersonal,
 };
