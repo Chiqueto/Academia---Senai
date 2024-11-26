@@ -206,6 +206,12 @@ const renderizaMenu = (req, res) => {
   res.render(`academia/menuAcademia`, { id });
 };
 
+const renderizaEquipamento = (req, res) => {
+  const { id } = req.params;
+  res.render(`academia/equipamento`, { id });
+};
+
+
 const renderizaListaAlunos = async (req, res) => {
   const { id } = req.params;
   const alunos = await Academia.findStudents(id);
@@ -231,6 +237,26 @@ const inserirPersonal = async (req, res) => {
   }
 };
 
+// Função para buscar os alunos
+const searchAlunos = async (req, res) => {
+  const query = req.query.q;  // Pegando o termo de pesquisa da query string
+  
+  // Query SQL com LIKE para buscar alunos que começam com o termo pesquisado
+  const sql = `
+    SELECT nome
+    FROM tb_alunos
+    WHERE nome ILIKE $1
+    LIMIT 10
+  `;
+  
+  try {
+    const result = await pool.query(sql, [`%${query}%`]); // Realiza a busca no banco
+    res.json(result.rows); // Retorna os resultados em formato JSON
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: error.message });
+  }
+};
 module.exports = {
   cadastrar,
   listarAcademias,
@@ -245,5 +271,6 @@ module.exports = {
   renderizaCadastro,
   renderizaListaPersonais,
   inserirPersonal,
-
+  renderizaEquipamento,
+  searchAlunos,
 };

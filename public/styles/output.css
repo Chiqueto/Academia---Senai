@@ -726,10 +726,6 @@ video {
   height: 2rem;
 }
 
-.max-h-60{
-  max-height: 15rem;
-}
-
 .min-h-screen{
   min-height: 100vh;
 }
@@ -861,10 +857,6 @@ video {
 
 .gap-8{
   gap: 2rem;
-}
-
-.overflow-y-auto{
-  overflow-y: auto;
 }
 
 .rounded{

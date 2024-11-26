@@ -20,10 +20,10 @@ router.get("/alunos/:id", academiaController.renderizaListaAlunos);
 
 router.get("/personais/:id", academiaController.renderizaListaPersonais);
 
+router.get("/equipamento/:id", academiaController.renderizaEquipamento);
 
-router.get("/aparelhos", (req, res) => {
-  res.render("academia/aparelhos");
-});
+
+
 
 router.get("/adcEquipamento", (req, res) => {
   res.render("academia/adcEquipamento");
@@ -62,6 +62,6 @@ router.post("/login", academiaController.autenticaAcademia);
 
 router.post("/inserirPersonal", academiaController.inserirPersonal);
 
-
+router.get('/alunos', academiaController.searchAlunos);
 
 module.exports = router;
