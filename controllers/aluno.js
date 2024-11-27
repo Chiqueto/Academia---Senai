@@ -157,6 +157,13 @@ const renderizaMontarTreino = async (req, res) => {
   res.render("aluno/montarTreino", { id_aluno, treinos, exercicios });
 };
 
+const renderizaMeusTreinos = async (req, res) => {
+  const { id_aluno } = req.params;
+  const treinos = await Treino.getTreinosByAluno(id_aluno);
+
+  res.render("aluno/meusTreinos", { id_aluno, treinos });
+};
+
 const renderizaCadastro = (req, res) => {
   res.render("aluno/cadastro");
 };
@@ -333,4 +340,5 @@ module.exports = {
   formatarTelefone,
   renderizaListaPersonais,
   renderizaMontarTreino,
+  renderizaMeusTreinos,
 };

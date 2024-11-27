@@ -17,9 +17,7 @@ router.get("/cadastro", alunoController.renderizaCadastro);
 router.get("/menu/:id", alunoController.renderizaMenu);
 router.get("/perfilAluno/:id", alunoController.renderizaPerfil);
 
-router.get("/opcaoTreinoAluno", (req, res) => {
-  res.render("aluno/opcaoTreinoAluno");
-});
+router.get("/meusTreinos/:id_aluno", alunoController.renderizaMeusTreinos);
 
 router.get("/encontrarAcademia", alunoController.renderizaEncontrarAcademias);
 
