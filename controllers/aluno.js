@@ -1,6 +1,7 @@
 const Aluno = require("../models/aluno.js");
 const Personal = require("../models/personal.js");
 const Academia = require("../models/academia.js");
+const Exercicio = require("../models/exercicio.js");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const Treino = require("../models/treino.js");
@@ -151,10 +152,9 @@ const renderizaMontarTreino = async (req, res) => {
   const { id_aluno } = req.params;
 
   const treinos = await Treino.getTreinosByAluno(id_aluno);
+  const exercicios = await Exercicio.getExercicios();
 
-  console.log(treinos);
-
-  res.render("aluno/montarTreino", { id_aluno, treinos });
+  res.render("aluno/montarTreino", { id_aluno, treinos, exercicios });
 };
 
 const renderizaCadastro = (req, res) => {

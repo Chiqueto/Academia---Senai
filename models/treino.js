@@ -97,6 +97,24 @@ const setRepeticao = async (id_treino, id_aluno, id_exercicio, carga, reps) => {
   return result.rows[0];
 };
 
+const removeExercise = async (id_treino, id_exercicio) => {
+  const result = await pool.query(
+    "DELETE FROM tb_treino_exercicio WHERE id_treino = $1 AND id_exercicio = $2",
+    [id_treino, id_exercicio]
+  );
+
+  return result.rowCount;
+};
+
+const getExerciciosByTreino = async (id_treino) => {
+  const result = await pool.query(
+    "SELECT e.* FROM tb_treino t, tb_exercicio e WHERE t.id = $1 AND e.id IN (SELECT id_exercicio FROM tb_treino_exercicio WHERE id_exercicio = e.id) ",
+    [id_treino]
+  );
+
+  return result.rows;
+};
+
 module.exports = {
   createTreino,
   deleteTreino,
@@ -107,5 +125,7 @@ module.exports = {
   getTreinos,
   getTreinosByPersonal,
   getTreinosByAluno,
-  setExercise,
+  setExercises,
+  removeExercise,
+  getExerciciosByTreino,
 };

@@ -51,7 +51,7 @@ router.get(
 );
 router.post(
   "/:id_aluno/treino/:id_treino/addExercicio",
-  TreinoController.adicionarExercicio
+  TreinoController.adicionarExercicios
 );
 
 module.exports = router;

@@ -29,6 +29,18 @@ router.post(
   TreinoController.adicionarExercicios
 );
 
+//remover um exercicio
+router.delete(
+  `/montarTreino/:id_aluno/treino/:id_treino/exercicio/:id_exercicio`,
+  TreinoController.removerExercicio
+);
+
+//get exercicio by treino
+router.get(
+  "/montarTreino/:id_aluno/treino/:id_treino/exercicios",
+  ExercicioController.listarExerciciosPorTreino
+);
+
 // router.get("/encontrarPersonal", (req, res) => {
 //   res.render("aluno/encontrarPersonal");
 // });

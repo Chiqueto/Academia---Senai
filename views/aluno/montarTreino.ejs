@@ -18,6 +18,19 @@
           <h1 class="font-jaro text-zinc-50 text-3xl">GymFit</h1>
         </div>
       </nav>
+      <style>
+        .modal {
+          transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        .hidden {
+          opacity: 0;
+          visibility: hidden;
+        }
+        .visible {
+          opacity: 1;
+          visibility: visible;
+        }
+      </style>
     </header>
 
     <!-- Conteúdo Principal -->
@@ -51,6 +64,8 @@
                 <p class="text-gray-300"><%= treino.descricao %></p>
               </div>
               <button
+                onclick="toggleModalExercicio(this)"
+                data-id="<%= treino.id %>"
                 class="bg-neonGreen text-white px-4 py-2 rounded-lg hover:bg-neonGreenHover"
               >
                 Editar
@@ -127,42 +142,59 @@
           </button>
         </div>
       </div>
-      <!-- Botão Flutuante para Adicionar -->
-
+      <!-- Modal adicionar exercícios -->
       <div
         id="modalExercicio"
         class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-10"
       >
         <div class="bg-white p-6 rounded-lg w-96 flex flex-col items-center">
           <h1 class="text-center text-4xl font-bold mb-4">
-            Selecione os exercícios
+            Gerenciar Exercícios
           </h1>
 
-          <!-- Lista de Exercícios -->
-          <form id="formExercicios" class="flex flex-col gap-2 w-full">
-            <% exercicios.forEach(exercicio => { %>
-            <div class="flex items-center gap-2">
-              <input
-                type="checkbox"
-                id="exercicio-<%= exercicio.id %>"
-                name="exercicios"
-                value="<%= exercicio.id %>"
-                class="cursor-pointer"
-              />
-              <label for="exercicio-<%= exercicio.id %>" class="cursor-pointer">
-                <%= exercicio.nome %>
-              </label>
-            </div>
-            <% }) %>
-          </form>
+          <!-- Lista de Exercícios Adicionados -->
+          <div class="w-full mb-4">
+            <h2 class="text-lg font-bold text-gray-700 mb-2">
+              Exercícios Adicionados
+            </h2>
+            <ul id="exerciciosAdicionados" class="flex flex-col gap-2">
+              <!-- Os exercícios já vinculados ao treino serão inseridos dinamicamente aqui -->
+            </ul>
+          </div>
+
+          <!-- Lista de Exercícios Disponíveis -->
+          <div class="w-full mb-4">
+            <h2 class="text-lg font-bold text-gray-700 mb-2">
+              Adicionar Exercícios
+            </h2>
+            <form id="formExercicios" class="flex flex-col gap-2">
+              <% exercicios.forEach(exercicio => { %>
+              <div class="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  id="exercicio-<%= exercicio.id %>"
+                  name="exercicios"
+                  value="<%= exercicio.id %>"
+                  class="cursor-pointer"
+                />
+                <label
+                  for="exercicio-<%= exercicio.id %>"
+                  class="cursor-pointer"
+                >
+                  <%= exercicio.nome %>
+                </label>
+              </div>
+              <% }) %>
+            </form>
+          </div>
 
           <!-- Botões -->
           <div class="flex justify-between mt-4 w-full">
             <button
-              onclick="adicionarExerciciosSelecionados(<%= id_treino %>)"
+              onclick="salvarExercicios()"
               class="bg-neonGreen text-white px-4 py-2 rounded-lg hover:bg-neonGreenHover"
             >
-              Adicionar exercícios
+              Salvar Alterações
             </button>
             <button
               onclick="toggleModalExercicio()"
@@ -184,6 +216,7 @@
     </div>
     <!-- Scripts -->
     <script>
+      let idTreinoAtual = null;
       // Função para exibir/ocultar o modal
       function toggleModal() {
         const modal = document.getElementById("modal");
@@ -216,38 +249,44 @@
 
       // Função para criar treino
       async function criarTreino(event) {
-        event.preventDefault(); // Impede o recarregamento da página
+        event.preventDefault();
+        const formButton = event.target.querySelector("button[type='submit']");
+        const originalText = formButton.textContent;
 
-        const nome = document.getElementById("nome").value.trim();
-        const descricao = document.getElementById("descricao").value.trim();
-        const formTreino = document.getElementById("formTreino");
+        formButton.disabled = true;
+        formButton.textContent = "Criando...";
 
         try {
+          const nome = document.getElementById("nome").value.trim();
+          const descricao = document.getElementById("descricao").value.trim();
+
           const response = await fetch(`/treino/aluno/<%= id_aluno %>`, {
             method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ nome, descricao }),
           });
 
           const data = await response.json();
 
-          nome.value = "";
-          descricao.value = "";
-
           if (response.ok) {
             exibirMensagem(data.message || "Treino criado com sucesso!");
-            formTreino.reset();
           } else {
             exibirMensagem(data.message || "Erro ao criar treino.", false);
           }
         } catch (error) {
           exibirMensagem("Erro inesperado. Tente novamente mais tarde.", false);
+        } finally {
+          formButton.disabled = false;
+          formButton.textContent = originalText;
         }
       }
 
-      async function adicionarExerciciosSelecionados(id_treino) {
+      async function adicionarExerciciosSelecionados() {
+        if (!idTreinoAtual) {
+          alert("ID do treino não encontrado. Tente novamente.");
+          return;
+        }
+        console.log(idTreinoAtual);
         const checkboxes = document.querySelectorAll(
           "#formExercicios input[name='exercicios']:checked"
         );
@@ -255,20 +294,24 @@
           (checkbox) => checkbox.value
         );
 
+        console.log(ids_exercicios);
+
         if (ids_exercicios.length === 0) {
           alert("Selecione ao menos um exercício.");
           return;
         }
-
         try {
           const response = await fetch(
-            `/montarTreino/${id_aluno}/treino/addExercicios`,
+            `/aluno/montarTreino/<%= id_aluno %>/treino/addExercicios`,
             {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
               },
-              body: JSON.stringify({ id_treino, ids_exercicios }),
+              body: JSON.stringify({
+                id_treino: idTreinoAtual,
+                ids_exercicios,
+              }),
             }
           );
 
@@ -285,9 +328,137 @@
         }
       }
 
-      function toggleModalExercicio() {
+      async function toggleModalExercicio(button) {
         const modal = document.getElementById("modalExercicio");
         modal.classList.toggle("hidden");
+        const checkboxes = document.querySelectorAll(
+          "#formExercicios input[name='exercicios']:checked"
+        );
+
+        checkboxes.forEach((checkbox) => {
+          checkbox.checked = false; // Desmarcar os checkboxes
+        });
+
+        if (button) {
+          idTreinoAtual = button.getAttribute("data-id");
+
+          // Carregar exercícios adicionados ao treino
+          try {
+            const response = await fetch(
+              `/aluno/montarTreino/<%= id_aluno %>/treino/${idTreinoAtual}/exercicios`
+            );
+            const data = await response.json();
+
+            if (response.ok) {
+              renderizarExerciciosAdicionados(data || []);
+            } else {
+              alert(data.error || "Erro ao carregar os exercícios do treino.");
+            }
+          } catch (error) {
+            alert("Erro inesperado ao carregar os exercícios.");
+          }
+        }
+      }
+
+      async function carregarExerciciosAdicionados() {
+        try {
+          const response = await fetch(
+            `/aluno/montarTreino/<%= id_aluno %>/treino/${idTreinoAtual}/exercicios`
+          );
+
+          const data = await response.json();
+
+          if (response.ok) {
+            renderizarExerciciosAdicionados(data || []);
+          } else {
+            alert(data.error || "Erro ao carregar exercícios.");
+          }
+        } catch (error) {
+          alert("Erro ao atualizar a lista de exercícios.");
+        }
+      }
+
+      function renderizarExerciciosAdicionados(exercicios) {
+        const lista = document.getElementById("exerciciosAdicionados");
+        lista.innerHTML = ""; // Limpa a lista atual
+
+        exercicios.forEach((exercicio) => {
+          const li = document.createElement("li");
+          li.className = "flex justify-between items-center";
+          li.innerHTML = `
+      <span>${exercicio.nome}</span>
+      <button
+        onclick="removerExercicio('${exercicio.id}')"
+        class="bg-red-500 text-white px-2 py-1 rounded-lg"
+      >
+        Remover
+      </button>
+    `;
+          lista.appendChild(li);
+        });
+      }
+
+      async function removerExercicio(idExercicio) {
+        try {
+          const response = await fetch(
+            `/aluno/montarTreino/<%= id_aluno %>/treino/${idTreinoAtual}/exercicio/${idExercicio}`,
+            {
+              method: "DELETE",
+            }
+          );
+
+          const data = await response.json();
+
+          if (response.ok) {
+            alert(data.message || "Exercício removido com sucesso!");
+            carregarExerciciosAdicionados();
+          } else {
+            alert(data.error || "Erro ao remover exercício.");
+          }
+        } catch (error) {
+          alert("Erro inesperado ao remover exercício.");
+        }
+      }
+
+      async function salvarExercicios() {
+        const checkboxes = document.querySelectorAll(
+          "#formExercicios input[name='exercicios']:checked"
+        );
+        const idsExercicios = Array.from(checkboxes).map(
+          (checkbox) => checkbox.value
+        );
+
+        if (idsExercicios.length === 0) {
+          alert("Selecione ao menos um exercício para adicionar.");
+          return;
+        }
+
+        try {
+          const response = await fetch(
+            `/aluno/montarTreino/<%= id_aluno %>/treino/addExercicios`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                id_treino: idTreinoAtual,
+                ids_exercicios: idsExercicios,
+              }),
+            }
+          );
+
+          const data = await response.json();
+
+          if (response.ok) {
+            alert(data.message || "Exercícios adicionados com sucesso!");
+            toggleModalExercicio(); // Fecha o modal após salvar
+          } else {
+            alert(data.error || "Erro ao adicionar exercícios.");
+          }
+        } catch (error) {
+          alert("Erro inesperado ao salvar exercícios.");
+        }
       }
     </script>
   </body>
