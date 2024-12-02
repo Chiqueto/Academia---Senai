@@ -8,28 +8,33 @@
     <title>Lista de Alunos</title>
   </head>
   <body>
-    <header>
-      <nav class="flex justify-between bg-zinc-800 py-5 px-4">
-        <div class="flex items-center gap-4">
-          <a href="/"><img src="/icons/back_arrow.svg" /></a>
-          <h1 class="font-jaro text-zinc-50 text-3xl">GymFit</h1>
-        </div>
-      </nav>
-    </header>
-
-    <main class="text-center mt-10 text-white mx-4 flex-grow">
-      <div class="container mx-auto bg-zinc-600">
-        <h2>Alunos do Personal</h2>
-        <ul>
-          <% alunos.forEach(aluno => { %>
-            <li><%= aluno.nome %> - <%= aluno.email %></li>
-          <% }); %>
-        </ul>
+    <h1>Lista de Alunos</h1>
+  
+    <!-- Verifica se há uma mensagem para exibir -->
+    <% if (message) { %>
+      <div style="color: red; font-weight: bold;">
+        <p><%= message %></p>
       </div>
-    </main>
-
-    <footer class="text-zinc-200 p-4 text-center">
-      <p>&copy; GymFit</p>
-    </footer>
+    <% } %>
+  
+    <!-- Exibe a lista de alunos -->
+    <% if (alunos && alunos.length > 0) { %>
+      <ul>
+        <% alunos.forEach(aluno => { %>
+          <li>
+            <strong>Nome:</strong> <%= aluno.nome %><br>
+            <strong>Email:</strong> <%= aluno.email %><br>
+            <strong>Idade:</strong> <%= aluno.idade %>
+          </li>
+          <hr>
+        <% }); %>
+      </ul>
+    <% } else { %>
+      <!-- Mostra algo padrão quando não há alunos (opcional) -->
+      <p>Não há alunos cadastrados no momento.</p>
+    <% } %>
+  
+    <!-- Outras opções da página -->
+    <a href="/personal/dashboard">Voltar ao Dashboard</a>
   </body>
 </html>

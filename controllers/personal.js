@@ -1,6 +1,7 @@
 const Personal = require("../models/personal.js");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const Aluno = require("../models/aluno.js")
 require("dotenv").config();
 
 const SECRET_KEY = process.env.SECRET_KEY;
@@ -86,22 +87,28 @@ const listarPersonais = async (req, res) => {
 };
 
 const listarAlunos = async (req, res) => {
-  const { id } = req.params; // Captura o ID do personal da URL
+  const { id } = req.params;
 
   try {
-    // Supondo que você tenha uma função para listar alunos de um personal
-    const alunos = await Personal.findAlunoByPersonalId(id); // Alterar conforme sua lógica
+    const alunos = await Personal.findAlunoByPersonalId(id);
 
     if (alunos.length === 0) {
-      return res.status(404).json({ message: "Nenhum aluno encontrado" });
+      return res.render("personal/listaAlunos", {
+        alunos: [],
+        message: "Nenhum aluno encontrado.", // Mensagem para a view
+      });
     }
 
-    res.render("personal/listaAlunos", { alunos }); // Passa os alunos para a view
+    res.render("personal/listaAlunos", { alunos, message: null }); // Sem mensagem
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Erro ao listar alunos" });
+    console.error("Erro ao listar alunos:", error);
+    res.status(500).render("personal/listaAlunos", {
+      alunos: [],
+      message: "Erro ao listar alunos. Tente novamente mais tarde.",
+    });
   }
 };
+
 
 
 const buscarPersonal = async (req, res) => {
