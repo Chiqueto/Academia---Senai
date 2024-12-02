@@ -1,25 +1,41 @@
 const Personal = require("../models/personal.js");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const Aluno = require("../models/aluno.js")
+const Aluno = require("../models/aluno.js");
 require("dotenv").config();
 
 const SECRET_KEY = process.env.SECRET_KEY;
 
 const formatarTelefone = (telefone) => {
   const telefoneFormatado = telefone.replace(/\D/g, ""); // Remove caracteres não numéricos
-  return telefoneFormatado.replace(
-    /^(\d{3})(\d{5})(\d{4})$/,
-    "($1) $2-$3"
-  );
+  return telefoneFormatado.replace(/^(\d{3})(\d{5})(\d{4})$/, "($1) $2-$3");
 };
 
-
 const criarPersonal = async (req, res) => {
-  const { nome, email, senha, cref, cep, cidade, uf, descricao, especialidade, telefone, } = req.body;
+  const {
+    nome,
+    email,
+    senha,
+    cref,
+    cep,
+    cidade,
+    uf,
+    descricao,
+    especialidade,
+    telefone,
+  } = req.body;
 
   //validações de campos em branco
-  if (!nome || !email || !senha || !cref || !cep || !cidade || !uf || !telefone) {
+  if (
+    !nome ||
+    !email ||
+    !senha ||
+    !cref ||
+    !cep ||
+    !cidade ||
+    !uf ||
+    !telefone
+  ) {
     return res.status(400).json({ message: "Preencha todos os campos!" });
   }
 
@@ -27,12 +43,11 @@ const criarPersonal = async (req, res) => {
   const senhaCriptografada = await bcrypt.hash(senha, 10);
   const cepFormatado = cep.replace(/[-]/g, "");
 
-//verificar email
-const db_email = await Aluno.findByEmail(email);
-if (db_email) {
-  return res.status(400).json({ message: "Email já cadastrado!" });
-}
-
+  //verificar email
+  const db_email = await Aluno.findByEmail(email);
+  if (db_email) {
+    return res.status(400).json({ message: "Email já cadastrado!" });
+  }
 
   //verificar se o cep é válido
   if (cepFormatado.length > 8) {
@@ -89,16 +104,14 @@ const listarAlunos = async (req, res) => {
 };
 
 
-
-
 const buscarPersonal = async (req, res) => {
   const { id } = req.params;
 
-  console.log("ID recebido:", id);
+  // console.log("ID recebido:", id);
 
   try {
     const personal = await Personal.findById(id);
-    console.log("Resultado da busca:", personal);
+    // console.log("Resultado da busca:", personal);
     if (personal) {
       res.status(200).json(personal);
     } else {
@@ -170,7 +183,6 @@ const renderizaCadastro = (req, res) => {
   res.render("personal/cadastro");
 };
 
-
 const renderizaMenu = (req, res) => {
   const { id } = req.params;
   if (!id) return res.status(400).send("ID não fornecido!");
@@ -186,7 +198,7 @@ const renderizaMenu = (req, res) => {
 
 const renderizaPerfil = async (req, res) => {
   const { id } = req.params;
-  console.log("ID recebido na rota:", id);
+  // console.log("ID recebido na rota:", id);
 
   try {
     const personal = await Personal.findById(id);
@@ -203,8 +215,6 @@ const renderizaPerfil = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
-
-
 
 const autenticaPersonal = async (req, res) => {
   const { email, senha } = req.body;
@@ -228,8 +238,7 @@ const autenticaPersonal = async (req, res) => {
       }
     );
 
-
-// Redireciona para a página do menu diretamente
+    // Redireciona para a página do menu diretamente
     res.cookie("authToken", token, { httpOnly: true }); // Opcional: Define o token como cookie
     return res.redirect(`/personal/menuPersonal/${personal.id}`);
   } catch (error) {

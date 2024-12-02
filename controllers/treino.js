@@ -112,15 +112,15 @@ const registrarRepeticao = async (req, res) => {
   const { id_treino, id_exercicio, carga, reps } = req.body;
 
   console.log(
-    "id_aluno: " +
+    "id_aluno" +
       id_aluno +
-      " id_treino: " +
+      "id_treino" +
       id_treino +
-      " id_exercicio: " +
+      "id_exercicio" +
       id_exercicio +
-      " carga: " +
+      "carga" +
       carga +
-      " reps: " +
+      "reps" +
       reps
   );
 
