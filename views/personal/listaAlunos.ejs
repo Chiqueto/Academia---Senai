@@ -5,36 +5,40 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link href="/styles/output.css" rel="stylesheet" />
-    <title>Lista de Alunos</title>
+    <title>Opções de Treinos</title>
   </head>
-  <body>
-    <h1>Lista de Alunos</h1>
-  
-    <!-- Verifica se há uma mensagem para exibir -->
-    <% if (message) { %>
-      <div style="color: red; font-weight: bold;">
-        <p><%= message %></p>
+
+  <body class="flex flex-col min-h-screen">
+    <header>
+      <nav class="flex justify-between bg-zinc-800 py-5 px-4">
+        <div class="flex items-center gap-4">
+          <a href="/personal/menuPersonal/<%= id %>"><img src="/icons/back_arrow.svg" /></a>
+          <h1 class="font-jaro text-zinc-50 text-3xl">GymFit</h1>
+        </div>
+      </nav>
+    </header>
+
+    <main class="text-center mt-10 text-white mx-4 flex-grow">
+      <div class="container mx-auto bg-zinc-600 p-3 rounded-md">
+        <h2 class="text-2xl font-bold mb-5">Opções de Treino</h2>
+        <div class="grid grid-cols-2 gap-4 text-xl">
+          <a href="/personal/treinoIndividual/<%= id %>">
+            <div class="bg-white shadow-md rounded p-3 flex flex-col justify-center items-center">
+              <p class="font-zain text-black">Treino Individual</p>
+            </div>
+          </a>
+
+          <a href="/personal/treinoGrupo/<%= id %>">
+            <div class="bg-white shadow-md rounded p-3 flex flex-col justify-center items-center">
+              <p class="font-zain text-black">Treino em Grupo</p>
+            </div>
+          </a>
+        </div>
       </div>
-    <% } %>
-  
-    <!-- Exibe a lista de alunos -->
-    <% if (alunos && alunos.length > 0) { %>
-      <ul>
-        <% alunos.forEach(aluno => { %>
-          <li>
-            <strong>Nome:</strong> <%= aluno.nome %><br>
-            <strong>Email:</strong> <%= aluno.email %><br>
-            <strong>Idade:</strong> <%= aluno.idade %>
-          </li>
-          <hr>
-        <% }); %>
-      </ul>
-    <% } else { %>
-      <!-- Mostra algo padrão quando não há alunos (opcional) -->
-      <p>Não há alunos cadastrados no momento.</p>
-    <% } %>
-  
-    <!-- Outras opções da página -->
-    <a href="/personal/dashboard">Voltar ao Dashboard</a>
+    </main>
+
+    <footer class="text-zinc-200 p-4 text-center">
+      <p>&copy Luís Felipe, Edney Araujo, Marília</p>
+    </footer>
   </body>
 </html>

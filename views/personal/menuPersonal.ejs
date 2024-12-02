@@ -6,7 +6,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link href="/styles/output.css" rel="stylesheet" />
-    <title>Menu Aluno</title>
+    <title>Menu Personal</title>
   </head>
 
   <body class="flex flex-col min-h-screen">
@@ -45,7 +45,7 @@
             </div>
           </a>
 
-          <a href="/personal/menuPersonal/<%= id %>">
+          <a href="/personal/opcaoTreinoPersonal/<%= id %>">
             <div
               class="bg-white shadow-md rounded p-3 flex flex-col justify-center items-center"
             >
@@ -62,37 +62,5 @@
     <footer class="text-zinc-200 p-4 text-center">
       <p>&copy Luís Felipe, Edney Araujo, Marília</p>
     </footer>
-
-    <!-- <script>
-    // Recupera o token usando a função getToken
-    const token = localStorage.getItem("authorization");
-    console.log({ token });
-    if (!token) {
-      // Se não houver token, redireciona para a página de login
-      window.location.href = "/aluno";
-    } else {
-      // Faz a requisição autenticada
-      console.log(token);
-      fetch("/aluno/menu", {
-        method: "GET",
-        headers: {
-          authorization: `Bearer ${token}`, // Inclui o token no cabeçalho
-          "Content-Type": "application/json",
-        },
-      })
-        .then((response) => {
-          if (!response.ok) {
-            // Se a resposta não for OK (ex: token inválido), redireciona para o login
-            throw new Error("Token inválido ou expirado");
-          }
-          console.log(response);
-          return;
-        })
-        .catch((error) => {
-          console.error(error);
-          window.location.href = "/aluno";
-        });
-    }
-  </script> -->
   </body>
 </html>
