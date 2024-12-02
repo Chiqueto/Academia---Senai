@@ -72,12 +72,30 @@ const getExerciciosByTreinoWSerie = async (id_treino) => {
   return result.rows;
 };
 
+const getSeriesFeitas = async (id_treino, id_exercicio, id_aluno, dt_atual) => {
+  const result = await pool.query(
+    "SELECT COALESCE(MAX(serie), 0) AS max_serie FROM tb_registro_treino WHERE id_treino = $1 AND id_exercicio = $2 AND id_aluno = $3 AND dt_treino = $4",
+    [id_treino, id_exercicio, id_aluno, dt_atual]
+  );
+
+  return result.rows[0].max_serie;
+};
+
 const getMaxSeries = async (id_treino, id_exercicio) => {
   const result = await pool.query(
     "SELECT series FROM tb_treino_exercicio WHERE id_treino = $1 AND id_exercicio = $2",
     [id_treino, id_exercicio]
   );
   return result.rows[0]?.series || null; // Retorna o número de séries ou null
+};
+
+const getSeries = async (id_treino, id_exercicio, id_aluno, dt_treino) => {
+  const result = await pool.query(
+    "SELECT * FROM tb_registro_treino WHERE id_treino = $1 AND id_exercicio = $2 AND id_aluno = $3 AND dt_treino = $4",
+    [id_treino, id_exercicio, id_aluno, dt_treino]
+  );
+
+  return result.rows;
 };
 
 module.exports = {
@@ -90,4 +108,6 @@ module.exports = {
   getExerciciosByTreino,
   getExerciciosByTreinoWSerie,
   getMaxSeries,
+  getSeriesFeitas,
+  getSeries,
 };

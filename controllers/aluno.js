@@ -167,7 +167,7 @@ const renderizaMeusTreinos = async (req, res) => {
 const renderizaTreino = async (req, res) => {
   const { id_aluno, id_treino } = req.params;
   const { id_exercicio } = req.query;
-  console.log("Entrou");
+  // console.log("Entrou");
 
   const dt_atual = new Date().toLocaleDateString("en-CA");
   // Obter treino e exercícios
@@ -190,10 +190,36 @@ const renderizaTreino = async (req, res) => {
     })
   );
 
-  // console.log(exercicios); // Verificar se os exercícios têm a propriedade `seriesFeitas`
-
-  // Renderizar a página com os dados atualizados
   res.render("aluno/treino", { id_aluno, treino, exercicios });
+};
+
+const renderizaExercicio = async (req, res) => {
+  const { id_aluno, id_treino, id_exercicio } = req.params;
+
+  try {
+    let exercicio = await Exercicio.getExercicioById(id_exercicio);
+    const series = await Exercicio.getSeries(
+      id_treino,
+      id_exercicio,
+      id_aluno,
+      new Date().toLocaleDateString("en-CA")
+    );
+
+    exercicio.seriesFeitas = await Exercicio.getSeriesFeitas(
+      id_treino,
+      id_exercicio,
+      id_aluno,
+      new Date().toLocaleDateString("en-CA")
+    );
+
+    // console.log(series);
+
+    // console.log("Exercicio: ", exercicio);
+
+    res.render("aluno/exercicio", { id_aluno, id_treino, exercicio, series });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 };
 
 const renderizaCadastro = (req, res) => {
@@ -374,4 +400,5 @@ module.exports = {
   renderizaMontarTreino,
   renderizaMeusTreinos,
   renderizaTreino,
+  renderizaExercicio,
 };

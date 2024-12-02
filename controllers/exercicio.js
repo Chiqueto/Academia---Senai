@@ -111,7 +111,7 @@ const listarExerciciosPorTreino = async (req, res) => {
 
   try {
     const treinos = await Exercicio.getExerciciosByTreino(id_treino);
-    console.log(treinos);
+    // console.log(treinos);
     res.status(201).json(treinos);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -120,7 +120,7 @@ const listarExerciciosPorTreino = async (req, res) => {
 
 const listarExerciciosPorTreinoWSerie = async (req, res) => {
   const { id_treino } = req.params;
-  console.log("Entrou " + id_treino);
+  // console.log("Entrou " + id_treino);
 
   try {
     const treinos = await Exercicio.getExerciciosByTreinoWSerie(id_treino);

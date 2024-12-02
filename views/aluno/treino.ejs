@@ -32,27 +32,35 @@
       <section>
         <ul class="flex flex-col gap-4 text-zinc-950">
           <% exercicios.forEach((exercicio, index) => { %>
-          <li
-            class="bg-zinc-200 p-4 rounded-lg shadow-lg flex items-center justify-between hover:bg-zinc-300 transition-colors"
+          <a
+            href="/aluno/meusTreinos/<%= id_aluno %>/treino/<%= treino.id %>/exercicios/<%= exercicio.id %>"
           >
-            <div class="flex items-center gap-4">
-              <!-- Ícone do exercício -->
-              <div
-                class="bg-rose-200 p-3 rounded-full flex justify-center items-center w-12 h-12"
-              >
-                <img src="/icons/weight.svg" alt="Exercício" class="w-6 h-6" />
+            <li
+              class="bg-zinc-200 p-4 rounded-lg shadow-lg flex items-center justify-between hover:bg-zinc-300 transition-colors"
+            >
+              <div class="flex items-center gap-4">
+                <!-- Ícone do exercício -->
+                <div
+                  class="bg-rose-200 p-3 rounded-full flex justify-center items-center w-12 h-12"
+                >
+                  <img
+                    src="/icons/weight.svg"
+                    alt="Exercício"
+                    class="w-6 h-6"
+                  />
+                </div>
+                <!-- Nome do exercício -->
+                <div>
+                  <h3 class="text-2xl font-bold"><%= exercicio.nome %></h3>
+                </div>
               </div>
-              <!-- Nome do exercício -->
-              <div>
-                <h3 class="text-2xl font-bold"><%= exercicio.nome %></h3>
-              </div>
-            </div>
 
-            <!-- Contador de séries -->
-            <span class="text-3xl font-bold font-zain">
-              <%= exercicio.seriesFeitas %>/<%= exercicio.series %>
-            </span>
-          </li>
+              <!-- Contador de séries -->
+              <span class="text-3xl font-bold font-zain">
+                <%= exercicio.seriesFeitas %>/<%= exercicio.series %>
+              </span>
+            </li>
+          </a>
           <% }) %>
         </ul>
       </section>

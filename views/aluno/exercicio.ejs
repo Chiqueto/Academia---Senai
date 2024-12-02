@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta lang="pt-br" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="/styles/output.css" rel="stylesheet" />
+    <title><%= exercicio.nome %></title>
+  </head>
+  <body class="flex flex-col min-h-screen bg-zinc-900 text-zinc-50">
+    <!-- Cabeçalho -->
+    <header>
+      <nav class="flex justify-between bg-zinc-800 py-5 px-4">
+        <div class="flex items-center gap-4">
+          <a href="/aluno/meusTreinos/<%= id_aluno %>"
+            ><img src="/icons/back_arrow.svg"
+          /></a>
+          <h1 class="font-jaro text-zinc-50 text-3xl">GymFit</h1>
+        </div>
+      </nav>
+    </header>
+
+    <!-- Conteúdo principal -->
+    <main class="mx-4 flex-grow">
+      <!-- Título do Exercicio -->
+      <section class="text-center pt-6 pb-3">
+        <h2 class="text-3xl font-bold"><%= exercicio.nome %></h2>
+        <div class="bg-zinc-800 max-w-full mx-7 my-2 rounded-2xl p-3">
+          <img src="/icons/agachamento.svg" alt="Vídeo do exercício" />
+        </div>
+      </section>
+
+      <section class="text-center py-2">
+        <h2 class="text-3xl font-bold">Série atual</h2>
+        <form
+          action="/treino/repeticao/<%= id_aluno %>"
+          method="POST"
+          class="bg-zinc-200 flex flex-col items-center gap-2 justify-between max-w-full mx-7 my-2 rounded-2xl p-3 text-zinc-950 text-2xl"
+        >
+          <!-- Série atual -->
+          <div class="flex items-center">
+            <div class="ml-2 flex gap-2">
+              <strong>Série <%= exercicio.seriesFeitas + 1 %>: </strong>
+
+              <!-- Campo para a carga -->
+              <input
+                type="number"
+                name="carga"
+                placeholder="10"
+                class="w-14 rounded-md border border-zinc-400 px-2 py-1 text-xl text-center"
+                required
+              />
+              <span>kg</span>
+              <!-- Campo para as repetições -->
+              <input
+                type="number"
+                name="reps"
+                placeholder="12"
+                class="w-14 rounded-md border border-zinc-400 px-2 py-1 text-xl text-center"
+                required
+              />
+              <span>Reps</span>
+            </div>
+          </div>
+
+          <!-- Botão de envio -->
+          <button
+            type="submit"
+            class="ml-4 bg-green-600 text-zinc-50 px-4 py-2 rounded-md hover:bg-green-700"
+          >
+            Concluir
+          </button>
+
+          <!-- Campos ocultos -->
+          <input type="hidden" name="id_treino" value="<%= id_treino %>" />
+          <input
+            type="hidden"
+            name="id_exercicio"
+            value="<%= exercicio.id %>"
+          />
+        </form>
+      </section>
+
+      <!-- Séries -->
+      <section class="text-center py-4">
+        <h2 class="text-3xl font-bold">Séries Feitas:</h2>
+        <div>
+          <!-- Lista de séries -->
+          <% if (series.length > 0) { %>
+          <ul class="text-left">
+            <% series.forEach((s, index) => { %>
+            <li
+              class="bg-zinc-200 flex items-center justify-between max-w-full mx-7 my-2 rounded-2xl p-3 text-zinc-950 text-3xl"
+            >
+              <strong>Série <%= index + 1 %>:</strong>
+              <div><%= s.carga %> kg - <%= s.qtde_reps %> Reps %></div>
+            </li>
+            <% }) %>
+          </ul>
+          <% } else { %>
+          <p>Nenhuma série registrada até agora.</p>
+          <% } %>
+        </div>
+      </section>
+    </main>
+
+    <!-- Rodapé -->
+    <footer class="text-center py-4 text-sm bg-zinc-800">
+      <p>&copy; 2024 Luís Felipe, Edney Araujo, Marília</p>
+    </footer>
+  </body>
+</html>

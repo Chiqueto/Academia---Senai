@@ -77,5 +77,9 @@ router.get(
   "/:id_aluno/treino/:id_treino",
   ExercicioController.listarExerciciosPorTreino
 );
+router.get(
+  "/meusTreinos/:id_aluno/treino/:id_treino/exercicios/:id_exercicio",
+  alunoController.renderizaExercicio
+);
 
 module.exports = router;
