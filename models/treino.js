@@ -68,29 +68,40 @@ const setTreino = async (idAluno, idTreino) => {
   return result.rows[0];
 };
 
-const setExercises = async (id_treino, ids_exercicios) => {
-  const values = ids_exercicios
-    .map((id_exercicio) => `(${id_treino}, ${id_exercicio})`)
+const setExercises = async (id_treino, exercicios) => {
+  const values = exercicios
+    .map((_, i) => `($1, $${i * 2 + 2}, $${i * 2 + 3})`)
     .join(", ");
+  const params = exercicios.reduce(
+    (acc, exercicio) => acc.concat([exercicio.id, exercicio.series]),
+    [id_treino]
+  );
   const query = `
-    INSERT INTO tb_treino_exercicio (id_treino, id_exercicio)
+    INSERT INTO tb_treino_exercicio (id_treino, id_exercicio, series)
     VALUES ${values}
     RETURNING *;
   `;
-
-  const result = await pool.query(query);
+  const result = await pool.query(query, params);
   return result.rows;
 };
 
 const setRepeticao = async (id_treino, id_aluno, id_exercicio, carga, reps) => {
-  const serie =
-    (await pool.query(
-      "SELECT COUNT(1) FROM tb_registro_treino WHERE id_treino = $1 AND id_exercicio = $2 AND id_aluno = $3  AND dt_treino = current_date",
-      [id_treino, id_exercicio, id_aluno]
-    )) + 1;
+  const serieQuery = await pool.query(
+    "SELECT COUNT(1) FROM tb_registro_treino WHERE id_treino = $1 AND id_exercicio = $2 AND id_aluno = $3  AND dt_treino = current_date",
+    [id_treino, id_exercicio, id_aluno]
+  );
+
+  const count = serieQuery.rows[0].count;
+  const serie = Number(count) + 1;
+
+  console.log("teste serie", serie);
+
+  console.log(
+    `Teste ${id_treino} ${id_exercicio} ${id_aluno} ${carga} ${reps} ${serie}`
+  );
 
   const result = await pool.query(
-    "INSERT INTO tb_registro_treino (id_treino, id_exercicio, id_aluno, dt_treino, serie, carga, reps ) VALUES ($1, $2, $6, current_date, $3, $4, $5) RETURNING *",
+    "INSERT INTO tb_registro_treino (id_treino, id_exercicio, id_aluno, dt_treino, serie, carga, qtde_reps ) VALUES ($1, $2, $6, CURRENT_DATE::DATE, $3, $4, $5) RETURNING *",
     [id_treino, id_exercicio, serie, carga, reps, id_aluno]
   );
 
@@ -115,6 +126,15 @@ const getExerciciosByTreino = async (id_treino) => {
   return result.rows;
 };
 
+const getSeriesFeitas = async (id_treino, id_exercicio, id_aluno, dt_atual) => {
+  const result = await pool.query(
+    "SELECT COALESCE(MAX(serie), 0) AS max_serie FROM tb_registro_treino WHERE id_treino = $1 AND id_exercicio = $2 AND id_aluno = $3 AND dt_treino = $4",
+    [id_treino, id_exercicio, id_aluno, dt_atual]
+  );
+
+  return result.rows[0].max_serie;
+};
+
 module.exports = {
   createTreino,
   deleteTreino,
@@ -128,4 +148,5 @@ module.exports = {
   setExercises,
   removeExercise,
   getExerciciosByTreino,
+  getSeriesFeitas,
 };

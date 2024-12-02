@@ -183,6 +183,15 @@
                 >
                   <%= exercicio.nome %>
                 </label>
+
+                <input
+                  type="number"
+                  id="series-<%= exercicio.id %>"
+                  name="series"
+                  placeholder="Séries"
+                  min="1"
+                  class="w-16 py-1 pl-2 pr-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-gray-700 placeholder-gray-400 border border-gray-300"
+                />
               </div>
               <% }) %>
             </form>
@@ -294,7 +303,12 @@
           (checkbox) => checkbox.value
         );
 
-        console.log(ids_exercicios);
+        const seriesInputs = document.querySelectorAll(
+          "#formExercicios input[name='series']"
+        );
+        const series = Array.from(seriesInputs).map((input) => input.value);
+
+        console.log(ids_exercicios, series);
 
         if (ids_exercicios.length === 0) {
           alert("Selecione ao menos um exercício.");
@@ -311,6 +325,7 @@
               body: JSON.stringify({
                 id_treino: idTreinoAtual,
                 ids_exercicios,
+                series,
               }),
             }
           );
@@ -384,16 +399,13 @@
 
         exercicios.forEach((exercicio) => {
           const li = document.createElement("li");
-          li.className = "flex justify-between items-center";
-          li.innerHTML = `
-      <span>${exercicio.nome}</span>
-      <button
+          li.innerHTML = `${exercicio.nome} - ${exercicio.series} séries      <button
         onclick="removerExercicio('${exercicio.id}')"
         class="bg-red-500 text-white px-2 py-1 rounded-lg"
       >
         Remover
-      </button>
-    `;
+      </button>`;
+          li.className = "flex justify-between items-center";
           lista.appendChild(li);
         });
       }
@@ -422,14 +434,16 @@
 
       async function salvarExercicios() {
         const checkboxes = document.querySelectorAll(
-          "#formExercicios input[name='exercicios']:checked"
+          'input[name="exercicios"]:checked'
         );
-        const idsExercicios = Array.from(checkboxes).map(
-          (checkbox) => checkbox.value
-        );
+        const exercicios = Array.from(checkboxes).map((checkbox) => {
+          const id = checkbox.value;
+          const series = document.getElementById(`series-${id}`).value;
+          return { id: parseInt(id), series: parseInt(series) };
+        });
 
-        if (idsExercicios.length === 0) {
-          alert("Selecione ao menos um exercício para adicionar.");
+        if (!idTreinoAtual) {
+          alert("Selecione um treino antes de salvar os exercícios.");
           return;
         }
 
@@ -438,26 +452,21 @@
             `/aluno/montarTreino/<%= id_aluno %>/treino/addExercicios`,
             {
               method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                id_treino: idTreinoAtual,
-                ids_exercicios: idsExercicios,
-              }),
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ id_treino: idTreinoAtual, exercicios }),
             }
           );
 
           const data = await response.json();
-
           if (response.ok) {
-            alert(data.message || "Exercícios adicionados com sucesso!");
-            toggleModalExercicio(); // Fecha o modal após salvar
+            alert("Exercícios adicionados com sucesso!");
+            window.location.reload();
           } else {
-            alert(data.error || "Erro ao adicionar exercícios.");
+            alert(`Erro: ${data.error}`);
           }
         } catch (error) {
-          alert("Erro inesperado ao salvar exercícios.");
+          console.error("Erro ao salvar exercícios:", error);
+          alert("Erro inesperado. Tente novamente.");
         }
       }
     </script>

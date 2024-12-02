@@ -164,6 +164,38 @@ const renderizaMeusTreinos = async (req, res) => {
   res.render("aluno/meusTreinos", { id_aluno, treinos });
 };
 
+const renderizaTreino = async (req, res) => {
+  const { id_aluno, id_treino } = req.params;
+  const { id_exercicio } = req.query;
+  console.log("Entrou");
+
+  const dt_atual = new Date().toLocaleDateString("en-CA");
+  // Obter treino e exercícios
+  const treino = await Treino.getTreinoById(id_treino);
+  let exercicios = await Exercicio.getExerciciosByTreinoWSerie(id_treino);
+
+  // Adicionar a quantidade de séries feitas para cada exercício
+  exercicios = await Promise.all(
+    exercicios.map(async (exercicio) => {
+      const seriesFeitas = await Treino.getSeriesFeitas(
+        id_treino,
+        exercicio.id,
+        id_aluno,
+        dt_atual
+      );
+      return {
+        ...exercicio,
+        seriesFeitas, // Adiciona a propriedade ao objeto do exercício
+      };
+    })
+  );
+
+  // console.log(exercicios); // Verificar se os exercícios têm a propriedade `seriesFeitas`
+
+  // Renderizar a página com os dados atualizados
+  res.render("aluno/treino", { id_aluno, treino, exercicios });
+};
+
 const renderizaCadastro = (req, res) => {
   res.render("aluno/cadastro");
 };
@@ -341,4 +373,5 @@ module.exports = {
   renderizaListaPersonais,
   renderizaMontarTreino,
   renderizaMeusTreinos,
+  renderizaTreino,
 };
