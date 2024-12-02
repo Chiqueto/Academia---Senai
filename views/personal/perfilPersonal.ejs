@@ -6,10 +6,20 @@
   <title>Perfil do Personal</title>
 </head>
 <body>
-  <h1>Perfil do Personal</h1>
-  <p><strong>Nome:</strong> <%= personal.nome %></p>
-  <p><strong>Email:</strong> <%= personal.email %></p>
+  <h1><%= personal.nome %></h1>
+  <h3>Espaço para a foto do personal</h3>
+  <p><strong> <%= personal.cidade %>, <%= personal.uf %></strong></p>
+  <p> <%= personal.descricao %></p>
+  <br>
+  <br>
   <p><strong>Telefone:</strong> <%= personal.telefone %></p>
-  <p><strong>Descrição:</strong> <%= personal.descricao %></p>
+
+
+  <button
+      type="submit"
+      class="bg-neonGreen rounded-xl py-2 hover:bg-neonGreenHover transition-colors text-zinc-50 font-zain text-4xl mx-12"
+    >
+      Sair
+    </button>
 </body>
 </html>
