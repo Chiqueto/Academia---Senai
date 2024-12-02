@@ -98,41 +98,17 @@ const listarAcademiaPorId = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
-
 const atualizaAcademia = async (req, res) => {
-  const { id } = req.params; // ID da academia
-  const { nome, email, telefone, senha } = req.body; // Dados enviados pelo formulário
-
+  const { id } = req.params;
+  const { nome, telefone, email, senha } = req.body;
   try {
-    // Formatar telefone e outros campos, se necessário
-    const telefoneFormatado = telefone.replace(/\D/g, "");
-    
-    // Atualizar somente se o campo senha foi preenchido
-    const camposAtualizar = {
-      nome,
-      email,
-      telefone: telefoneFormatado,
-    };
-
-    if (senha) {
-      camposAtualizar.senha = await bcrypt.hash(senha, 10);
-    }
-
-    // Atualiza os dados no banco
-    const academiaAtualizada = await Academia.updateAcademia(id, camposAtualizar);
-
-    if (!academiaAtualizada) {
-      return res.status(404).send("Academia não encontrada");
-    }
-
-    // Redirecionar após sucesso
+    const academia = await Academia.updateAcademia(id, { nome, telefone, email, senha });
     res.redirect(`/academia/perfil/${id}`);
   } catch (error) {
     console.error(error);
     res.status(500).send("Erro ao atualizar a academia");
   }
 };
-
 
 const deletar = async (req, res) => {
   const { id } = req.params;
@@ -187,6 +163,23 @@ const renderizaCadastro = (req, res) => {
   res.render("academia/cadastro");
 };
 
+const editarAcademia = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const academia = await Academia.findById(id);
+    if (!academia) {
+      return res.status(404).send("Academia não encontrada");
+    }
+    res.render(`academia/editar`, { academia });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Erro ao carregar a página de edição");
+  }
+};
+
+
+
 const renderizaPerfil = async (req, res) => {
   const { id } = req.params;
   const academia = await Academia.findById(id);
@@ -206,24 +199,10 @@ const renderizaEquipamento = (req, res) => {
 
 
 const renderizaListaAlunos = async (req, res) => {
-  const { id } = req.params; // ID da academia vindo da rota
-
-  try {
-    // Busca os alunos vinculados à academia
-    const alunos = await Academia.findStudents(id);
-
-    // Busca os dados da academia pelo ID
-    const academia = await Academia.findById(id);
-
-    // Renderiza a view, passando os dados necessários
-    res.render("academia/alunos", { 
-      alunos, 
-      academia // Passa o objeto academia para a view
-    });
-  } catch (error) {
-    console.error("Erro ao renderizar a lista de alunos:", error);
-    res.status(500).send("Erro ao carregar a lista de alunos.");
-  }
+  const { id } = req.params;
+  const alunos = await Academia.findStudents(id);
+  console.log(alunos);
+  res.render("academia/alunos", { alunos });
 };
 
 const renderizaListaPersonais = async (req, res) => {
@@ -244,26 +223,6 @@ const inserirPersonal = async (req, res) => {
   }
 };
 
-
-  const renderizaEditar =  async (req, res) => {
-    try {
-      const id = req.params.id; // Obtém o ID da academia na URL
-      const academia = await Academia.findById(id); // Busca a academia no banco de dados
-  
-      if (!academia) {
-        return res.status(404).send('Academia não encontrada');
-      }
-  
-      // Renderiza a página de edição passando os dados da academia
-      res.render('academia/editar', { academia });
-    } catch (error) {
-      console.error(error);
-      res.status(500).send('Erro no servidor');
-    }
-  };
-
-
-
 module.exports = {
   cadastrar,
   listarAcademias,
@@ -279,6 +238,6 @@ module.exports = {
   renderizaListaPersonais,
   inserirPersonal,
   renderizaEquipamento,
-  renderizaEditar,
+  editarAcademia,
  
 };
