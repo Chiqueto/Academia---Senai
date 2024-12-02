@@ -875,6 +875,12 @@ video {
   gap: 2rem;
 }
 
+.space-y-4 > :not([hidden]) ~ :not([hidden]){
+  --tw-space-y-reverse: 0;
+  margin-top: calc(1rem * calc(1 - var(--tw-space-y-reverse)));
+  margin-bottom: calc(1rem * var(--tw-space-y-reverse));
+}
+
 .rounded{
   border-radius: 0.25rem;
 }
@@ -903,6 +909,13 @@ video {
   border-radius: 0.75rem;
 }
 
+<<<<<<< HEAD
+.border{
+  border-width: 1px;
+}
+
+=======
+>>>>>>> feba9de3056374d0886bee8bb320a930891ccb95
 .border-2{
   border-width: 2px;
 }

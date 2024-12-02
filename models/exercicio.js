@@ -54,7 +54,7 @@ const getExerciciosByPersonal = async (id_personal) => {
 
 const getExerciciosByTreino = async (id_treino) => {
   const result = await pool.query(
-    "SELECT e.* FROM tb_treino t, tb_exercicio e WHERE t.id = $1 AND e.id IN (SELECT id_exercicio FROM tb_treino_exercicio WHERE id_exercicio = e.id) ",
+    "SELECT e.* FROM tb_exercicio e WHERE e.id IN (SELECT id_exercicio FROM tb_treino_exercicio WHERE id_treino = $1) ",
     [id_treino]
   );
 

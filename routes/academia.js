@@ -22,6 +22,9 @@ router.get("/personais/:id", academiaController.renderizaListaPersonais);
 
 router.get("/equipamento/:id", academiaController.renderizaEquipamento);
 
+router.get("/editar/:id",  academiaController.renderizaEditar);
+router.post("/editar/:id", academiaController.atualizaAcademia);
+
 
 
 
@@ -62,6 +65,6 @@ router.post("/login", academiaController.autenticaAcademia);
 
 router.post("/inserirPersonal", academiaController.inserirPersonal);
 
-router.get('/alunos', academiaController.searchAlunos);
+
 
 module.exports = router;
