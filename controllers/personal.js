@@ -1,6 +1,7 @@
 const Personal = require("../models/personal.js");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const Aluno = require("../models/aluno.js");
 require("dotenv").config();
 
 const SECRET_KEY = process.env.SECRET_KEY;
@@ -8,19 +9,6 @@ const SECRET_KEY = process.env.SECRET_KEY;
 const formatarTelefone = (telefone) => {
   const telefoneFormatado = telefone.replace(/\D/g, ""); // Remove caracteres não numéricos
   return telefoneFormatado.replace(/^(\d{3})(\d{5})(\d{4})$/, "($1) $2-$3");
-};
-
-const calcularIdade = (dataNascimento) => {
-  const hoje = new Date();
-  const nascimento = new Date(dataNascimento);
-  let idade = hoje.getFullYear() - nascimento.getFullYear();
-  const mes = hoje.getMonth() - nascimento.getMonth();
-
-  if (mes < 0 || (mes === 0 && hoje.getDate() < nascimento.getDate())) {
-    idade--;
-  }
-
-  return idade;
 };
 
 const criarPersonal = async (req, res) => {
@@ -101,20 +89,25 @@ const listarPersonais = async (req, res) => {
 };
 
 const listarAlunos = async (req, res) => {
-  const { id } = req.params; // Captura o ID do personal da URL
+  const { id } = req.params;
 
   try {
-    // Supondo que você tenha uma função para listar alunos de um personal
-    const alunos = await Personal.findAlunoByPersonalId(id); // Alterar conforme sua lógica
+    const alunos = await Personal.findAlunoByPersonalId(id);
 
     if (alunos.length === 0) {
-      return res.status(404).json({ message: "Nenhum aluno encontrado" });
+      return res.render("personal/listaAlunos", {
+        alunos: [],
+        message: "Nenhum aluno encontrado.", // Mensagem para a view
+      });
     }
 
-    res.render("personal/listaAlunos", { alunos }); // Passa os alunos para a view
+    res.render("personal/listaAlunos", { alunos, message: null }); // Sem mensagem
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Erro ao listar alunos" });
+    console.error("Erro ao listar alunos:", error);
+    res.status(500).render("personal/listaAlunos", {
+      alunos: [],
+      message: "Erro ao listar alunos. Tente novamente mais tarde.",
+    });
   }
 };
 
@@ -222,7 +215,6 @@ const renderizaPerfil = async (req, res) => {
     }
 
     personal.telefone = formatarTelefone(personal.telefone);
-    personal.idade = calcularIdade(personal.dt_nascimento); // Ajuste para considerar 'dt_nascimento'
 
     res.render("personal/perfilPersonal", { personal });
   } catch (error) {
@@ -284,4 +276,5 @@ module.exports = {
   renderizaPerfil,
   autenticaPersonal,
   listarAlunos,
+  formatarTelefone,
 };

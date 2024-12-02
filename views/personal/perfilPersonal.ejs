@@ -1,25 +1,65 @@
 <!DOCTYPE html>
-<html lang="pt-br">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Perfil do Personal</title>
-</head>
-<body>
-  <h1><%= personal.nome %></h1>
-  <h3>Espaço para a foto do personal</h3>
-  <p><strong> <%= personal.cidade %>, <%= personal.uf %></strong></p>
-  <p> <%= personal.descricao %></p>
-  <br>
-  <br>
-  <p><strong>Telefone:</strong> <%= personal.telefone %></p>
 
+<html>
+  <head>
+    <meta lang="pt-br" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="/styles/output.css" rel="stylesheet" />
+    <title>Perfil do Personal</title>
+  </head>
+  <body class="flex flex-col min-h-screen">
+    <header>
+      <nav class="flex justify-between bg-zinc-800 py-5 px-4">
+        <div class="flex items-center gap-4">
+          <a href="/personal/menuPersonal"><img src="/icons/back_arrow.svg" /></a>
+          <a href="/views/index.ejs"
+            ><h1 class="font-jaro text-zinc-50 text-3xl">GymFit</h1></a
+          >
+          <!-- <img src="/icons/GymFit.svg" /> -->
+        </div>
+      </nav>
+      <form
+        action="/personal/uploadFoto/<%= personal.id %>"
+        method="POST"
+        enctype="multipart/form-data"
+      >
+        <label for="fotoPerfil">Escolher imagem:</label>
+        <input type="file" id="fotoPerfil" name="fotoPerfil" accept="image/*" />
+        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">
+          Enviar
+        </button>
+      </form>
+    </header>
 
-  <button
+    <main class="flex flex-col">
+      <div
+        class="shadow-md rounded p-3 flex flex-col justify-center items-center"
+      >
+        <div class="rounded-full p-2 bg-slate-300">
+          <img
+            src="<%= personal.foto_perfil ? personal.foto_perfil : '/icons/user.svg' %>"
+            alt="Foto de Perfil"
+            class="w-14 h-14"
+          />
+        </div>
+        <h4 class="ml-3 text-white"><%= personal.nome %></h4>
+        <p class="font-zain text-lg text-white mt-2"></p>
+      </div>
+      <div class="font-zain text-white p-5">
+        <h4><strong> <%= personal.cidade %>, <%= personal.uf %></strong></h4>
+        <h4 class="ml-3">
+          <%= personal.descricao %>
+        </h4>
+        <h4 class="ml-3">Telefone: <%= personal.telefone %></h4>
+      </div>
+    </main>
+
+    <button
       type="submit"
       class="bg-neonGreen rounded-xl py-2 hover:bg-neonGreenHover transition-colors text-zinc-50 font-zain text-4xl mx-12"
     >
       Sair
     </button>
-</body>
+  </body>
 </html>
