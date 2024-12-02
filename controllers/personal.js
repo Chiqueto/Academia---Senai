@@ -167,7 +167,8 @@ const renderizaCadastro = (req, res) => {
 
 const renderizaMenu = (req, res) => {
   const { id } = req.params;
-  res.render("personal/menuPersonal", { id: id || null });
+  if (!id) return res.status(400).send("ID não fornecido!");
+  res.render("personal/menuPersonal", { id });
 };
 // const renderizaMenu = (req, res) => {
 //   res.render("personal/menuPersonal",{ id });
@@ -225,7 +226,7 @@ const autenticaPersonal = async (req, res) => {
 
 // Redireciona para a página do menu diretamente
     res.cookie("authToken", token, { httpOnly: true }); // Opcional: Define o token como cookie
-    return res.redirect("/personal/menuPersonal");
+    return res.redirect(`/personal/menuPersonal/${personal.id}`);
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: "Erro interno do servidor" });
