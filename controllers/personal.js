@@ -5,37 +5,46 @@ require("dotenv").config();
 
 const SECRET_KEY = process.env.SECRET_KEY;
 
+const formatarTelefone = (telefone) => {
+  const telefoneFormatado = telefone.replace(/\D/g, ""); // Remove caracteres não numéricos
+  return telefoneFormatado.replace(
+    /^(\d{3})(\d{5})(\d{4})$/,
+    "($1) $2-$3"
+  );
+};
+
+const calcularIdade = (dataNascimento) => {
+  const hoje = new Date();
+  const nascimento = new Date(dataNascimento);
+  let idade = hoje.getFullYear() - nascimento.getFullYear();
+  const mes = hoje.getMonth() - nascimento.getMonth();
+
+  if (mes < 0 || (mes === 0 && hoje.getDate() < nascimento.getDate())) {
+    idade--;
+  }
+
+  return idade;
+};
+
+
 const criarPersonal = async (req, res) => {
-  const {
-    nome,
-    email,
-    senha,
-    cref,
-    cep,
-    cidade,
-    uf,
-    descricao,
-    especialidade,
-    telefone,
-  } = req.body;
+  const { nome, email, senha, cref, cep, cidade, uf, descricao, especialidade, telefone, } = req.body;
 
   //validações de campos em branco
-  if (
-    !nome ||
-    !email ||
-    !senha ||
-    !cref ||
-    !cep ||
-    !cidade ||
-    !uf ||
-    !telefone
-  ) {
+  if (!nome || !email || !senha || !cref || !cep || !cidade || !uf || !telefone) {
     return res.status(400).json({ message: "Preencha todos os campos!" });
   }
 
   const telefoneFormatado = telefone.replace(/\D/g, "");
   const senhaCriptografada = await bcrypt.hash(senha, 10);
   const cepFormatado = cep.replace(/[-]/g, "");
+
+//verificar email
+const db_email = await Aluno.findByEmail(email);
+if (db_email) {
+  return res.status(400).json({ message: "Email já cadastrado!" });
+}
+
 
   //verificar se o cep é válido
   if (cepFormatado.length > 8) {
@@ -70,7 +79,7 @@ const criarPersonal = async (req, res) => {
 const listarPersonais = async (req, res) => {
   try {
     const personais = await Personal.findAll();
-    res.status(201).json(personais);
+    res.status(200).json(personais);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -79,14 +88,18 @@ const listarPersonais = async (req, res) => {
 const buscarPersonal = async (req, res) => {
   const { id } = req.params;
 
+  console.log("ID recebido:", id);
+
   try {
     const personal = await Personal.findById(id);
+    console.log("Resultado da busca:", personal);
     if (personal) {
       res.status(200).json(personal);
     } else {
       res.status(404).json({ message: "Personal não encontrado" });
     }
   } catch (error) {
+    console.error("Erro ao buscar personal:", error);
     res.status(500).json({ error: error.message });
   }
 };
@@ -152,12 +165,30 @@ const renderizaCadastro = (req, res) => {
 };
 
 const renderizaMenu = (req, res) => {
-  res.render("personal/menuPersonal");
+  res.render("personal/menuPersonal",{ id });
 };
 
- const renderizaPerfil = (req, res) => {
-   res.render("personal/perfilPersonal");
- };
+//  const renderizaPerfil = (req, res) => {
+//    res.render("personal/perfilPersonal");
+//  };
+
+const renderizaPerfil = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const personal = await Personal.findById(id);
+    if (!personal) {
+      return res.status(404).json({ message: "Personal não encontrado" });
+    }
+    personal.telefone = formatarTelefone(personal.telefone); // Atualiza o campo com o número formatado
+    personal.idade = calcularIdade(personal.dt_nascimento); // Adiciona a idade
+    res.render("personal/perfilPersonal", { personal });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+
+
 
 const autenticaPersonal = async (req, res) => {
   const { email, senha } = req.body;

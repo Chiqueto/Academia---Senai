@@ -909,10 +909,13 @@ video {
   border-radius: 0.75rem;
 }
 
+<<<<<<< HEAD
 .border{
   border-width: 1px;
 }
 
+=======
+>>>>>>> feba9de3056374d0886bee8bb320a930891ccb95
 .border-2{
   border-width: 2px;
 }

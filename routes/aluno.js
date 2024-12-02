@@ -17,16 +17,26 @@ router.get("/cadastro", alunoController.renderizaCadastro);
 router.get("/menu/:id", alunoController.renderizaMenu);
 router.get("/perfilAluno/:id", alunoController.renderizaPerfil);
 
-router.get("/opcaoTreinoAluno", (req, res) => {
-  res.render("aluno/opcaoTreinoAluno");
-});
+router.get("/meusTreinos/:id_aluno", alunoController.renderizaMeusTreinos);
 
 router.get("/encontrarAcademia", alunoController.renderizaEncontrarAcademias);
 
 //add exercicio a um treino
 router.post(
-  "/:id_aluno/treino/:id_treino/addExercicio",
-  TreinoController.adicionarExercicio
+  "/montarTreino/:id_aluno/treino/addExercicios",
+  TreinoController.adicionarExercicios
+);
+
+//remover um exercicio
+router.delete(
+  `/montarTreino/:id_aluno/treino/:id_treino/exercicio/:id_exercicio`,
+  TreinoController.removerExercicio
+);
+
+//get exercicio by treino
+router.get(
+  "/montarTreino/:id_aluno/treino/:id_treino/exercicios",
+  ExercicioController.listarExerciciosPorTreino
 );
 
 // router.get("/encontrarPersonal", (req, res) => {
@@ -35,9 +45,7 @@ router.post(
 
 router.get("/encontrarPersonal", alunoController.renderizaListaPersonais);
 
-router.get("/montarTreino", (req, res) => {
-  res.render("aluno/montarTreino");
-});
+router.get("/montarTreino/:id_aluno", alunoController.renderizaMontarTreino);
 
 router.get("/TreinoA", (req, res) => {
   res.render("aluno/TreinoA");

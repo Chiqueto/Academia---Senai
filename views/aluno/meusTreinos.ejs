@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta lang="pt-br" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="/styles/output.css" rel="stylesheet" />
+    <title>Opções de treino</title>
+  </head>
+
+  <body class="flex flex-col min-h-screen">
+    <header>
+      <nav class="flex justify-between bg-zinc-800 py-5 px-4">
+        <div class="flex items-center gap-4">
+          <a href="/aluno/menu/<%= id_aluno %>"
+            ><img src="/icons/back_arrow.svg"
+          /></a>
+          <h1 class="font-jaro text-zinc-50 text-3xl">GymFit</h1>
+          <!-- <img src="/icons/GymFit.svg" /> -->
+        </div>
+      </nav>
+    </header>
+
+    <!-- Conteúdo Principal -->
+    <main class="mx-4 flex-grow">
+      <section class="font-zain px-4">
+        <h2 class="text-3xl text-center text-white py-2">Meus Treinos</h2>
+
+        <!-- Barra de Busca -->
+        <div class="relative w-full mb-4">
+          <input
+            type="text"
+            placeholder="Buscar pelo treino..."
+            class="w-full py-1 pl-10 pr-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-gray-700 placeholder-gray-400"
+          />
+          <div
+            class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none"
+          >
+            <img src="/icons/lupa.svg" alt="Buscar" class="w-5 h-5" />
+          </div>
+        </div>
+
+        <!-- Lista de Treinos -->
+        <div class="max-h-[400px] overflow-y-auto">
+          <ul class="grid grid-cols-1 gap-4">
+            <% treinos.forEach(treino => { %>
+            <li
+              class="bg-neonGreen shadow-md rounded p-3 flex flex-col justify-center items-center"
+            >
+              <div>
+                <h3 class="text-xl font-bold text-white"><%= treino.nome %></h3>
+                <!-- <p class="text-gray-300"><%= treino.descricao %></p> -->
+              </div>
+              <!-- <button
+                class="bg-neonGreen text-white px-4 py-2 rounded-lg hover:bg-neonGreenHover"
+              >
+                Iniciar
+              </button> -->
+            </li>
+            <% }) %>
+          </ul>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

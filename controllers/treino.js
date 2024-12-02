@@ -1,4 +1,5 @@
 const Treino = require("../models/treino.js");
+const Exercicio = require("../models/exercicio.js");
 
 const criarTreinoAluno = async (req, res) => {
   const { id_aluno } = req.params;
@@ -13,7 +14,7 @@ const criarTreinoAluno = async (req, res) => {
       nome,
       descricao,
     });
-    console.log(id_aluno);
+    // console.log(id_aluno);
 
     fetch("http://localhost:3000/treino/atribuir", {
       method: "POST",
@@ -175,19 +176,72 @@ const listaTreinoAluno = async (req, res) => {
   }
 };
 
-const adicionarExercicio = async (req, res) => {
-  const { id_treino } = req.params;
-  const { id_exercicio } = req.body;
+const adicionarExercicios = async (req, res) => {
+  const { id_treino, ids_exercicios } = req.body; // Recebe um array de IDs
 
   try {
-    const exercicioAdicionado = await Treino.setExercise(
+    // Consultar exercícios já associados ao treino
+    const exerciciosExistentes = await Exercicio.getExerciciosByTreino(
+      id_treino
+    );
+
+    // Verificar se algum dos IDs enviados já está associado
+    const exerciciosJaAdicionados = ids_exercicios.filter((id) =>
+      exerciciosExistentes.some((exercicio) => exercicio.id === id)
+    );
+
+    const nomeExerciciosAdicionados = exerciciosJaAdicionados.map(
+      (id) => exerciciosExistentes.find((exercicio) => exercicio.id === id).nome
+    );
+
+    if (exerciciosJaAdicionados.length > 0) {
+      return res.status(400).json({
+        error: `Os exercícios já estão associados ao treino: ${nomeExerciciosAdicionados.join(
+          ", "
+        )}`,
+      });
+    }
+
+    // Caso nenhum esteja duplicado, proceder com a adição
+    const exerciciosAdicionados = await Treino.setExercises(
+      id_treino,
+      ids_exercicios
+    );
+
+    res.status(201).json({
+      message: "Exercícios adicionados ao treino!",
+      exerciciosAdicionados,
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const removerExercicio = async (req, res) => {
+  const { id_treino, id_exercicio } = req.params;
+  console.log("Entrou no remover" + id_treino + id_exercicio);
+  try {
+    const exercicioRemovido = await Treino.removeExercise(
       id_treino,
       id_exercicio
     );
+
     res.status(201).json({
-      message: "Exercício adicionado ao treino!",
-      exercicioAdicionado,
+      message: "Exercício removido do treino!",
+      exercicioRemovido,
     });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const listarExerciciosPorTreino = async (req, res) => {
+  const { id_treino } = req.params;
+
+  try {
+    const exercicios = await Treino.getExerciciosByTreino(id_treino);
+
+    res.status(201).json({ exercicios });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -204,5 +258,7 @@ module.exports = {
   listarTreinos,
   listaTreinoPersonal,
   listaTreinoAluno,
-  adicionarExercicio,
+  adicionarExercicios,
+  removerExercicio,
+  listarExerciciosPorTreino,
 };
