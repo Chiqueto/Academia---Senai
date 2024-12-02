@@ -85,6 +85,25 @@ const listarPersonais = async (req, res) => {
   }
 };
 
+const listarAlunos = async (req, res) => {
+  const { id } = req.params; // Captura o ID do personal da URL
+
+  try {
+    // Supondo que você tenha uma função para listar alunos de um personal
+    const alunos = await Personal.findAlunoByPersonalId(id); // Alterar conforme sua lógica
+
+    if (alunos.length === 0) {
+      return res.status(404).json({ message: "Nenhum aluno encontrado" });
+    }
+
+    res.render("personal/listaAlunos", { alunos }); // Passa os alunos para a view
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Erro ao listar alunos" });
+  }
+};
+
+
 const buscarPersonal = async (req, res) => {
   const { id } = req.params;
 
@@ -254,4 +273,5 @@ module.exports = {
   renderizaMenu,
   renderizaPerfil,
   autenticaPersonal,
+  listarAlunos,
 };
