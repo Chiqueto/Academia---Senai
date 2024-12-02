@@ -164,9 +164,15 @@ const renderizaCadastro = (req, res) => {
   res.render("personal/cadastro");
 };
 
+
 const renderizaMenu = (req, res) => {
-  res.render("personal/menuPersonal",{ id });
+  const { id } = req.params;
+  if (!id) return res.status(400).send("ID não fornecido!");
+  res.render("personal/menuPersonal", { id });
 };
+// const renderizaMenu = (req, res) => {
+//   res.render("personal/menuPersonal",{ id });
+// };
 
 //  const renderizaPerfil = (req, res) => {
 //    res.render("personal/perfilPersonal");
@@ -174,19 +180,24 @@ const renderizaMenu = (req, res) => {
 
 const renderizaPerfil = async (req, res) => {
   const { id } = req.params;
+  console.log("ID recebido na rota:", id);
+
   try {
     const personal = await Personal.findById(id);
+
     if (!personal) {
       return res.status(404).json({ message: "Personal não encontrado" });
     }
-    personal.telefone = formatarTelefone(personal.telefone); // Atualiza o campo com o número formatado
-    personal.idade = calcularIdade(personal.dt_nascimento); // Adiciona a idade
+
+    personal.telefone = formatarTelefone(personal.telefone);
+    personal.idade = calcularIdade(personal.dt_nascimento); // Ajuste para considerar 'dt_nascimento'
+
     res.render("personal/perfilPersonal", { personal });
   } catch (error) {
+    console.error("Erro ao buscar personal:", error);
     res.status(500).json({ error: error.message });
   }
 };
-
 
 
 
@@ -215,7 +226,7 @@ const autenticaPersonal = async (req, res) => {
 
 // Redireciona para a página do menu diretamente
     res.cookie("authToken", token, { httpOnly: true }); // Opcional: Define o token como cookie
-    return res.redirect("/personal/menuPersonal");
+    return res.redirect(`/personal/menuPersonal/${personal.id}`);
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: "Erro interno do servidor" });
