@@ -74,19 +74,11 @@ const listarPersonais = async (req, res) => {
 };
 
 const listarAlunos = async (req, res) => {
+  console.log("Rota /personal/listaAlunos/:id acessada com ID:", req.params.id);
   const { id } = req.params;
-
   try {
     const alunos = await Personal.findAlunoByPersonalId(id);
-
-    if (alunos.length === 0) {
-      return res.render("personal/listaAlunos", {
-        alunos: [],
-        message: "Nenhum aluno encontrado.", // Mensagem para a view
-      });
-    }
-
-    res.render("personal/listaAlunos", { alunos, message: null }); // Sem mensagem
+    res.render("personal/listaAlunos", { alunos, message: null, id });
   } catch (error) {
     console.error("Erro ao listar alunos:", error);
     res.status(500).render("personal/listaAlunos", {
@@ -95,6 +87,7 @@ const listarAlunos = async (req, res) => {
     });
   }
 };
+
 
 
 

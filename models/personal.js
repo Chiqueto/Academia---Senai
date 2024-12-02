@@ -77,12 +77,15 @@ const loginPersonal = async (email) => {
 };
 
 const findAlunoByPersonalId = async (personalId) => {
+  console.log("Personal ID recebido:", personalId);
   const result = await pool.query(
-    "SELECT * FROM tb_aluno WHERE id IN (SELECT id_aluno FROM tb_alunos_personais WHERE id_personal = $1 )", // Supondo que a tabela de alunos tenha uma referência para o personal
+    "SELECT * FROM tb_aluno WHERE id IN (SELECT id_aluno FROM tb_alunos_personais WHERE id_personal = $1 )",
     [personalId]
   );
+  console.log("Resultado da query:", result.rows);
   return result.rows;
 };
+
 
 
 const findByEmail = async (email) => {
