@@ -37,7 +37,11 @@
                 <span class="ml-4 text-2xl text-gray-900 font-semibold"><%= aluno.nome %></span>
         
                 <!-- Botão de Delete com evento para chamar função de deletação -->
-                
+                <button 
+                class="ml-auto bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors"
+                onclick="desmatricularAluno('<%= aluno.id %>')">
+                Desvincular
+              </button>
               </div>
             <% }) %>
           <% } else { %>
@@ -87,8 +91,32 @@
         abaSuspensa.classList.toggle("hidden");
       }
 
-    
-      
+  async function desmatricularAluno(idAluno) {
+  const idAcademia = "<%= academia.id %>"; // Use o ID da academia vindo do objeto academia
+
+  try {
+    const response = await fetch(`/academia/alunos/desvincular`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ idAluno, idAcademia }),
+    });
+
+    if (response.ok) {
+      alert("Aluno desmatriculado com sucesso!");
+      location.reload(); // Atualiza a página para refletir as mudanças
+    } else {
+      const errorData = await response.json();
+      alert(`Erro ao desmatricular aluno: ${errorData.message}`);
+    }
+  } catch (error) {
+    console.error("Erro ao desmatricular aluno:", error);
+    alert("Erro ao desmatricular aluno.");
+  }
+}
+
+
     </script>
   </body>
 </html>

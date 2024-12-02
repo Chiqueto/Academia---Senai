@@ -100,46 +100,39 @@ const listarAcademiaPorId = async (req, res) => {
 };
 
 const atualizaAcademia = async (req, res) => {
-  const { id } = req.params;
-  const { nome, cep, cidade, bairro, logradouro, numero, uf, telefone } =
-    req.body;
-
-  //verificar campos vazios
-  if (
-    !nome ||
-    !cep ||
-    !cidade ||
-    !bairro ||
-    !logradouro ||
-    !numero ||
-    !uf ||
-    !telefone
-  ) {
-    return res.status(400).json({ message: "Preencha todos os campos!" });
-  }
-
-  const telefoneFormatado = telefone.replace(/\D/g, "");
-  const cepFormatado = cep.replace(/[-]/g, "");
+  const { id } = req.params; // ID da academia
+  const { nome, email, telefone, senha } = req.body; // Dados enviados pelo formulário
 
   try {
-    const academia = Academia.updateAcademia(id, {
+    // Formatar telefone e outros campos, se necessário
+    const telefoneFormatado = telefone.replace(/\D/g, "");
+    
+    // Atualizar somente se o campo senha foi preenchido
+    const camposAtualizar = {
       nome,
-      cep: cepFormatado,
-      cidade,
-      bairro,
-      logradouro,
-      numero,
-      uf,
+      email,
       telefone: telefoneFormatado,
-    });
+    };
 
-    res
-      .status(201)
-      .json({ academia }, { message: "Academia atualizado com sucesso!" });
+    if (senha) {
+      camposAtualizar.senha = await bcrypt.hash(senha, 10);
+    }
+
+    // Atualiza os dados no banco
+    const academiaAtualizada = await Academia.updateAcademia(id, camposAtualizar);
+
+    if (!academiaAtualizada) {
+      return res.status(404).send("Academia não encontrada");
+    }
+
+    // Redirecionar após sucesso
+    res.redirect(`/academia/perfil/${id}`);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error(error);
+    res.status(500).send("Erro ao atualizar a academia");
   }
 };
+
 
 const deletar = async (req, res) => {
   const { id } = req.params;
@@ -213,10 +206,24 @@ const renderizaEquipamento = (req, res) => {
 
 
 const renderizaListaAlunos = async (req, res) => {
-  const { id } = req.params;
-  const alunos = await Academia.findStudents(id);
-  console.log(alunos);
-  res.render("academia/alunos", { alunos });
+  const { id } = req.params; // ID da academia vindo da rota
+
+  try {
+    // Busca os alunos vinculados à academia
+    const alunos = await Academia.findStudents(id);
+
+    // Busca os dados da academia pelo ID
+    const academia = await Academia.findById(id);
+
+    // Renderiza a view, passando os dados necessários
+    res.render("academia/alunos", { 
+      alunos, 
+      academia // Passa o objeto academia para a view
+    });
+  } catch (error) {
+    console.error("Erro ao renderizar a lista de alunos:", error);
+    res.status(500).send("Erro ao carregar a lista de alunos.");
+  }
 };
 
 const renderizaListaPersonais = async (req, res) => {
@@ -237,26 +244,26 @@ const inserirPersonal = async (req, res) => {
   }
 };
 
-// Função para buscar os alunos
-const searchAlunos = async (req, res) => {
-  const query = req.query.q;  // Pegando o termo de pesquisa da query string
+
+  const renderizaEditar =  async (req, res) => {
+    try {
+      const id = req.params.id; // Obtém o ID da academia na URL
+      const academia = await Academia.findById(id); // Busca a academia no banco de dados
   
-  // Query SQL com LIKE para buscar alunos que começam com o termo pesquisado
-  const sql = `
-    SELECT nome
-    FROM tb_alunos
-    WHERE nome ILIKE $1
-    LIMIT 10
-  `;
+      if (!academia) {
+        return res.status(404).send('Academia não encontrada');
+      }
   
-  try {
-    const result = await pool.query(sql, [`%${query}%`]); // Realiza a busca no banco
-    res.json(result.rows); // Retorna os resultados em formato JSON
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: error.message });
-  }
-};
+      // Renderiza a página de edição passando os dados da academia
+      res.render('academia/editar', { academia });
+    } catch (error) {
+      console.error(error);
+      res.status(500).send('Erro no servidor');
+    }
+  };
+
+
+
 module.exports = {
   cadastrar,
   listarAcademias,
@@ -272,5 +279,6 @@ module.exports = {
   renderizaListaPersonais,
   inserirPersonal,
   renderizaEquipamento,
-  searchAlunos,
+  renderizaEditar,
+ 
 };

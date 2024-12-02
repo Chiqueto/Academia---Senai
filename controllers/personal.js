@@ -85,6 +85,25 @@ const listarPersonais = async (req, res) => {
   }
 };
 
+const listarAlunos = async (req, res) => {
+  const { id } = req.params; // Captura o ID do personal da URL
+
+  try {
+    // Supondo que você tenha uma função para listar alunos de um personal
+    const alunos = await Personal.findAlunoByPersonalId(id); // Alterar conforme sua lógica
+
+    if (alunos.length === 0) {
+      return res.status(404).json({ message: "Nenhum aluno encontrado" });
+    }
+
+    res.render("personal/listaAlunos", { alunos }); // Passa os alunos para a view
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Erro ao listar alunos" });
+  }
+};
+
+
 const buscarPersonal = async (req, res) => {
   const { id } = req.params;
 
@@ -164,9 +183,15 @@ const renderizaCadastro = (req, res) => {
   res.render("personal/cadastro");
 };
 
+
 const renderizaMenu = (req, res) => {
-  res.render("personal/menuPersonal",{ id });
+  const { id } = req.params;
+  if (!id) return res.status(400).send("ID não fornecido!");
+  res.render("personal/menuPersonal", { id });
 };
+// const renderizaMenu = (req, res) => {
+//   res.render("personal/menuPersonal",{ id });
+// };
 
 //  const renderizaPerfil = (req, res) => {
 //    res.render("personal/perfilPersonal");
@@ -174,19 +199,24 @@ const renderizaMenu = (req, res) => {
 
 const renderizaPerfil = async (req, res) => {
   const { id } = req.params;
+  console.log("ID recebido na rota:", id);
+
   try {
     const personal = await Personal.findById(id);
+
     if (!personal) {
       return res.status(404).json({ message: "Personal não encontrado" });
     }
-    personal.telefone = formatarTelefone(personal.telefone); // Atualiza o campo com o número formatado
-    personal.idade = calcularIdade(personal.dt_nascimento); // Adiciona a idade
+
+    personal.telefone = formatarTelefone(personal.telefone);
+    personal.idade = calcularIdade(personal.dt_nascimento); // Ajuste para considerar 'dt_nascimento'
+
     res.render("personal/perfilPersonal", { personal });
   } catch (error) {
+    console.error("Erro ao buscar personal:", error);
     res.status(500).json({ error: error.message });
   }
 };
-
 
 
 
@@ -215,7 +245,7 @@ const autenticaPersonal = async (req, res) => {
 
 // Redireciona para a página do menu diretamente
     res.cookie("authToken", token, { httpOnly: true }); // Opcional: Define o token como cookie
-    return res.redirect("/personal/menuPersonal");
+    return res.redirect(`/personal/menuPersonal/${personal.id}`);
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: "Erro interno do servidor" });
@@ -243,4 +273,5 @@ module.exports = {
   renderizaMenu,
   renderizaPerfil,
   autenticaPersonal,
+  listarAlunos,
 };

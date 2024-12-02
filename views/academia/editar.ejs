@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta lang="pt-br" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/styles/output.css" />
+     
+    <title>Editar Usuario</title>
+  </head>
+  <body class="flex flex-col min-h-screen">
+    <header>
+      <nav class="flex justify-between bg-zinc-800 py-5 px-4">
+        <div class="flex items-center gap-4">
+          <a href="/academia/"><img src="/icons/back_arrow.svg" /></a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="text-center my-10 text-white mx-4 flex-grow">
+      <section class="font-zain bg-zinc-50 text-zinc-950 py-4 rounded-2xl">
+        <h2 class="text-4xl">Editar usuario</h2>
+        <form
+          action="/academia/editar/<% academia.id %>"
+          method="post"
+          class="flex flex-col text-2xl gap-6 text-black max-w-screen-sm"
+        >
+        <!-- Campo oculto para o ID do usuário -->
+        <input type="hidden" name="id" value="<%= academia.id %>" />
+
+          <div class="flex flex-col gap-2 px-6">
+            <label class="text-start" for="nome">Nome</label>
+            <input
+              class="border-2 border-black rounded-full bg-pink-50 text-lg px-2 py-1 text-center"
+              type="text"
+              name="nome"
+              value="<%= academia.nome %>"
+              required
+              minlength="3"
+              maxlength="50" placeholder="Nome da academia"
+            />
+          </div>
+
+          <div class="flex flex-col gap-2 px-6">
+            <label class="text-start" for="email">Email</label>
+            <input
+              class="border-2 border-black rounded-full bg-pink-50 text-lg px-2 py-1 text-center"
+              type="email"
+              name="email"
+              value="<%= academia.email %>"
+              placeholder="seuemail@exemplo.com.br"
+              required
+            />
+          </div>
+
+          <div class="flex flex-col gap-2 px-6">
+            <label class="text-start" for="senha">Senha</label>
+            <input
+              class="border-2 border-black rounded-full bg-pink-50 text-lg px-2 py-1 text-center"
+              type="password"
+              name="senha"
+              placeholder="*********"
+        
+            />
+            <p>Deixa em branco se não quiser mudar a senha</p>
+          </div>
+
+          <div class="flex flex-col gap-2 px-6">
+            <label class="text-start" for="telefone">Telefone</label>
+            <input
+              class="border-2 border-black rounded-full bg-pink-50 text-lg px-2 py-1 text-center"
+              type="text"
+              name="telefone"
+              value="<%= academia.telefone %>"
+              required
+              
+              title="Digite um telefone com 10 ou 11 digitos"
+            />
+          </div>
+
+          <button
+           type="submit"
+            class="bg-neonGreen rounded-xl py-2 hover:bg-neonGreenHover transition-colors text-zinc-50 font-zain text-4xl mx-12"
+          >
+            Salvar alterações
+          </button>
+        </form>
+      </section>
+    </main>
+  </body>
+</html>

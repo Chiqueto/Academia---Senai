@@ -8,17 +8,21 @@ const { authMiddleware } = require("../middleware/authMiddleware");
 router.get("/", personalController.renderizaLogin);
 router.get("/cadastro", personalController.renderizaCadastro);
 //router.get("/menu", personalController.renderizaMenu, authMiddleware);
-//router.get("/perfilPersonal", personalController.renderizaPerfil, authMiddleware);
-
 router.get("/perfilPersonal/:id", personalController.renderizaPerfil);
+
+router.get("/menuPersonal", (req, res) => {
+  res.render("personal/menuPersonal", { id: null });
+});
+router.get("/menuPersonal/:id", personalController.renderizaMenu);
+
 
 router.get("/opcaoTreinoPersonal", (req, res) => {
   res.render("personal/opcaoTreinoPersonal");
 });
 
 //Sem a autenticação
-router.get("/menuPersonal/:id", personalController.renderizaMenu);
-// router.get("/perfilPersonal", personalController.renderizaPerfil);
+//router.get("/menuPersonal/:id", personalController.renderizaMenu);
+router.get("/menuPersonal/:id?", personalController.renderizaMenu);
 
 router.post("/cadastro", personalController.criarPersonal);
 // router.get("/listaPersonais", authMiddleware, personalController.listarPersonais);
@@ -29,6 +33,7 @@ router.post("/login", personalController.autenticaPersonal);
 
 //Sem a autenticação
 router.get("/listaPersonais", personalController.listarPersonais);
+router.get("/listaAlunos/:id", personalController.listarAlunos);
 router.get("/buscarPersonal/:id", personalController.buscarPersonal);
 router.delete("/deletar/:id", personalController.deletarPersonal);
 router.put("/atualizar/:id", personalController.atualizarPersonal);
