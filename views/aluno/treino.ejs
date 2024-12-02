@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta lang="pt-br" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="/styles/output.css" rel="stylesheet" />
+    <title><%= treino.nome %></title>
+  </head>
+  <body class="flex flex-col min-h-screen bg-zinc-900 text-zinc-50">
+    <!-- Cabeçalho -->
+    <header>
+      <nav class="flex justify-between bg-zinc-800 py-5 px-4">
+        <div class="flex items-center gap-4">
+          <a href="/aluno/meusTreinos/<%= id_aluno %>"
+            ><img src="/icons/back_arrow.svg"
+          /></a>
+          <h1 class="font-jaro text-zinc-50 text-3xl">GymFit</h1>
+          <!-- <img src="/icons/GymFit.svg" /> -->
+        </div>
+      </nav>
+    </header>
+
+    <!-- Conteúdo principal -->
+    <main class="mx-4 flex-grow">
+      <!-- Título do Treino -->
+      <section class="text-center py-6">
+        <h2 class="text-3xl font-bold"><%= treino.nome %></h2>
+      </section>
+
+      <!-- Lista de Exercícios -->
+      <section>
+        <ul class="flex flex-col gap-4 text-zinc-950">
+          <% exercicios.forEach((exercicio, index) => { %>
+          <li
+            class="bg-zinc-200 p-4 rounded-lg shadow-lg flex items-center justify-between hover:bg-zinc-300 transition-colors"
+          >
+            <div class="flex items-center gap-4">
+              <!-- Ícone do exercício -->
+              <div
+                class="bg-rose-200 p-3 rounded-full flex justify-center items-center w-12 h-12"
+              >
+                <img src="/icons/weight.svg" alt="Exercício" class="w-6 h-6" />
+              </div>
+              <!-- Nome do exercício -->
+              <div>
+                <h3 class="text-2xl font-bold"><%= exercicio.nome %></h3>
+              </div>
+            </div>
+
+            <!-- Contador de séries -->
+            <span class="text-3xl font-bold font-zain">
+              <%= exercicio.seriesFeitas %>/<%= exercicio.series %>
+            </span>
+          </li>
+          <% }) %>
+        </ul>
+      </section>
+    </main>
+
+    <!-- Botão de Concluir -->
+    <div class="p-4">
+      <button
+        type="button"
+        class="bg-neonGreen w-full py-3 rounded-lg text-xl font-bold hover:bg-neonGreenHover transition-colors"
+      >
+        Concluir
+      </button>
+    </div>
+
+    <!-- Rodapé -->
+    <footer class="text-center py-4 text-sm bg-zinc-800">
+      <p>&copy; 2024 Luís Felipe, Edney Araujo, Marília</p>
+      <p>Início: 14:00 | Tempo: 00:30:00</p>
+    </footer>
+  </body>
+</html>

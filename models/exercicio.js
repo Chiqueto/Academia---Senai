@@ -61,6 +61,25 @@ const getExerciciosByTreino = async (id_treino) => {
   return result.rows;
 };
 
+const getExerciciosByTreinoWSerie = async (id_treino) => {
+  const result = await pool.query(
+    "SELECT e.*, te.series FROM tb_exercicio e, tb_treino_exercicio te WHERE e.id IN (SELECT id_exercicio FROM tb_treino_exercicio WHERE id_treino = $1) AND te.id_exercicio = e.id AND te.id_treino = $1",
+    [id_treino]
+  );
+
+  console.log(result.rows);
+
+  return result.rows;
+};
+
+const getMaxSeries = async (id_treino, id_exercicio) => {
+  const result = await pool.query(
+    "SELECT series FROM tb_treino_exercicio WHERE id_treino = $1 AND id_exercicio = $2",
+    [id_treino, id_exercicio]
+  );
+  return result.rows[0]?.series || null; // Retorna o número de séries ou null
+};
+
 module.exports = {
   createExercicio,
   updateExercicio,
@@ -69,4 +88,6 @@ module.exports = {
   getExercicioById,
   getExerciciosByPersonal,
   getExerciciosByTreino,
+  getExerciciosByTreinoWSerie,
+  getMaxSeries,
 };

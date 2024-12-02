@@ -4,7 +4,6 @@ const Treino = require("../controllers/treino.js");
 
 // Rota para criar um novo treino
 router.post("/personal/:id_personal", Treino.criarTreinoPersonal);
-
 router.post("/aluno/:id_aluno", Treino.criarTreinoAluno);
 
 // Rota para deletar um treino pelo ID
