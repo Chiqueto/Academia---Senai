@@ -38,11 +38,16 @@ const findAll = async () => {
 };
 
 const findById = async (id) => {
+  console.log("ID recebido no modelo:", id);
+
   const result = await pool.query("SELECT * FROM tb_personal WHERE id = $1", [
     id,
   ]);
+  console.log("Resultado da query:", result.rows);
+
   return result.rows[0];
 };
+
 
 const deletePersonal = async (id) => {
   const result = await pool.query("DELETE FROM tb_personal WHERE id = $1", [
