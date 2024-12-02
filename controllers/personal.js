@@ -14,19 +14,6 @@ const formatarTelefone = (telefone) => {
   );
 };
 
-const calcularIdade = (dataNascimento) => {
-  const hoje = new Date();
-  const nascimento = new Date(dataNascimento);
-  let idade = hoje.getFullYear() - nascimento.getFullYear();
-  const mes = hoje.getMonth() - nascimento.getMonth();
-
-  if (mes < 0 || (mes === 0 && hoje.getDate() < nascimento.getDate())) {
-    idade--;
-  }
-
-  return idade;
-};
-
 
 const criarPersonal = async (req, res) => {
   const { nome, email, senha, cref, cep, cidade, uf, descricao, especialidade, telefone, } = req.body;
@@ -216,7 +203,6 @@ const renderizaPerfil = async (req, res) => {
     }
 
     personal.telefone = formatarTelefone(personal.telefone);
-    personal.idade = calcularIdade(personal.dt_nascimento); // Ajuste para considerar 'dt_nascimento'
 
     res.render("personal/perfilPersonal", { personal });
   } catch (error) {
@@ -281,4 +267,5 @@ module.exports = {
   renderizaPerfil,
   autenticaPersonal,
   listarAlunos,
+  formatarTelefone,
 };
