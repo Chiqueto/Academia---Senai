@@ -98,17 +98,48 @@ const listarAcademiaPorId = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+// const atualizaAcademia = async (req, res) => {
+//   const { id } = req.params;
+//   const { cidade, bairro, logradouro, telefone } = req.body;
+//   try {
+//     const academia = await Academia.updateAcademia(id, { cidade, bairro, logradouro, telefone });
+//     res.redirect(`/academia/perfil/${id}`);
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).send("Erro ao atualizar a academia");
+//   }
+// };
+
+
 const atualizaAcademia = async (req, res) => {
   const { id } = req.params;
-  const { nome, telefone, email, senha } = req.body;
+  const { cidade, bairro, logradouro, telefone, nome } = req.body;
+
+  if (!cidade || !bairro || !logradouro || !telefone) {
+    return res.status(400).send("Todos os campos são obrigatórios.");
+  }
+
   try {
-    const academia = await Academia.updateAcademia(id, { nome, telefone, email, senha });
+    const academiaAtualizada = await Academia.updateAcademia(id, {
+      cidade,
+      bairro,
+      logradouro,
+      telefone,
+      nome,
+    });
+
+    if (academiaAtualizada.length === 0) {
+      return res.status(404).send("Academia não encontrada.");
+    }
+
     res.redirect(`/academia/perfil/${id}`);
   } catch (error) {
-    console.error(error);
-    res.status(500).send("Erro ao atualizar a academia");
+    console.error("Erro ao atualizar a academia:", error.message);
+    res.status(500).send("Erro interno do servidor.");
   }
 };
+
+
 
 const deletar = async (req, res) => {
   const { id } = req.params;

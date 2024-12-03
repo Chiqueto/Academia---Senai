@@ -23,11 +23,7 @@ router.get("/personais/:id", academiaController.renderizaListaPersonais);
 router.get("/equipamento/:id", academiaController.renderizaEquipamento);
 
 router.get("/editar/:id",  academiaController.editarAcademia);
-router.put(
-  "/atualizar/:id",
-  // authMiddleware,
-  academiaController.atualizaAcademia
-);
+router.post("/atualizar/:id", academiaController.atualizaAcademia);
 
 
 router.get("/adcEquipamento", (req, res) => {
