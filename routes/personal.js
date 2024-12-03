@@ -47,11 +47,13 @@ router.put("/atualizar/:id", personalController.atualizarPersonal);
 
 //exercicios para personais
 router.post("/criarExercicio/:id_personal", ExercicioController.criarExercicio);
+router.post('/:id_personal/adicionar', personalController.adicionarAluno);
 router.put(
   "/atualizarExercicio/:id_personal/:id_exercicio",
   ExercicioController.atualizarExercicio
 );
 router.delete("/deletarExercicio/:id", ExercicioController.deletarExercicio);
+router.delete('/:id_personal/remover', personalController.removerAluno);
 router.get(
   "/exercicios/:id_personal",
   ExercicioController.listarExerciciosByPersonal
