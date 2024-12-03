@@ -250,7 +250,7 @@ const renderizaExercicio = async (req, res) => {
       id_treino,
       exercicio,
       series,
-      status,
+      treinoStatus,
     });
   } catch (error) {
     res.status(500).json({ error: error.message });
