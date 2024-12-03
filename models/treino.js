@@ -135,6 +135,60 @@ const getSeriesFeitas = async (id_treino, id_exercicio, id_aluno, dt_atual) => {
   return result.rows[0].max_serie;
 };
 
+const initTreino = async (id_aluno, id_treino) => {
+  const result = await pool.query(
+    "INSERT INTO tb_historico_treino (id_aluno, id_treino, dt_treino, hr_inicio) VALUES ($1, $2, current_date, current_timestamp) RETURNING *",
+    [id_aluno, id_treino]
+  );
+
+  return result.rows[0];
+};
+
+const getTreinoStatus = async (id_aluno, id_treino) => {
+  const result = await pool.query(
+    "SELECT * FROM tb_historico_treino WHERE id_aluno = $1 AND id_treino = $2 AND dt_treino = current_date",
+    [id_aluno, id_treino]
+  );
+
+  return result.rows[0];
+};
+
+const deleteTreinoExec = async (id_aluno, id_treino) => {
+  const result = await pool.query(
+    "DELETE FROM tb_historico_treino WHERE id_aluno = $1 AND id_treino = $2 AND dt_treino = current_date",
+    [id_aluno, id_treino]
+  );
+
+  return result.rowCount;
+};
+
+const finishTreino = async (id_aluno, id_treino) => {
+  const result = await pool.query(
+    "UPDATE tb_historico_treino SET hr_conclusao = current_timestamp, concluido = true WHERE id_aluno = $1 AND id_treino = $2 AND dt_treino = current_date RETURNING *",
+    [id_aluno, id_treino]
+  );
+
+  return result.rows[0];
+};
+
+const getAllSeriesByTreino = async (id_treino) => {
+  const result = await pool.query(
+    "SELECT SUM(series) AS total_series FROM tb_treino_exercicio WHERE id_treino = $1",
+    [id_treino]
+  );
+
+  return result.rows[0].total_series;
+};
+
+const getFinishedSeriesByTreino = async (id_treino, id_aluno) => {
+  const result = await pool.query(
+    "SELECT COUNT(1) AS series_feitas FROM tb_registro_treino WHERE id_treino = $1 AND id_aluno = $2 AND dt_treino = current_date",
+    [id_treino, id_aluno]
+  );
+
+  return result.rows[0].series_feitas;
+};
+
 module.exports = {
   createTreino,
   deleteTreino,
@@ -149,4 +203,10 @@ module.exports = {
   removeExercise,
   getExerciciosByTreino,
   getSeriesFeitas,
+  initTreino,
+  getTreinoStatus,
+  deleteTreinoExec,
+  finishTreino,
+  getAllSeriesByTreino,
+  getFinishedSeriesByTreino,
 };

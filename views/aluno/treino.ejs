@@ -10,21 +10,38 @@
   <body class="flex flex-col min-h-screen bg-zinc-900 text-zinc-50">
     <!-- Cabeçalho -->
     <header>
-      <nav class="flex justify-between bg-zinc-800 py-5 px-4">
+      <nav class="flex justify-between bg-zinc-800 py-5 px-4 items-center">
         <div class="flex items-center gap-4">
           <a href="/aluno/meusTreinos/<%= id_aluno %>"
             ><img src="/icons/back_arrow.svg"
           /></a>
           <h1 class="font-jaro text-zinc-50 text-3xl">GymFit</h1>
           <!-- <img src="/icons/GymFit.svg" /> -->
+          <!-- Tag de Concluído -->
         </div>
+        <% if (status === "concluido") { %>
+        <span
+          class="inline-flex items-center justify-center bg-green-500 text-white text-sm font-semibold rounded-full px-4 py-1 shadow-md"
+          >✔ Concluído</span
+        >
+        <% } else if(status === "inativo"){ %>
+        <span
+          class="inline-flex items-center justify-center bg-red-500 text-white text-sm font-semibold rounded-full px-4 py-1 shadow-md"
+          >X Não iniciado</span
+        >
+        <% } else { %>
+        <span
+          class="inline-flex items-center justify-center bg-amber-500 text-white text-sm font-semibold rounded-full px-4 py-1 shadow-md"
+          >! Em andamento</span
+        >
+        <% } %>
       </nav>
     </header>
 
     <!-- Conteúdo principal -->
     <main class="mx-4 flex-grow">
-      <!-- Título do Treino -->
       <section class="text-center py-6">
+        <!-- Título do Treino -->
         <h2 class="text-3xl font-bold"><%= treino.nome %></h2>
       </section>
 
@@ -66,14 +83,69 @@
       </section>
     </main>
 
-    <!-- Botão de Concluir -->
+    <!-- Botão Dinâmico -->
     <div class="p-4">
+      <% if (status === "inativo") { %>
+      <!-- Botão de Iniciar -->
       <button
         type="button"
-        class="bg-neonGreen w-full py-3 rounded-lg text-xl font-bold hover:bg-neonGreenHover transition-colors"
+        onclick="iniciarTreino()"
+        class="bg-green-500 w-full py-3 rounded-lg text-xl font-bold hover:bg-green-600 transition-colors"
       >
-        Concluir
+        Iniciar
       </button>
+      <% } else if (status === "iniciado") { %>
+      <!-- Botões de Cancelar e Concluir -->
+      <div class="flex gap-4">
+        <button
+          type="button"
+          onclick="cancelarTreino()"
+          class="bg-red-500 flex-1 py-3 rounded-lg text-xl font-bold hover:bg-red-600 transition-colors"
+        >
+          Cancelar
+        </button>
+        <button
+          type="button"
+          onclick="concluirTreino()"
+          class="bg-green-500 flex-1 py-3 rounded-lg text-xl font-bold hover:bg-green-600 transition-colors"
+        >
+          Concluir
+        </button>
+      </div>
+      <% } else if (status === "concluido") { %>
+      <!-- Botões de Sair -->
+      <button
+        type="button"
+        onclick="window.location.href = '/aluno/meusTreinos/<%= id_aluno %>'"
+        class="bg-red-500 flex-1 w-full py-3 rounded-lg text-xl font-bold hover:bg-red-600 transition-colors"
+      >
+        Sair
+      </button>
+      <% } %>
+    </div>
+
+    <!-- Modal de Sucesso -->
+    <div
+      id="confirm-modal"
+      class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden"
+    >
+      <div class="bg-white p-6 rounded-lg text-center">
+        <h3 id="modal-message" class="text-2xl font-bold text-green-600"></h3>
+        <button
+          onclick="finalizarMesmoAssim()"
+          id="confirm-workout-modal"
+          class="mt-4 bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+        >
+          Concluir mesmo assim
+        </button>
+        <button
+          onclick="closeModal()"
+          id="close-modal"
+          class="mt-4 bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
+        >
+          Não concluir
+        </button>
+      </div>
     </div>
 
     <!-- Rodapé -->
@@ -81,5 +153,100 @@
       <p>&copy; 2024 Luís Felipe, Edney Araujo, Marília</p>
       <p>Início: 14:00 | Tempo: 00:30:00</p>
     </footer>
+
+    <script>
+      async function iniciarTreino() {
+        event.preventDefault();
+        const res = await fetch(
+          "/treino/iniciarTreino/<%= id_aluno %>/<%= treino.id %>",
+          {
+            method: "POST",
+          }
+        );
+        console.log(res);
+        window.location.reload();
+      }
+
+      async function cancelarTreino() {
+        event.preventDefault();
+        const res = await fetch(
+          "/treino/cancelarTreino/<%= id_aluno %>/<%= treino.id %>",
+          {
+            method: "DELETE",
+          }
+        );
+        console.log(res);
+        window.location.href = "/aluno/meusTreinos/<%= id_aluno %>";
+      }
+
+      async function concluirTreino() {
+        event.preventDefault();
+
+        const modal = document.getElementById("confirm-modal");
+        const modalMessage = document.getElementById("modal-message");
+
+        const response = await fetch(
+          "/treino/verificaSerie/<%= id_aluno %>/<%= treino.id %>",
+          {
+            method: "GET",
+          }
+        );
+
+        const statusTreino = await response.json();
+
+        console.log(statusTreino.data.statusTreino);
+
+        if (statusTreino.data.statusTreino === "finalizado") {
+          const res = await fetch(
+            "/treino/concluirTreino/<%= id_aluno %>/<%= treino.id %>",
+            {
+              method: "PUT",
+            }
+          );
+          modalMessage.textContent = "Treino finalizado com sucesso!";
+          modal.classList.remove("hidden");
+
+          // Recarrega a página automaticamente após 3 segundos
+          setTimeout(() => {
+            window.location.reload();
+          }, 3000);
+          window.location.reload();
+        } else {
+          // Exibe a mensagem no modal
+          modalMessage.textContent = "Você não concluiu todas as séries!";
+          modal.classList.remove("hidden");
+        }
+      }
+
+      async function finalizarMesmoAssim() {
+        event.preventDefault();
+
+        const modal = document.getElementById("confirm-modal");
+        const modalMessage = document.getElementById("modal-message");
+        const confirmModal = document.getElementById("confirm-workout-modal");
+        const closeModal = document.getElementById("close-modal");
+        const res = await fetch(
+          "/treino/concluirTreino/<%= id_aluno %>/<%= treino.id %>",
+          {
+            method: "PUT",
+          }
+        );
+        confirmModal.classList.add("hidden");
+        closeModal.classList.add("hidden");
+        modalMessage.textContent = "Treino finalizado com sucesso!";
+        modal.classList.remove("hidden");
+
+        // Recarrega a página automaticamente após 3 segundos
+        setTimeout(() => {
+          window.location.reload();
+        }, 3000);
+        window.location.reload();
+      }
+
+      function closeModal() {
+        const modal = document.getElementById("confirm-modal");
+        modal.classList.add("hidden");
+      }
+    </script>
   </body>
 </html>

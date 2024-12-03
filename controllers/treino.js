@@ -222,6 +222,17 @@ const adicionarExercicios = async (req, res) => {
     });
   }
 
+  console.log("Exercícios recebidos:", exercicios);
+
+  // Valida se todos os exercícios possuem séries
+  for (const exercicio of exercicios) {
+    if (!exercicio.series) {
+      return res.status(400).json({
+        error: "Cada exercício deve conter um número de séries.",
+      });
+    }
+  }
+
   try {
     // Consultar exercícios já associados ao treino
     const exerciciosExistentes = await Treino.getExerciciosByTreino(id_treino);
@@ -315,6 +326,89 @@ const listarExerciciosPorTreino = async (req, res) => {
   }
 };
 
+const iniciarTreino = async (req, res) => {
+  const { id_aluno, id_treino } = req.params;
+
+  if (!id_treino || !id_aluno) {
+    return res.status(400).json({ message: "Preencha todos os campos!" });
+  }
+
+  try {
+    const treinoIniciado = await Treino.initTreino(id_aluno, id_treino);
+
+    res
+      .status(201)
+      .json({ message: "Treino iniciado!", treinoIniciado, status: "ativo" });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const cancelarTreino = async (req, res) => {
+  const { id_aluno, id_treino } = req.params;
+
+  if (!id_treino || !id_aluno) {
+    return res.status(400).json({ message: "Preencha todos os campos!" });
+  }
+
+  try {
+    const treinoCancelado = await Treino.deleteTreinoExec(id_aluno, id_treino);
+
+    res.status(201).json({ message: "Treino cancelado!", treinoCancelado });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const concluirTreino = async (req, res) => {
+  const { id_aluno, id_treino } = req.params;
+
+  if (!id_treino || !id_aluno) {
+    return res.status(400).json({ message: "Preencha todos os campos!" });
+  }
+
+  try {
+    const treinoFinalizado = await Treino.finishTreino(id_aluno, id_treino);
+
+    res.status(201).json({
+      message: "Treino finalizado!",
+      treinoFinalizado,
+      status: "concluído",
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const verificaSeries = async (req, res) => {
+  const { id_treino, id_aluno } = req.params;
+
+  try {
+    const seriesFeitas = await Treino.getFinishedSeriesByTreino(
+      id_treino,
+      id_aluno
+    );
+
+    const totalSeries = await Treino.getAllSeriesByTreino(id_treino);
+    let statusTreino;
+    if (seriesFeitas === totalSeries) {
+      statusTreino = "finalizado";
+    } else {
+      statusTreino = "incompleto";
+    }
+
+    console.log("Status Treino:", statusTreino);
+
+    res.status(201).json({
+      data: {
+        statusTreino,
+      },
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 module.exports = {
   criarTreinoPersonal,
   criarTreinoAluno,
@@ -329,4 +423,8 @@ module.exports = {
   adicionarExercicios,
   removerExercicio,
   listarExerciciosPorTreino,
+  iniciarTreino,
+  cancelarTreino,
+  concluirTreino,
+  verificaSeries,
 };
