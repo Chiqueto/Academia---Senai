@@ -66,27 +66,46 @@ const findPersonais = async (id) => {
   return result.rows;
 };
 
-const updateAcademia = async (id, academiaData) => {
-  const { nome, cep, cidade, bairro, logradouro, numero, uf, telefone } =
-    academiaData;
-  console.log({
-    nome,
-    cep,
-    cidade,
-    bairro,
-    logradouro,
-    numero,
-    uf,
-    telefone,
-    id,
-  });
-  const result = await pool.query(
-    "UPDATE tb_academia SET nome = $1, cep = $2, cidade = $3, bairro = $4, logradouro = $5, numero = $6, uf = $7, telefone = $8 WHERE id = $9 RETURNING *",
-    [nome, cep, cidade, bairro, logradouro, numero, uf, telefone, id]
-  );
 
-  return result.rows;
+const updateAcademia = async (id, academiaData) => {
+  const { cidade, bairro, logradouro, telefone, nome } = academiaData;
+
+  try {
+    const result = await pool.query(
+      "UPDATE tb_academia SET cidade = $1, bairro = $2, logradouro = $3, telefone = $4, nome = $5 WHERE id = $6 RETURNING *",
+      [cidade, bairro, logradouro, telefone, nome, id]
+    );
+
+    return result.rows; // Deve retornar a linha atualizada
+  } catch (error) {
+    console.error("Erro na atualização do banco de dados:", error.message);
+    throw error;
+  }
 };
+
+
+
+// const updateAcademia = async (id, academiaData) => {
+//   const { nome, cep, cidade, bairro, logradouro, numero, uf, telefone } =
+//     academiaData;
+//   console.log({
+//     nome,
+//     cep,
+//     cidade,
+//     bairro,
+//     logradouro,
+//     numero,
+//     uf,
+//     telefone,
+//     id,
+//   });
+//   const result = await pool.query(
+//     "UPDATE tb_academia SET nome = $1, cep = $2, cidade = $3, bairro = $4, logradouro = $5, numero = $6, uf = $7, telefone = $8 WHERE id = $9 RETURNING *",
+//     [nome, cep, cidade, bairro, logradouro, numero, uf, telefone, id]
+//   );
+
+//   return result.rows;
+// };
 
 const deleteAcademia = async (id) => {
   const result = pool.query("DELETE FROM tb_academia WHERE id = $1", [id]);
