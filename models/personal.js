@@ -109,6 +109,23 @@ const findByEmail = async (email) => {
   return result.rows[0];
 };
 
+const addAluno = async (idPersonal, idAluno) => {
+  const result = await pool.query(
+    "INSERT INTO tb_alunos_personais (id_personal, id_aluno) VALUES ($1, $2) RETURNING *",
+    [idPersonal, idAluno]
+  );
+
+  return result.rows[0];
+};
+
+const removeAluno = async (idPersonal, idAluno) => {
+  const result = await pool.query(
+    "DELETE FROM tb_alunos_personais WHERE id_personal = $1 AND id_aluno = $2",
+    [idPersonal, idAluno]
+  );
+  return result.rowCount;
+};
+
 module.exports = {
   findAll,
   findById,
@@ -119,4 +136,6 @@ module.exports = {
   findByEmail,
   findByNome,
   findAlunoByPersonalId,
+  removeAluno,
+  addAluno,
 };
