@@ -93,8 +93,11 @@
               const li = document.createElement('li');
               li.classList.add('flex', 'justify-between', 'items-center', 'p-2', 'border-b');
               li.innerHTML = `
-                <span>${personal.nome}</span>
-                <button class="bg-blue-500 text-white px-2 py-1 rounded" onclick="inserirPersonal(${personal.id})">Selecionar</button>
+              <div class="rounded-full bg-pink-200 flex-shrink-0 w-10 h-10">
+                    <img src="/icons/user.svg" class="w-10 h-8" alt="Usuário">
+                  
+                ${personal.nome} Cod:${personal.id}</span>
+                </div><button class="bg-blue-500 text-white px py-1 rounded" onclick="inserirPersonal(${personal.id})">Selecionar</button>
               `;
               resultsList.appendChild(li);
             });
