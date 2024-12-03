@@ -26,4 +26,9 @@ router.get("/personal/:id_personal", Treino.listaTreinoPersonal);
 
 router.get("/aluno/:id_aluno", Treino.listaTreinoAluno);
 
+router.post("/iniciarTreino/:id_aluno/:id_treino", Treino.iniciarTreino);
+router.delete("/cancelarTreino/:id_aluno/:id_treino", Treino.cancelarTreino);
+router.put("/concluirTreino/:id_aluno/:id_treino", Treino.concluirTreino);
+router.get("/verificaSerie/:id_aluno/:id_treino", Treino.verificaSeries);
+
 module.exports = router;

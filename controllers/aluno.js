@@ -189,8 +189,25 @@ const renderizaTreino = async (req, res) => {
       };
     })
   );
+  let status;
+  const treinoStatus = await Treino.getTreinoStatus(id_aluno, id_treino);
+  console.log(treinoStatus);
+  if (!treinoStatus) {
+    status = "inativo";
+  } else if (treinoStatus.concluido === true) {
+    status = "concluido";
+  } else if (treinoStatus) {
+    status = "iniciado";
+  }
 
-  res.render("aluno/treino", { id_aluno, treino, exercicios });
+  console.log(status);
+
+  res.render("aluno/treino", {
+    id_aluno,
+    treino,
+    exercicios,
+    status,
+  });
 };
 
 const renderizaExercicio = async (req, res) => {
@@ -204,19 +221,37 @@ const renderizaExercicio = async (req, res) => {
       id_aluno,
       new Date().toLocaleDateString("en-CA")
     );
-
+    console.log(exercicio);
     exercicio.seriesFeitas = await Exercicio.getSeriesFeitas(
       id_treino,
       id_exercicio,
       id_aluno,
       new Date().toLocaleDateString("en-CA")
     );
+    exercicio.maxSeries = await Exercicio.getMaxSeries(id_treino, id_exercicio);
 
     // console.log(series);
 
     // console.log("Exercicio: ", exercicio);
 
-    res.render("aluno/exercicio", { id_aluno, id_treino, exercicio, series });
+    let status;
+    const treinoStatus = await Treino.getTreinoStatus(id_aluno, id_treino);
+    console.log(treinoStatus);
+    if (!treinoStatus) {
+      status = "inativo";
+    } else if (treinoStatus.concluido === true) {
+      status = "concluido";
+    } else if (treinoStatus) {
+      status = "iniciado";
+    }
+
+    res.render("aluno/exercicio", {
+      id_aluno,
+      id_treino,
+      exercicio,
+      series,
+      status,
+    });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
