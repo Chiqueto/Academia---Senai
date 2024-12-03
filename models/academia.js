@@ -165,7 +165,25 @@ const insertPersonal = async (id_academia, id_personal) => {
   return result.rows[0];
 };
 
+async function adicionarAluno(req, res) {
+  try {
+    const { id_academia, nome_aluno } = req.body;
 
+    // Validação simples
+    if (!id_academia || !nome_aluno) {
+      return res.status(400).json({ error: 'ID da academia ou nome do aluno está faltando' });
+    }
+
+    // Adicione o aluno no banco de dados
+    // Substitua pela lógica do seu banco
+    await db.query('INSERT INTO alunos (nome, id_academia) VALUES (?, ?)', [nome_aluno, id_academia]);
+
+    res.status(201).json({ message: 'Aluno adicionado com sucesso!' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Erro ao adicionar aluno.' });
+  }
+}
 
 module.exports = {
   createAcademia,
@@ -181,5 +199,6 @@ module.exports = {
   insertPersonal,
   deleteAlunos,
   deletePersonal,
+  adicionarAluno,
 
 };
