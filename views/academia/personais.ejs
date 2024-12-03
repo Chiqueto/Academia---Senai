@@ -27,7 +27,7 @@
               <img src="/icons/lupa.svg" class="w-5 h-5">
             </div>
           </div><br>
-            <div id="">
+            
            <!-- Renderizar alunos -->
             <% if (personais && personais.length > 0) { %>
               <% personais.forEach(personais => { %>
@@ -35,12 +35,12 @@
                   <div class="rounded-full bg-pink-200 flex-shrink-0 w-10 h-10">
                     <img src="/icons/user.svg" class="w-10 h-8" alt="Usuário">
                   </div>
-                  <span class="ml-4 text-2xl text-gray-900 font-semibold"><%= personais.nome %></span>
+                  <span class="ml-4 text-2xl text-gray-900 font-semibold"><%= personais.nome %></span><button onclick="deletePersonal" class="bg-red-600 text-2xl rounded-lg ">excluir</button>
                 </div>
               <% }) %>
             <% } else { %>
               <p class="text-gray-500">Nenhum personal encontrado.</p>
-            <% } %></div>
+            <% } %>
     
       </section>
     

@@ -99,6 +99,16 @@ const deleteAlunos = async (id) => {
   return result.rowCount;
 };
 
+const deletePersonal = async (idPersonal, idAcademia) => {
+  const result = await pool.query(
+    "DELETE FROM tb_academias_personais WHERE id_personal = $1 AND id_academia = $2",
+    [idPersonal, idAcademia]
+  );
+  return result.rowCount;
+};
+
+
+
 const findByCnpj = async (cnpj) => {
   const result = await pool.query("SELECT * FROM tb_academia WHERE cnpj = $1", [
     cnpj,
@@ -151,5 +161,6 @@ module.exports = {
   findPersonais,
   insertPersonal,
   deleteAlunos,
+  deletePersonal,
 
 };
