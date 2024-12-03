@@ -8,7 +8,9 @@ const academia = require("./routes/academia");
 const treino = require("./routes/treino");
 const exercicio = require("./routes/exercicio");
 const cors = require("cors");
+const methodOverride = require('method-override');
 
+app.use(methodOverride('_method'));
 app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: true }));
 

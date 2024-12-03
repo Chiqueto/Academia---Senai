@@ -22,10 +22,8 @@ router.get("/personais/:id", academiaController.renderizaListaPersonais);
 
 router.get("/equipamento/:id", academiaController.renderizaEquipamento);
 
-router.get("/editar/:id",  academiaController.renderizaEditar);
-router.post("/editar/:id", academiaController.atualizaAcademia);
-
-
+router.get("/editar/:id",  academiaController.editarAcademia);
+router.post("/atualizar/:id", academiaController.atualizaAcademia);
 
 
 router.get("/adcEquipamento", (req, res) => {
@@ -51,11 +49,7 @@ router.get(
   // authMiddleware,
   academiaController.listarAcademiaPorId
 );
-router.put(
-  "/atualizar/:id",
-  // authMiddleware,
-  academiaController.atualizaAcademia
-);
+
 router.delete(
   "/deletar/:id",
   // authMiddleware,
@@ -64,7 +58,6 @@ router.delete(
 router.post("/login", academiaController.autenticaAcademia);
 
 router.post("/inserirPersonal", academiaController.inserirPersonal);
-
 
 
 module.exports = router;

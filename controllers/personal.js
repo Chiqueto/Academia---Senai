@@ -2,6 +2,7 @@ const Personal = require("../models/personal.js");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const Aluno = require("../models/aluno.js");
+const { addAluno, removeAluno } = require('../models/personal');
 require("dotenv").config();
 
 const SECRET_KEY = process.env.SECRET_KEY;
@@ -89,19 +90,11 @@ const listarPersonais = async (req, res) => {
 };
 
 const listarAlunos = async (req, res) => {
+  console.log("Rota /personal/listaAlunos/:id acessada com ID:", req.params.id);
   const { id } = req.params;
-
   try {
     const alunos = await Personal.findAlunoByPersonalId(id);
-
-    if (alunos.length === 0) {
-      return res.render("personal/listaAlunos", {
-        alunos: [],
-        message: "Nenhum aluno encontrado.", // Mensagem para a view
-      });
-    }
-
-    res.render("personal/listaAlunos", { alunos, message: null }); // Sem mensagem
+    res.render("personal/listaAlunos", { alunos, message: null, id });
   } catch (error) {
     console.error("Erro ao listar alunos:", error);
     res.status(500).render("personal/listaAlunos", {
@@ -111,24 +104,24 @@ const listarAlunos = async (req, res) => {
   }
 };
 
-const buscarPersonal = async (req, res) => {
-  const { id } = req.params;
 
-  // console.log("ID recebido:", id);
+const buscarPersonal = async (req, res) => {
+  const { nome } = req.query;
+
+  console.log("Nome recebido:", nome);
 
   try {
-    const personal = await Personal.findById(id);
-    // console.log("Resultado da busca:", personal);
-    if (personal) {
-      res.status(200).json(personal);
+    const personais = await Personal.findByNome(nome);
+    if (personais.length > 0) {
+      res.status(200).json(personais);
     } else {
-      res.status(404).json({ message: "Personal não encontrado" });
+      res.status(404).json({ message: "Nenhum personal encontrado." });
     }
   } catch (error) {
-    console.error("Erro ao buscar personal:", error);
     res.status(500).json({ error: error.message });
   }
 };
+
 
 const deletarPersonal = async (req, res) => {
   const { id } = req.params;
@@ -264,6 +257,51 @@ const autenticaPersonal = async (req, res) => {
 //   }
 // };
 
+// controllers/AlunoPersonalController.js
+
+
+const adicionarAluno = async (req, res) => {
+  try {
+    const { idAluno } = req.body; // Pega o idAluno do corpo da requisição
+    const { idPersonal } = req.params; // Pega o idPersonal da URL
+
+    console.log("ID do Aluno:", idAluno);
+    console.log("ID do Personal:", idPersonal);
+
+    if (!idAluno || !idPersonal) {
+      return res.status(400).json({ error: "idAluno e idPersonal são obrigatórios." });
+    }
+
+    const alunoPersonal = await addAluno(idPersonal, idAluno);
+    res.status(201).json(alunoPersonal);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Erro ao adicionar aluno." });
+  }
+};
+
+const removerAluno = async (req, res) => {
+  try {
+    const { idAluno } = req.body; // Pega o idAluno do corpo da requisição
+    const { idPersonal } = req.params; // Pega o idPersonal da URL
+
+    if (!idAluno || !idPersonal) {
+      return res.status(400).json({ error: "ID do Aluno e ID do Personal são obrigatórios." });
+    }
+
+    const rowsDeleted = await removeAluno(idPersonal, idAluno);
+    if (rowsDeleted === 0) {
+      return res.status(404).json({ error: "Relação não encontrada." });
+    }
+
+    res.status(200).json({ message: "Aluno removido com sucesso." });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Erro ao remover aluno." });
+  }
+};
+
+
 module.exports = {
   criarPersonal,
   listarPersonais,
@@ -277,4 +315,6 @@ module.exports = {
   autenticaPersonal,
   listarAlunos,
   formatarTelefone,
+  adicionarAluno,
+  removerAluno,
 };

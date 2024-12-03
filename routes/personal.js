@@ -3,7 +3,14 @@ const router = express.Router();
 const personalController = require("../controllers/personal");
 const ExercicioController = require("../controllers/exercicio");
 const TreinoController = require("../controllers/treino");
-const { authMiddleware } = require("../middleware/authMiddleware");
+// const { authMiddleware } = require("../middleware/authMiddleware");
+
+
+router.get('/personal/:id', (req, res) => {
+  res.send('Rota interceptada!');
+});
+
+
 
 router.get("/", personalController.renderizaLogin);
 router.get("/cadastro", personalController.renderizaCadastro);
@@ -33,18 +40,21 @@ router.post("/login", personalController.autenticaPersonal);
 
 //Sem a autenticação
 router.get("/listaPersonais", personalController.listarPersonais);
-router.get("/listaAlunos/:id", personalController.listarAlunos);
-router.get("/buscarPersonal/:id", personalController.buscarPersonal);
+router.get("/buscarPersonal/", personalController.buscarPersonal);
 router.delete("/deletar/:id", personalController.deletarPersonal);
 router.put("/atualizar/:id", personalController.atualizarPersonal);
+router.get('/listaAlunos/:id', personalController.listarAlunos);
+
 
 //exercicios para personais
 router.post("/criarExercicio/:id_personal", ExercicioController.criarExercicio);
+router.post('/:id_personal/adicionar', personalController.adicionarAluno);
 router.put(
   "/atualizarExercicio/:id_personal/:id_exercicio",
   ExercicioController.atualizarExercicio
 );
 router.delete("/deletarExercicio/:id", ExercicioController.deletarExercicio);
+router.delete('/:id_personal/remover', personalController.removerAluno);
 router.get(
   "/exercicios/:id_personal",
   ExercicioController.listarExerciciosByPersonal
