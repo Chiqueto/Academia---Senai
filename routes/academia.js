@@ -24,6 +24,7 @@ router.get("/equipamento/:id", academiaController.renderizaEquipamento);
 
 router.get("/editar/:id",  academiaController.editarAcademia);
 router.post("/atualizar/:id", academiaController.atualizaAcademia);
+router.delete("/removerPersonal/:idPersonal", academiaController.deletarPersonal);
 
 
 router.get("/adcEquipamento", (req, res) => {
@@ -51,7 +52,7 @@ router.get(
 );
 
 router.delete(
-  "/deletar/:id",
+  "/deletar",
   // authMiddleware,
   academiaController.deletar
 );

@@ -255,6 +255,31 @@ const inserirPersonal = async (req, res) => {
   }
 };
 
+const deletarPersonal = async (req, res) => {
+  try {
+    const { idAcademia } = req.body; // ID da academia enviado no corpo da requisição
+    const { idPersonal } = req.params; // ID do personal enviado na URL
+
+    if (!idAcademia || !idPersonal) {
+      return res
+        .status(400)
+        .json({ error: "ID da academia e ID do personal são obrigatórios." });
+    }
+
+    const rowsDeleted = await Academia.deletePersonal(idPersonal, idAcademia);
+
+    if (rowsDeleted === 0) {
+      return res
+        .status(404)
+        .json({ error: "Relação entre academia e personal não encontrada." });
+    }
+
+    res.status(200).json({ message: "Personal removido com sucesso." });
+  } catch (error) {
+    console.error("Erro ao remover personal:", error);
+    res.status(500).json({ error: "Erro ao remover personal." });
+  }
+};
 
 module.exports = {
   cadastrar,
@@ -272,5 +297,6 @@ module.exports = {
   inserirPersonal,
   renderizaEquipamento,
   editarAcademia,
+  deletarPersonal,
  
 };
