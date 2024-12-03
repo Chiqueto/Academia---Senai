@@ -43,6 +43,8 @@ router.get("/listaPersonais", personalController.listarPersonais);
 router.get("/buscarPersonal/", personalController.buscarPersonal);
 router.delete("/deletar/:id", personalController.deletarPersonal);
 router.put("/atualizar/:id", personalController.atualizarPersonal);
+router.get('/listaAlunos/:id', personalController.listarAlunos);
+
 
 //exercicios para personais
 router.post("/criarExercicio/:id_personal", ExercicioController.criarExercicio);
