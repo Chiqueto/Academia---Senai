@@ -106,23 +106,22 @@ const listarAlunos = async (req, res) => {
 
 
 const buscarPersonal = async (req, res) => {
-  const { id } = req.params;
+  const { nome } = req.query;
 
-  // console.log("ID recebido:", id);
+  console.log("Nome recebido:", nome);
 
   try {
-    const personal = await Personal.findById(id);
-    // console.log("Resultado da busca:", personal);
-    if (personal) {
-      res.status(200).json(personal);
+    const personais = await Personal.findByNome(nome);
+    if (personais.length > 0) {
+      res.status(200).json(personais);
     } else {
-      res.status(404).json({ message: "Personal não encontrado" });
+      res.status(404).json({ message: "Nenhum personal encontrado." });
     }
   } catch (error) {
-    console.error("Erro ao buscar personal:", error);
     res.status(500).json({ error: error.message });
   }
 };
+
 
 const deletarPersonal = async (req, res) => {
   const { id } = req.params;
