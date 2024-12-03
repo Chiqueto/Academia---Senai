@@ -48,6 +48,18 @@ const findById = async (id) => {
   return result.rows[0];
 };
 
+const findByNome = async (nome) => {
+  console.log("Nome recebido no modelo:", nome);
+
+  const result = await pool.query(
+    "SELECT * FROM tb_personal WHERE nome ILIKE $1",
+    [`%${nome}%`] // Utiliza o operador LIKE para busca parcial
+  );
+
+  console.log("Resultado da query:", result.rows);
+
+  return result.rows; // Retorna todas as linhas encontradas
+};
 
 const deletePersonal = async (id) => {
   const result = await pool.query("DELETE FROM tb_personal WHERE id = $1", [
@@ -94,4 +106,5 @@ module.exports = {
   updatePersonal,
   loginPersonal,
   findByEmail,
+  findByNome,
 };

@@ -33,7 +33,7 @@ router.post("/login", personalController.autenticaPersonal);
 
 //Sem a autenticação
 router.get("/listaPersonais", personalController.listarPersonais);
-router.get("/buscarPersonal/:id", personalController.buscarPersonal);
+router.get("/buscarPersonal/", personalController.buscarPersonal);
 router.delete("/deletar/:id", personalController.deletarPersonal);
 router.put("/atualizar/:id", personalController.atualizarPersonal);
 

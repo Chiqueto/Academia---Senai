@@ -216,12 +216,14 @@ const inserirPersonal = async (req, res) => {
   const { id_academia, id_personal } = req.body;
 
   try {
-    const personal = await Academia.insertPersonal(id_academia, id_personal);
-    res.status(201).json({ message: "Personal inserido com sucesso!" });
+    const personais = await Academia.insertPersonal(id_academia, id_personal);
+    res.status(201).json({ message: "Personal inserido com sucesso!", data: personais });
   } catch (error) {
+    console.error("Erro ao adicionar pessoasl: ", error);
     res.status(500).json({ error: error.message });
   }
 };
+
 
 module.exports = {
   cadastrar,

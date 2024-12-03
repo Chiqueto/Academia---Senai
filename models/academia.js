@@ -137,6 +137,7 @@ const insertPersonal = async (id_academia, id_personal) => {
 };
 
 
+
 module.exports = {
   createAcademia,
   findAll,
