@@ -40,9 +40,8 @@ const findAll = async () => {
 const findById = async (id) => {
   console.log("ID recebido no modelo:", id);
 
-  const result = await pool.query("SELECT * FROM tb_personal WHERE id = $1", [
-    id,
-  ]);
+  const result = await pool.query("SELECT * FROM tb_personal WHERE id = $1", 
+    [id]);
   console.log("Resultado da query:", result.rows);
 
   return result.rows[0];
@@ -89,6 +88,18 @@ const loginPersonal = async (email) => {
   return result.rows[0];
 };
 
+const findAlunoByPersonalId = async (personalId) => {
+  console.log("Personal ID recebido:", personalId);
+  const result = await pool.query(
+    "SELECT * FROM tb_aluno WHERE id IN (SELECT id_aluno FROM tb_alunos_personais WHERE id_personal = $1 )",
+    [personalId]
+  );
+  console.log("Resultado da query:", result.rows);
+  return result.rows;
+};
+
+
+
 const findByEmail = async (email) => {
   const result = await pool.query(
     "SELECT * FROM tb_personal WHERE email = $1",
@@ -107,4 +118,5 @@ module.exports = {
   loginPersonal,
   findByEmail,
   findByNome,
+  findAlunoByPersonalId,
 };

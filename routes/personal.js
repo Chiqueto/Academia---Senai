@@ -3,7 +3,14 @@ const router = express.Router();
 const personalController = require("../controllers/personal");
 const ExercicioController = require("../controllers/exercicio");
 const TreinoController = require("../controllers/treino");
-const { authMiddleware } = require("../middleware/authMiddleware");
+// const { authMiddleware } = require("../middleware/authMiddleware");
+
+
+router.get('/personal/:id', (req, res) => {
+  res.send('Rota interceptada!');
+});
+
+
 
 router.get("/", personalController.renderizaLogin);
 router.get("/cadastro", personalController.renderizaCadastro);

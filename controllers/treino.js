@@ -1,6 +1,5 @@
 const Treino = require("../models/treino.js");
 const Exercicio = require("../models/exercicio.js");
-
 const criarTreinoAluno = async (req, res) => {
   const { id_aluno } = req.params;
   const { nome, descricao } = req.body;
@@ -14,7 +13,6 @@ const criarTreinoAluno = async (req, res) => {
       nome,
       descricao,
     });
-    // console.log(id_aluno);
 
     fetch("http://localhost:3000/treino/atribuir", {
       method: "POST",
@@ -26,8 +24,6 @@ const criarTreinoAluno = async (req, res) => {
         id_treino: novoTreino.id,
       }),
     });
-
-    // atribuirTreino(id_aluno, novoTreino.id);
 
     res
       .status(201)
@@ -115,18 +111,58 @@ const registrarRepeticao = async (req, res) => {
   const { id_aluno } = req.params;
   const { id_treino, id_exercicio, carga, reps } = req.body;
 
+  console.log(
+    "id_aluno" +
+      id_aluno +
+      "id_treino" +
+      id_treino +
+      "id_exercicio" +
+      id_exercicio +
+      "carga" +
+      carga +
+      "reps" +
+      reps
+  );
+
   if (!id_treino || !id_aluno || !id_exercicio || !carga || !reps) {
     return res.status(400).json({ message: "Preencha todos os campos!" });
   }
 
   try {
-    const repeticaoRegistrada = await Treino.setRepeticao(
-      id_aluno,
+    // Obtenha o número máximo de séries para o exercício
+    const maxSeries = await Exercicio.getMaxSeries(id_treino, id_exercicio);
+
+    if (!maxSeries) {
+      return res
+        .status(404)
+        .json({ message: "Exercício não encontrado ou sem limite definido." });
+    }
+
+    // Obtenha o número de séries feitas no dia
+    const dt_atual = new Date().toLocaleDateString("en-CA"); // Formato 'YYYY-MM-DD'
+    const seriesFeitas = await Treino.getSeriesFeitas(
       id_treino,
+      id_exercicio,
+      id_aluno,
+      dt_atual
+    );
+
+    // Verifique se o número máximo foi atingido
+    if (seriesFeitas >= maxSeries) {
+      return res
+        .status(400)
+        .json({ message: "Número máximo de séries já alcançado para hoje." });
+    }
+
+    // Registre a nova repetição
+    const repeticaoRegistrada = await Treino.setRepeticao(
+      id_treino,
+      id_aluno,
       id_exercicio,
       carga,
       reps
     );
+
     res.status(201).json({ message: "Série concluída!", repeticaoRegistrada });
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -177,23 +213,35 @@ const listaTreinoAluno = async (req, res) => {
 };
 
 const adicionarExercicios = async (req, res) => {
-  const { id_treino, ids_exercicios } = req.body; // Recebe um array de IDs
+  const { id_treino, exercicios } = req.body; // Recebe um array de objetos com id e series
+
+  // Verificação básica de entrada
+  if (!id_treino || !Array.isArray(exercicios) || exercicios.length === 0) {
+    return res.status(400).json({
+      error: "ID do treino ou lista de exercícios inválida.",
+    });
+  }
 
   try {
     // Consultar exercícios já associados ao treino
-    const exerciciosExistentes = await Exercicio.getExerciciosByTreino(
-      id_treino
-    );
+    const exerciciosExistentes = await Treino.getExerciciosByTreino(id_treino);
 
     // Verificar se algum dos IDs enviados já está associado
-    const exerciciosJaAdicionados = ids_exercicios.filter((id) =>
-      exerciciosExistentes.some((exercicio) => exercicio.id === id)
+    const exerciciosJaAdicionados = exercicios.filter((exercicio) =>
+      exerciciosExistentes.some(
+        (exExistente) => exExistente.id === exercicio.id
+      )
     );
 
+    // Nome dos exercícios duplicados
     const nomeExerciciosAdicionados = exerciciosJaAdicionados.map(
-      (id) => exerciciosExistentes.find((exercicio) => exercicio.id === id).nome
+      (exercicio) =>
+        exerciciosExistentes.find(
+          (exExistente) => exExistente.id === exercicio.id
+        ).nome
     );
 
+    // Retorna erro se houver exercícios duplicados
     if (exerciciosJaAdicionados.length > 0) {
       return res.status(400).json({
         error: `Os exercícios já estão associados ao treino: ${nomeExerciciosAdicionados.join(
@@ -202,24 +250,44 @@ const adicionarExercicios = async (req, res) => {
       });
     }
 
-    // Caso nenhum esteja duplicado, proceder com a adição
+    // Adiciona exercícios ao treino
     const exerciciosAdicionados = await Treino.setExercises(
       id_treino,
-      ids_exercicios
+      exercicios
     );
 
+    // Verifica se os exercícios foram adicionados corretamente
+    if (!exerciciosAdicionados || exerciciosAdicionados.length === 0) {
+      return res.status(500).json({
+        error: "Nenhum exercício foi adicionado ao treino. Tente novamente.",
+      });
+    }
+
     res.status(201).json({
-      message: "Exercícios adicionados ao treino!",
+      message: "Exercícios adicionados ao treino com sucesso!",
       exerciciosAdicionados,
     });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error("Erro ao adicionar exercícios:", error);
+
+    // Trata erros específicos do pool ou SQL
+    if (error.code === "23505") {
+      return res.status(409).json({
+        error: "Conflito: os exercícios já estão associados ao treino.",
+      });
+    }
+
+    // Trata outros erros inesperados
+    res.status(500).json({
+      error: "Erro inesperado ao adicionar exercícios.",
+      detalhes: error.message,
+    });
   }
 };
 
 const removerExercicio = async (req, res) => {
   const { id_treino, id_exercicio } = req.params;
-  console.log("Entrou no remover" + id_treino + id_exercicio);
+
   try {
     const exercicioRemovido = await Treino.removeExercise(
       id_treino,

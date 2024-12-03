@@ -18,6 +18,10 @@ router.get("/menu/:id", alunoController.renderizaMenu);
 router.get("/perfilAluno/:id", alunoController.renderizaPerfil);
 
 router.get("/meusTreinos/:id_aluno", alunoController.renderizaMeusTreinos);
+router.get(
+  "/meusTreinos/:id_aluno/treino/:id_treino",
+  alunoController.renderizaTreino
+);
 
 router.get("/encontrarAcademia", alunoController.renderizaEncontrarAcademias);
 
@@ -36,7 +40,7 @@ router.delete(
 //get exercicio by treino
 router.get(
   "/montarTreino/:id_aluno/treino/:id_treino/exercicios",
-  ExercicioController.listarExerciciosPorTreino
+  ExercicioController.listarExerciciosPorTreinoWSerie
 );
 
 // router.get("/encontrarPersonal", (req, res) => {
@@ -46,16 +50,6 @@ router.get(
 router.get("/encontrarPersonal", alunoController.renderizaListaPersonais);
 
 router.get("/montarTreino/:id_aluno", alunoController.renderizaMontarTreino);
-
-router.get("/TreinoA", (req, res) => {
-  res.render("aluno/TreinoA");
-});
-router.get("/TreinoB", (req, res) => {
-  res.render("aluno/TreinoB");
-});
-router.get("/Treinoc", (req, res) => {
-  res.render("aluno/Treinoc");
-});
 
 router.post("/cadastro", alunoController.criarAluno);
 // router.get("/listaAlunos", authMiddleware, alunoController.listarAlunos);
@@ -82,6 +76,10 @@ router.get("/:id_aluno/treinos", TreinoController.listaTreinoAluno);
 router.get(
   "/:id_aluno/treino/:id_treino",
   ExercicioController.listarExerciciosPorTreino
+);
+router.get(
+  "/meusTreinos/:id_aluno/treino/:id_treino/exercicios/:id_exercicio",
+  alunoController.renderizaExercicio
 );
 
 module.exports = router;

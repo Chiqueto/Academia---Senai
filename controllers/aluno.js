@@ -164,6 +164,64 @@ const renderizaMeusTreinos = async (req, res) => {
   res.render("aluno/meusTreinos", { id_aluno, treinos });
 };
 
+const renderizaTreino = async (req, res) => {
+  const { id_aluno, id_treino } = req.params;
+  const { id_exercicio } = req.query;
+  // console.log("Entrou");
+
+  const dt_atual = new Date().toLocaleDateString("en-CA");
+  // Obter treino e exercícios
+  const treino = await Treino.getTreinoById(id_treino);
+  let exercicios = await Exercicio.getExerciciosByTreinoWSerie(id_treino);
+
+  // Adicionar a quantidade de séries feitas para cada exercício
+  exercicios = await Promise.all(
+    exercicios.map(async (exercicio) => {
+      const seriesFeitas = await Treino.getSeriesFeitas(
+        id_treino,
+        exercicio.id,
+        id_aluno,
+        dt_atual
+      );
+      return {
+        ...exercicio,
+        seriesFeitas, // Adiciona a propriedade ao objeto do exercício
+      };
+    })
+  );
+
+  res.render("aluno/treino", { id_aluno, treino, exercicios });
+};
+
+const renderizaExercicio = async (req, res) => {
+  const { id_aluno, id_treino, id_exercicio } = req.params;
+
+  try {
+    let exercicio = await Exercicio.getExercicioById(id_exercicio);
+    const series = await Exercicio.getSeries(
+      id_treino,
+      id_exercicio,
+      id_aluno,
+      new Date().toLocaleDateString("en-CA")
+    );
+
+    exercicio.seriesFeitas = await Exercicio.getSeriesFeitas(
+      id_treino,
+      id_exercicio,
+      id_aluno,
+      new Date().toLocaleDateString("en-CA")
+    );
+
+    // console.log(series);
+
+    // console.log("Exercicio: ", exercicio);
+
+    res.render("aluno/exercicio", { id_aluno, id_treino, exercicio, series });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 const renderizaCadastro = (req, res) => {
   res.render("aluno/cadastro");
 };
@@ -341,4 +399,6 @@ module.exports = {
   renderizaListaPersonais,
   renderizaMontarTreino,
   renderizaMeusTreinos,
+  renderizaTreino,
+  renderizaExercicio,
 };
