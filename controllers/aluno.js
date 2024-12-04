@@ -294,10 +294,12 @@ const renderizaPerfil = async (req, res) => {
   }
 };
 
-const renderizaEncontrarAcademias = (req, res) => {
+const renderizaEncontrarAcademias = async (req, res) => {
+  const { id_aluno } = req.params;
   try {
+    const academias = await Academia.findAll();
     // Aqui você pode passar dados para a página, se necessário
-    res.render("aluno/encontrarAcademia", { academia: [] }); // Passe 'academias' se estiver renderizando dinamicamente
+    res.render("aluno/encontrarAcademia", { academias, id_aluno }); // Passe 'academias' se estiver renderizando dinamicamente
   } catch (error) {
     console.error(
       "Erro ao carregar a página encontrarAcademia:",
@@ -315,9 +317,10 @@ const renderizaEncontrarPersonais = async (req, res) => {
 };
 
 const renderizaListaPersonais = async (req, res) => {
+  const { id_aluno } = req.params;
   try {
     const personais = await Personal.findAll(); // Supondo que esta função retorne os personais cadastrados no banco de dados
-    res.render("aluno/encontrarPersonal", { personais }); // Passa 'personais' para o template
+    res.render("aluno/encontrarPersonal", { personais, id_aluno }); // Passa 'personais' para o template
   } catch (error) {
     console.error("Erro ao buscar os personais:", error.message);
     res.status(500).json({ error: "Erro interno ao buscar personais" });
