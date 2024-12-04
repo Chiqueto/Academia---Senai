@@ -36,8 +36,11 @@
                     <img src="/icons/user.svg" class="w-10 h-8" alt="Usuário">
                   </div>
                   <span class="ml-4 text-2xl text-gray-900 font-semibold"><%= personais.nome %></span>
-                  <button  onclick="removerPersonal('<%= personais.id %>')" >
-                    <img src="/icons/delete.svg" class="w-8 h-8  "> </button>
+                  <button 
+                    onclick="removerPersonal('<%= personais.id %>')" 
+                    class="ml-auto bg-transparent">
+                    <img src="/icons/delete.svg" class="w-8 h-8">
+                  </button>
                 </div>
               <% }) %>
             <% } else { %>
@@ -95,11 +98,11 @@
               const li = document.createElement('li');
               li.classList.add('flex', 'justify-between', 'items-center', 'p-2', 'border-b');
               li.innerHTML = `
-              <div class="rounded-full bg-pink-200 flex-shrink-0 w-10 h-10">
+              <div class="rounded-full bg-pink-200  w-10 h-10">
                     <img src="/icons/user.svg" class="w-10 h-8" alt="Usuário">
-                  
-                ${personal.nome} Cod:${personal.id}</span>
-                </div><button class="bg-blue-500 text-white px py-1 rounded" onclick="inserirPersonal(${personal.id})">Selecionar</button>
+                  </div>${personal.nome}
+                Cod:${personal.id}
+                <button class="bg-blue-500 text-white px py-1 rounded" onclick="inserirPersonal(${personal.id})">Selecionar</button>
               `;
               resultsList.appendChild(li);
             });
