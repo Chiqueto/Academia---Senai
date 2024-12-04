@@ -12,6 +12,12 @@ router.get("/cadastro", (req, res) => {
   res.render("academia/cadastro");
 });
 
+router.get('/academia/alunos', (req, res) => {
+  const id = req.params.id
+  res.render('academia/alunos', { id: id });
+});
+
+
 router.get("/menu/:id", academiaController.renderizaMenu);
 
 router.get("/perfil/:id", academiaController.renderizaPerfil);
@@ -59,6 +65,6 @@ router.delete(
 router.post("/login", academiaController.autenticaAcademia);
 
 router.post("/inserirPersonal", academiaController.inserirPersonal);
-
+router.post('/adicionarAluno', academiaController.adicionarAluno);
 
 module.exports = router;

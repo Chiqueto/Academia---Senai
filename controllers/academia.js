@@ -98,17 +98,6 @@ const listarAcademiaPorId = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
-// const atualizaAcademia = async (req, res) => {
-//   const { id } = req.params;
-//   const { cidade, bairro, logradouro, telefone } = req.body;
-//   try {
-//     const academia = await Academia.updateAcademia(id, { cidade, bairro, logradouro, telefone });
-//     res.redirect(`/academia/perfil/${id}`);
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).send("Erro ao atualizar a academia");
-//   }
-// };
 
 
 const atualizaAcademia = async (req, res) => {
@@ -141,17 +130,35 @@ const atualizaAcademia = async (req, res) => {
 
 
 
+// const deletar = async (req, res) => {
+//   const { id } = req.params;
+
+//   try {
+//     const result = Academia.deleteAcademia(id);
+
+//     res.status(200).json({ message: "Academia deletado com sucesso!" });
+//   } catch (error) {
+//     res.status(500).json({ error: error.message });
+//   }
+// };
+
+
 const deletar = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const result = Academia.deleteAcademia(id);
+    const result = await Academia.deleteAcademia(id);
 
-    res.status(200).json({ message: "Academia deletado com sucesso!" });
+    if (result === 0) {
+      return res.status(404).json({ message: "Academia não encontrada!" });
+    }
+
+    res.status(200).json({ message: "Academia deletada com sucesso!" });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 };
+
 
 const autenticaAcademia = async (req, res) => {
   const { email, senha } = req.body;
@@ -215,7 +222,7 @@ const renderizaPerfil = async (req, res) => {
   const { id } = req.params;
   const academia = await Academia.findById(id);
   // console.log(academia);
-  res.render(`academia/perfil`, { academia });
+  res.render('academia/perfil', { academia });
 };
 
 const renderizaMenu = (req, res) => {
@@ -233,14 +240,14 @@ const renderizaListaAlunos = async (req, res) => {
   const { id } = req.params;
   const alunos = await Academia.findStudents(id);
   console.log(alunos);
-  res.render("academia/alunos", { alunos });
+  res.render("academia/alunos", { alunos, id });
 };
 
 const renderizaListaPersonais = async (req, res) => {
   const { id } = req.params;
   const personais = await Academia.findPersonais(id);
   console.log(personais);
-  res.render("academia/personais", { personais });
+  res.render("academia/personais", { personais, id });
 };
 
 const inserirPersonal = async (req, res) => {
