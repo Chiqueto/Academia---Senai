@@ -12,11 +12,10 @@ router.get("/cadastro", (req, res) => {
   res.render("academia/cadastro");
 });
 
-router.get('/academia/alunos', (req, res) => {
-  const id = req.params.id
-  res.render('academia/alunos', { id: id });
+router.get("/academia/alunos", (req, res) => {
+  const id = req.params.id;
+  res.render("academia/alunos", { id: id });
 });
-
 
 router.get("/menu/:id", academiaController.renderizaMenu);
 
@@ -28,10 +27,12 @@ router.get("/personais/:id", academiaController.renderizaListaPersonais);
 
 router.get("/equipamento/:id", academiaController.renderizaEquipamento);
 
-router.get("/editar/:id",  academiaController.editarAcademia);
+router.get("/editar/:id", academiaController.editarAcademia);
 router.post("/atualizar/:id", academiaController.atualizaAcademia);
-router.delete("/removerPersonal/:idPersonal", academiaController.deletarPersonal);
-
+router.delete(
+  "/removerPersonal/:idPersonal",
+  academiaController.deletarPersonal
+);
 
 router.get("/adcEquipamento", (req, res) => {
   res.render("academia/adcEquipamento");
@@ -65,6 +66,6 @@ router.delete(
 router.post("/login", academiaController.autenticaAcademia);
 
 router.post("/inserirPersonal", academiaController.inserirPersonal);
-router.post('/adicionarAluno', academiaController.adicionarAluno);
+// router.post('/adicionarAluno', academiaController.adicionarAluno);
 
 module.exports = router;

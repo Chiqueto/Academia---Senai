@@ -16,6 +16,15 @@ const deleteTreino = async (id) => {
   return result.rowCount;
 };
 
+const deleteTreinoAluno = async (id) => {
+  const result = await pool.query(
+    "DELETE FROM tb_treino_alunos WHERE id_treino = $1",
+    [id]
+  );
+
+  return result.rowCount;
+};
+
 const getTreinos = async () => {
   const result = await pool.query("SELECT * FROM tb_treino");
 
@@ -137,7 +146,7 @@ const getSeriesFeitas = async (id_treino, id_exercicio, id_aluno, dt_atual) => {
 
 const initTreino = async (id_aluno, id_treino) => {
   const result = await pool.query(
-    "INSERT INTO tb_historico_treino (id_aluno, id_treino, dt_treino, hr_inicio) VALUES ($1, $2, current_date, current_timestamp) RETURNING *",
+    "INSERT INTO tb_historico_treino (id_aluno, id_treino, dt_treino, hr_inicio) VALUES ($1, $2, current_date, current_timestamp AT TIME ZONE 'America/Sao_Paulo') RETURNING *",
     [id_aluno, id_treino]
   );
 
@@ -151,6 +160,15 @@ const getTreinoStatus = async (id_aluno, id_treino) => {
   );
 
   return result.rows[0];
+};
+
+const deleteDoneSeries = async (id_aluno, id_treino) => {
+  const result = await pool.query(
+    "DELETE FROM tb_registro_treino WHERE id_aluno = $1 AND id_treino = $2 AND dt_treino = current_date",
+    [id_aluno, id_treino]
+  );
+
+  return result.rowCount;
 };
 
 const deleteTreinoExec = async (id_aluno, id_treino) => {
@@ -192,6 +210,7 @@ const getFinishedSeriesByTreino = async (id_treino, id_aluno) => {
 module.exports = {
   createTreino,
   deleteTreino,
+  deleteTreinoAluno,
   updateTreino,
   setTreino,
   setRepeticao,
@@ -209,4 +228,5 @@ module.exports = {
   finishTreino,
   getAllSeriesByTreino,
   getFinishedSeriesByTreino,
+  deleteDoneSeries,
 };

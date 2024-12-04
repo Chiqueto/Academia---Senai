@@ -99,7 +99,7 @@
       <div class="flex gap-4">
         <button
           type="button"
-          onclick="cancelarTreino()"
+          onclick="openCancelModal()"
           class="bg-red-500 flex-1 py-3 rounded-lg text-xl font-bold hover:bg-red-600 transition-colors"
         >
           Cancelar
@@ -139,6 +139,13 @@
           Concluir mesmo assim
         </button>
         <button
+          onclick="cancelarTreino()"
+          id="cancel-modal"
+          class="mt-4 bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 hidden"
+        >
+          Cancelar mesmo assim
+        </button>
+        <button
           onclick="closeModal()"
           id="close-modal"
           class="mt-4 bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
@@ -151,101 +158,188 @@
     <!-- Rodapé -->
     <footer class="text-center py-4 text-sm bg-zinc-800">
       <p>&copy; 2024 Luís Felipe, Edney Araujo, Marília</p>
-      <p>Início: 14:00 | Tempo: 00:30:00</p>
+      <p>
+        Início: <%= treinoStatus ? new
+        Date(treinoStatus.hr_inicio).toLocaleTimeString('pt-BR', { hour:
+        '2-digit', minute: '2-digit' }) : "Não iniciado" %> | Tempo: <% if
+        (status === "concluido") { const inicio = new
+        Date(treinoStatus.hr_inicio); const conclusao = new
+        Date(treinoStatus.hr_conclusao); const diffMs = conclusao - inicio;
+        const diffHrs = Math.floor(diffMs / 3600000); const diffMins =
+        Math.floor((diffMs % 3600000) / 60000); const diffSecs =
+        Math.floor((diffMs % 60000) / 1000); %> <%=
+        `${String(diffHrs).padStart(2, '0')}:${String(diffMins).padStart(2,
+        '0')}:${String(diffSecs).padStart(2, '0')}` %> <% } else { %>
+        <span id="tempo-decorrido">00:00:00</span>
+        <% } %>
+      </p>
     </footer>
 
     <script>
-      async function iniciarTreino() {
-        event.preventDefault();
-        const res = await fetch(
-          "/treino/iniciarTreino/<%= id_aluno %>/<%= treino.id %>",
-          {
-            method: "POST",
-          }
-        );
-        console.log(res);
-        window.location.reload();
-      }
+                              async function iniciarTreino() {
+                                event.preventDefault();
+                                const res = await fetch(
+                                  "/treino/iniciarTreino/<%= id_aluno %>/<%= treino.id %>",
+                                  {
+                                    method: "POST",
+                                  }
+                                );
+                                console.log(res);
+                                window.location.reload();
+                              }
 
-      async function cancelarTreino() {
-        event.preventDefault();
-        const res = await fetch(
-          "/treino/cancelarTreino/<%= id_aluno %>/<%= treino.id %>",
-          {
-            method: "DELETE",
-          }
-        );
-        console.log(res);
-        window.location.href = "/aluno/meusTreinos/<%= id_aluno %>";
-      }
+                              function openCancelModal() {
+                                const modal = document.getElementById("confirm-modal");
+                                const modalMessage = document.getElementById("modal-message");
+                                const btnConfirmar = document.getElementById("confirm-workout-modal");
+                                const btnCancela = document.getElementById("close-modal");
+                                const btnCancelaMesmo = document.getElementById("cancel-modal");
+                                modal.classList.remove("hidden");
+                                btnConfirmar.classList.add("hidden");
+                                // btnCancela.classList.add("hidden");
+                                btnCancela.textContent = "Não cancelar";
+                                btnCancelaMesmo.classList.remove("hidden");
+                                modalMessage.textContent =
+                                  "Ao cancelar, você perderá o progresso do treino!";
+                              }
 
-      async function concluirTreino() {
-        event.preventDefault();
+                              async function cancelarTreino() {
+                                event.preventDefault();
+                                const res = await fetch(
+                                  "/treino/cancelarTreino/<%= id_aluno %>/<%= treino.id %>",
+                                  {
+                                    method: "DELETE",
+                                  }
+                                );
+                                window.location.reload();
+                                // console.log(res);
+                                // window.location.href = "/aluno/meusTreinos/<%= id_aluno %>";
+                              }
 
-        const modal = document.getElementById("confirm-modal");
-        const modalMessage = document.getElementById("modal-message");
+                              async function concluirTreino() {
+                                event.preventDefault();
 
-        const response = await fetch(
-          "/treino/verificaSerie/<%= id_aluno %>/<%= treino.id %>",
-          {
-            method: "GET",
-          }
-        );
+                                const modal = document.getElementById("confirm-modal");
+                                const modalMessage = document.getElementById("modal-message");
+                                const btnConfirmar = document.getElementById("confirm-workout-modal");
+                                const btnCancela = document.getElementById("close-modal");
+                                const btnCancelaMesmo = document.getElementById("cancel-modal");
 
-        const statusTreino = await response.json();
+                                btnCancela.textContent = "Voltar";
+                                btnCancelaMesmo.classList.add("hidden");
+                                btnConfirmar.classList.remove("hidden");
+                                const response = await fetch(
+                                  "/treino/verificaSerie/<%= id_aluno %>/<%= treino.id %>",
+                                  {
+                                    method: "GET",
+                                  }
+                                );
 
-        console.log(statusTreino.data.statusTreino);
+                                const statusTreino = await response.json();
 
-        if (statusTreino.data.statusTreino === "finalizado") {
-          const res = await fetch(
-            "/treino/concluirTreino/<%= id_aluno %>/<%= treino.id %>",
-            {
-              method: "PUT",
-            }
-          );
-          modalMessage.textContent = "Treino finalizado com sucesso!";
-          modal.classList.remove("hidden");
+                                console.log(statusTreino.data.statusTreino);
 
-          // Recarrega a página automaticamente após 3 segundos
-          setTimeout(() => {
-            window.location.reload();
-          }, 3000);
-          window.location.reload();
-        } else {
-          // Exibe a mensagem no modal
-          modalMessage.textContent = "Você não concluiu todas as séries!";
-          modal.classList.remove("hidden");
+                                if (statusTreino.data.statusTreino === "finalizado") {
+                                  const res = await fetch(
+                                    "/treino/concluirTreino/<%= id_aluno %>/<%= treino.id %>",
+                                    {
+                                      method: "PUT",
+                                    }
+                                  );
+                                  modalMessage.textContent = "Treino finalizado com sucesso!";
+                                  modal.classList.remove("hidden");
+                                  btnConfirmar.classList.add("hidden");
+                                  btnCancela.classList.add("hidden");
+                                  // Recarrega a página automaticamente após 3 segundos
+                                  setTimeout(() => {
+                                    window.location.reload();
+                                  }, 1500);
+                                } else {
+                                  // Exibe a mensagem no modal
+                                  modalMessage.textContent = "Você não concluiu todas as séries!";
+                                  modal.classList.remove("hidden");
+                                  btnConfirmar.classList.remove("hidden");
+                                  btnCancela.classList.remove("hidden");
+                                }
+                              }
+
+                              async function finalizarMesmoAssim() {
+                                event.preventDefault();
+
+                                const modal = document.getElementById("confirm-modal");
+                                const modalMessage = document.getElementById("modal-message");
+                                const confirmModal = document.getElementById("confirm-workout-modal");
+                                const closeModal = document.getElementById("close-modal");
+                                const res = await fetch(
+                                  "/treino/concluirTreino/<%= id_aluno %>/<%= treino.id %>",
+                                  {
+                                    method: "PUT",
+                                  }
+                                );
+                                confirmModal.classList.add("hidden");
+                                closeModal.classList.add("hidden");
+                                modalMessage.textContent = "Treino finalizado com sucesso!";
+                                modal.classList.remove("hidden");
+
+                                // Recarrega a página automaticamente após 3 segundos
+                                setTimeout(() => {
+                                  window.location.reload();
+                                }, 1000);
+                              }
+
+                              function closeModal() {
+                                const modal = document.getElementById("confirm-modal");
+                                modal.classList.add("hidden");
+                              }
+
+      // Função para atualizar o tempo decorrido
+      function atualizarTempoDecorrido(hr_inicio) {
+        const tempoDecorridoEl = document.getElementById("tempo-decorrido");
+
+        // Formata o hr_inicio para o formato desejado
+        function formatarDataParaISO(data) {
+          const dataObj = new Date(data);
+          const ano = dataObj.getFullYear();
+          const mes = String(dataObj.getMonth() + 1).padStart(2, "0");
+          const dia = String(dataObj.getDate()).padStart(2, "0");
+          const horas = String(dataObj.getHours()).padStart(2, "0");
+          const minutos = String(dataObj.getMinutes()).padStart(2, "0");
+          const segundos = String(dataObj.getSeconds()).padStart(2, "0");
+
+          return `${ano}-${mes}-${dia}T${horas}:${minutos}:${segundos}`;
         }
+
+        const inicioFormatado = formatarDataParaISO(hr_inicio);
+        const inicio = new Date(inicioFormatado);
+
+        // Função para atualizar o tempo no DOM
+        function atualizar() {
+          const agoraAtualizado = new Date();
+          const diffMs = agoraAtualizado - inicio; // Diferença entre agora e o horário de início
+          const diffHrs = Math.floor(diffMs / 3600000);
+          const diffMins = Math.floor((diffMs % 3600000) / 60000);
+          const diffSecs = Math.floor((diffMs % 60000) / 1000);
+
+          const horas = String(diffHrs).padStart(2, "0");
+          const minutos = String(diffMins).padStart(2, "0");
+          const segundos = String(diffSecs).padStart(2, "0");
+
+          tempoDecorridoEl.textContent = `${horas}:${minutos}:${segundos}`;
+
+          console.log("inicio formatado: " + inicioFormatado);
+          console.log("inicio original: " + inicio);
+          console.log("agora: " + agoraAtualizado);
+          console.log(`Tempo: ${horas}:${minutos}:${segundos}`);
+        }
+
+        atualizar(); // Chama a função imediatamente
+        setInterval(atualizar, 1000); // Atualiza a cada segundo
       }
 
-      async function finalizarMesmoAssim() {
-        event.preventDefault();
-
-        const modal = document.getElementById("confirm-modal");
-        const modalMessage = document.getElementById("modal-message");
-        const confirmModal = document.getElementById("confirm-workout-modal");
-        const closeModal = document.getElementById("close-modal");
-        const res = await fetch(
-          "/treino/concluirTreino/<%= id_aluno %>/<%= treino.id %>",
-          {
-            method: "PUT",
-          }
-        );
-        confirmModal.classList.add("hidden");
-        closeModal.classList.add("hidden");
-        modalMessage.textContent = "Treino finalizado com sucesso!";
-        modal.classList.remove("hidden");
-
-        // Recarrega a página automaticamente após 3 segundos
-        setTimeout(() => {
-          window.location.reload();
-        }, 1000);
-      }
-
-      function closeModal() {
-        const modal = document.getElementById("confirm-modal");
-        modal.classList.add("hidden");
-      }
+      // Chama a função se o treino estiver iniciado
+      <% if (status === "iniciado" && treinoStatus) { %>
+      atualizarTempoDecorrido("<%= treinoStatus.hr_inicio %>");
+      <% } %>
     </script>
   </body>
 </html>

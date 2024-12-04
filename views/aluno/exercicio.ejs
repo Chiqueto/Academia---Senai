@@ -29,7 +29,7 @@
           <img src="/icons/agachamento.svg" alt="Vídeo do exercício" />
         </div>
       </section>
-      <% if (treinoStatus === "concluido") { %>
+      <% if ( status === "concluido") { %>
 
       <div
         class="relative bg-gradient-to-br from-green-700 via-green-600 to-green-800 p-4 rounded-xl shadow-xl text-center hover:scale-105 transition-transform duration-300"
@@ -205,21 +205,24 @@
 
       async function iniciarTreino() {
         event.preventDefault();
+        console.log();
         const res = await fetch(
           "/treino/iniciarTreino/<%= id_aluno %>/<%= id_treino %>",
           {
             method: "POST",
           }
         );
-        initModal.classList.add("hidden");
-        sendReq();
+        if (res.ok) {
+          initModal.classList.add("hidden");
+          sendReq();
+        }
       }
 
       form.addEventListener("submit", async (e) => {
         e.preventDefault(); // Impede o envio padrão do formulário
-        console.log("status" + treinoStatus);
+        // console.log( "<%= status %>" + " " + <%= id_aluno %> + " " + <%= id_treino %>);
 
-        if (statreinoStatustus !== "iniciado") {
+        if (<%= status  !== "iniciado" %>) {
           initModal.classList.remove("hidden");
         } else {
           sendReq();

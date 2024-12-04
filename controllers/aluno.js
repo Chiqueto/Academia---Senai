@@ -190,23 +190,29 @@ const renderizaTreino = async (req, res) => {
     })
   );
   let status;
-  const treinoStatus = await Treino.getTreinoStatus(id_aluno, id_treino);
-  console.log(treinoStatus);
+  let treinoStatus = await Treino.getTreinoStatus(id_aluno, id_treino);
+  // console.log(treinoStatus);
   if (!treinoStatus) {
     status = "inativo";
+    treinoStatus = null;
   } else if (treinoStatus.concluido === true) {
     status = "concluido";
   } else if (treinoStatus) {
     status = "iniciado";
   }
 
-  console.log(status);
+  // console.log("treino: ");
+  // console.log(treinoStatus);
+  // console.log("exercicios: ");
+  // console.log(exercicios);
+  // console.log("status: " + status);
 
   res.render("aluno/treino", {
     id_aluno,
     treino,
     exercicios,
     status,
+    treinoStatus,
   });
 };
 
@@ -250,7 +256,7 @@ const renderizaExercicio = async (req, res) => {
       id_treino,
       exercicio,
       series,
-      treinoStatus,
+      status,
     });
   } catch (error) {
     res.status(500).json({ error: error.message });
