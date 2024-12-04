@@ -41,6 +41,7 @@
                   <button 
                   class="ml-auto bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors"
                   onclick="desmatricularAluno('<%= aluno.id %>')">
+                  
                   Desvincular
                 </button>
                 </div>
@@ -50,28 +51,72 @@
             <% } %>
           </div>
 
-
           <div id="searchModal" class="hidden fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center">
             <div class="bg-white p-6 rounded-lg shadow-lg w-96">
               <button id="closeSearchModal" class="text-red-600 float-right font-bold">Fechar</button>
-              <h3 class="text-xl font-semibold mb-4">Buscar Personal</h3>
+              <h3 class="text-xl font-semibold mb-4">Buscar Aluno</h3>
               <input
                 type="text"
                 id="searchInput"
                 class="w-full p-2 border border-gray-300 rounded-md mb-4"
-                placeholder="Buscar personal..."
+                placeholder="Buscar aluno..."
               />
               <ul id="searchResults" class="max-h-60 overflow-y-auto space-y-2">
-                <!-- Resultados da pesquisa serão inseridos aqui -->
+                <% if (all_alunos && all_alunos.length > 0) { %>
+                  <% all_alunos.forEach(aluno => { %>
+                    <li
+                      class="flex justify-between items-center p-2 border-b bg-gray-50 hover:bg-gray-100 transition"
+                      data-nome="<%= aluno.nome.toLowerCase() %>">
+                      <span><%= aluno.nome %></span>
+                      <button
+                        class="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600 transition"
+                        onclick="inserirAluno('<%= aluno.id %>')">
+                        Adicionar
+                      </button>
+                    </li>
+                  <% }) %>
+                <% } else { %>
+                  <p class="text-gray-500 text-center">Nenhum aluno encontrado.</p>
+                <% } %>
               </ul>
             </div>
           </div>
-        </main>
-       <button id="openSearchModal" class="mx-auto bg-neonGreen rounded-xl px-4 py-2 hover:bg-neonGreenHover transition-colors text-zinc-50 font-zain text-4xl ">
-          Adicionar
-        </button><br>
+          
     
         <script>
+
+async function inserirAluno(id_aluno) {
+  try {
+    const id_personal = '<%= id_personal %>'; // Obtemos o ID do personal do EJS
+
+    if (!id_aluno || !id_personal) {
+      alert('Erro: ID do aluno ou do personal não encontrado.');
+      return;
+    }
+
+    const response = await fetch(`/personal/${id_personal}/adicionarAluno`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ id_academia, id_aluno }), // Passando os dados como JSON
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+      alert(data.message); // Mensagem de sucesso
+      document.getElementById('searchModal').classList.add('hidden'); // Fechando modal
+      location.reload();
+    } else {
+      alert('Erro ao adicionar aluno: ' + (data.error || 'Erro desconhecido')); // Mensagem de erro
+    }
+  } catch (error) {
+    console.error('Erro ao adicionar aluno:', error); // Log do erro no console
+  }
+}
+        
+
          // Abrir aba suspensa
          document.getElementById('openSearchModal').addEventListener('click', () => {
           document.getElementById('searchModal').classList.remove('hidden');
@@ -82,10 +127,21 @@
           document.getElementById('searchModal').classList.add('hidden');
         });
     
-        // Buscar personais
+        // Buscar alunos
         document.getElementById('searchInput').addEventListener('input', async (event) => {
-          const query = event.target.value;
-    
+          const query = event.target.value.toLowerCase();
+          const items = document.querySelectorAll('#searchResults li');
+
+          items.forEach((item) => {
+    const nome = item.getAttribute('data-nome');
+    if (nome.includes(query)) {
+      item.style.display = 'flex'; // Mostra itens que correspondem
+    } else {
+      item.style.display = 'none'; // Oculta os demais
+    }
+  });
+});
+
           if (query.length > 1) {
             try {
               const response = await fetch(`/personal/buscarPersonal?nome=${query}`);
@@ -113,35 +169,7 @@
           }
         });
     
-        async function inserirPersonal(id_personal) {
-          const id_academia = '54'; 
-    
-          if (!id_academia || !id_personal) {
-            alert('Erro: ID da academia ou do personal não encontrado.');
-            return;
-          }
-    
-          try {
-            const response = await fetch('/academia/inserirPersonal', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({ id_academia, id_personal }),
-            });
-    
-            const data = await response.json();
-    
-            if (response.ok) {
-              alert(data.message);
-              document.getElementById('searchModal').classList.add('hidden');
-            } else {
-              alert('Erro ao adicionar personal: ' + (data.error || 'Erro desconhecido'));
-            }
-          } catch (error) {
-            console.error('Erro ao adicionar personal:', error);
-          }
-        }
+
         </script>
 
   </body>

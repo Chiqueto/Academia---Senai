@@ -57,6 +57,7 @@ const findStudents = async (id) => {
   return result.rows;
 };
 
+
 const findPersonais = async (id) => {
   const result = await pool.query(
     "SELECT * FROM tb_personal WHERE id in (SELECT id_personal FROM tb_academias_personais WHERE id_academia = $1)",
@@ -167,23 +168,20 @@ const insertPersonal = async (id_academia, id_personal) => {
 
 async function adicionarAluno(req, res) {
   try {
-    const { id_academia, nome_aluno } = req.body;
+    const { idAcademia, idAluno } = req.body;
 
     // Validação simples
-    if (!id_academia || !nome_aluno) {
-      return res.status(400).json({ error: 'ID da academia ou nome do aluno está faltando' });
+    if (!idAcademia || !idAluno) {
+      return res.status(400).json({ error: 'ID da academia ou ID do aluno está faltando' });
     }
-
-    // Adicione o aluno no banco de dados
-    // Substitua pela lógica do seu banco
-    await db.query('INSERT INTO alunos (nome, id_academia) VALUES (?, ?)', [nome_aluno, id_academia]);
+    await db.query('INSERT INTO tb_alunos_academias (idAcademia, idAluno) VALUES ($1, $2) RETURNING *', [idAcademia, idAluno]);
 
     res.status(201).json({ message: 'Aluno adicionado com sucesso!' });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Erro ao adicionar aluno.' });
   }
-}
+};
 
 module.exports = {
   createAcademia,
