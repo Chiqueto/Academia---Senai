@@ -43,12 +43,12 @@ router.get("/listaPersonais", personalController.listarPersonais);
 router.get("/buscarPersonal/", personalController.buscarPersonal);
 router.delete("/deletar/:id", personalController.deletarPersonal);
 router.put("/atualizar/:id", personalController.atualizarPersonal);
-router.get('/listaAlunos/:id', personalController.listarAlunos);
+router.get('/listaAlunos/:id_personal', personalController.listarAlunos);
 
 
 //exercicios para personais
 router.post("/criarExercicio/:id_personal", ExercicioController.criarExercicio);
-router.post('/:id_personal/adicionar', personalController.adicionarAluno);
+router.post('/:id_personal/adicionarAluno', personalController.adicionarAluno);
 router.put(
   "/atualizarExercicio/:id_personal/:id_exercicio",
   ExercicioController.atualizarExercicio
