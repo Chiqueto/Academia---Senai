@@ -287,6 +287,51 @@ const deletarPersonal = async (req, res) => {
     res.status(500).json({ error: "Erro ao remover personal." });
   }
 };
+ 
+const inserirAluno = async (req, res) => {
+  const { id_aluno, id_academia } = req.body;
+  console.log('Dados recebidos:', { id_aluno, id_academia }); // Log para depuração
+
+  if (!id_aluno || !id_academia) {
+    return res.status(400).json({ error: "ID do aluno ou da academia está faltando." });
+  }
+
+  try {
+    const alunos = await Academia.insertAluno(id_aluno, id_academia);
+    res.status(201).json({ message: "Aluno inserido com sucesso!", data: alunos });
+  } catch (error) {
+    console.error("Erro ao adicionar aluno: ", error);
+    res.status(500).json({ error: "Erro interno do servidor." });
+  }
+};
+
+
+const deletarAluno = async (req, res) => {
+  try {
+    const { idAcademia } = req.body; // ID da academia enviado no corpo da requisição
+    const { idAluno } = req.params; // ID do personal enviado na URL
+
+    if (!idAluno || !idAcademia) {
+      return res
+        .status(400)
+        .json({ error: "ID da academia e ID do aluno são obrigatórios." });
+    }
+
+    const rowsDeleted = await Academia.deleteAluno(idAluno, idAcademia);
+
+    if (rowsDeleted === 0) {
+      return res
+        .status(404)
+        .json({ error: "Relação entre aluno e academia não encontrada." });
+    }
+
+    res.status(200).json({ message: "Aluno removido com sucesso." });
+  } catch (error) {
+    console.error("Erro ao remover Aluno:", error);
+    res.status(500).json({ error: "Erro ao remover aluno." });
+  }
+};
+
 
 module.exports = {
   cadastrar,
@@ -305,5 +350,8 @@ module.exports = {
   renderizaEquipamento,
   editarAcademia,
   deletarPersonal,
+  inserirAluno,
+  deletarAluno,
+
  
 };

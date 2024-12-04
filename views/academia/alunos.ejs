@@ -20,7 +20,7 @@
       <section class="font-zain px-4">
         <h2 class="text-3xl text-center text-white py-2">Lista de alunos</h2>
         <div class="relative w-full">
-          <input
+          <input 
             type="text"
             placeholder="Pesquisar pelo nome do aluno..."
             class="w-full py-1 pl-10 pr-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-gray-700 placeholder-gray-400"
@@ -30,23 +30,29 @@
           </div>
         </div>
         <br />
-        <div>
+        <div >
           <% if (alunos && alunos.length > 0) { %>
-          <% alunos.forEach(alunos => { %>
-          <div class="container bg-white rounded-lg flex items-center p-3 shadow-md w-auto mb-2">
-            <div class="rounded-full bg-pink-200 flex-shrink-0 w-10 h-10">
-              <img src="/icons/user.svg" class="w-10 h-8" alt="Usuário" />
-            </div>
-            <span class="ml-4 text-2xl text-gray-900 font-semibold">
-              <%= alunos.nome %>
-            </span>
-           
-          </div>
-          <% }) %>
+            <% alunos.forEach(aluno => { %>
+              <div class="flex items-center bg-white rounded-lg p-3 shadow-md mb-2">
+                <div class="rounded-full bg-pink-200 w-10 h-10 flex items-center justify-center">
+                  <img src="/icons/user.svg" class="w-8 h-8" alt="Usuário" />
+                </div>
+                <span class="ml-4 text-left text-xl text-gray-900 font-semibold">
+                  <%= aluno.nome %></span>
+                  <span class="ml-4 text-xl text-gray-900 ">Cod: <%= aluno.id %></span>
+                
+                <button 
+                  onclick="removerAluno('<%= aluno.id %>')" 
+                  class="ml-auto bg-transparent">
+                  <img src="/icons/delete.svg" class="w-8 h-8">
+                </button>
+              </div>
+            <% }) %>
           <% } else { %>
-          <p class="text-gray-500">Nenhum aluno encontrado.</p>
+            <p class="text-gray-300">Nenhum aluno encontrado.</p>
           <% } %>
         </div>
+        
       </section>
       <!-- Adicionar a barra de pesquisa na aba suspensa -->
       <div id="searchModal" class="hidden fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center">
@@ -85,34 +91,46 @@
 
     // Buscar personais
     document.getElementById('searchInput').addEventListener('input', async (event) => {
-      const query = event.target.value;
+  const query = event.target.value.trim();
 
-      if (query.length > 1) {
-        try {
-          const response = await fetch(`/aluno/buscarAluno?nome=${query}`);
-          const personais = await response.json();
+  if (query.length > 1) {
+    try {
+      const response = await fetch(`/aluno/buscarAluno?nome=${query}`);
+      const alunos = await response.json();
 
-          const resultsList = document.getElementById('searchResults');
-          resultsList.innerHTML = ''; // Limpa os resultados anteriores
+      const resultsList = document.getElementById('searchResults');
+      resultsList.innerHTML = ''; // Limpa os resultados anteriores
 
-          if (Array.isArray(alunos) && alunos.length > 0) {
-            palunos.forEach((aluno) => {
-              const li = document.createElement('li');
-              li.classList.add('flex', 'justify-between', 'items-center', 'p-2', 'border-b');
-              li.innerHTML = `
-                <span>${aluno.nome}</span>
-                <button class="bg-blue-500 text-white px-2 py-1 rounded" onclick="inserirAluno(${aluno.id})">Selecionar</button>
-              `;
-              resultsList.appendChild(li);
-            });
-          } else {
-            resultsList.innerHTML = '<li>Nenhum aluno encontrado.</li>';
-          }
-        } catch (error) {
-          console.error('Erro ao buscar alunos:', error);
-        }
+      if (Array.isArray(alunos) && alunos.length > 0) {
+        alunos.forEach((aluno) => {
+          const li = document.createElement('li');
+          li.classList.add('flex', 'justify-between', 'items-center', 'p-2', 'border-b');
+
+          // Corrigindo o botão e nome do aluno
+          li.innerHTML = `
+            <div class="flex items-center gap-2">
+              <div class="rounded-full bg-pink-200 w-10 h-10 flex items-center justify-center">
+                <img src="/icons/user.svg" class="w-7 h-8" alt="Usuário">
+              </div>
+              <span>${aluno.nome}</span><span>Cod: ${aluno.id}</span>
+            </div>
+            <button 
+              class="bg-blue-500 text-white px-2 py-1 rounded" 
+             onclick="inserirAluno(&quot;${aluno.id}&quot;)">
+              Selecionar
+            </button>
+          `;
+
+          resultsList.appendChild(li);
+        });
+      } else {
+        resultsList.innerHTML = '<li class="text-gray-500">Nenhum aluno encontrado.</li>';
       }
-    });
+    } catch (error) {
+      console.error('Erro ao buscar alunos:', error);
+    }
+  }
+});
 
     async function inserirAluno(id_aluno) {
   const id_academia = '54';  // Pega o id_academia do EJS
@@ -129,7 +147,7 @@
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ id_academia, id_aluno }),  // Passa os dados como JSON
+      body: JSON.stringify({ id_aluno, id_academia }),  // Passa os dados como JSON
     });
 
     const data = await response.json();  // Converte a resposta em JSON
@@ -137,13 +155,44 @@
     if (response.ok) {
       alert(data.message);  // Exibe mensagem de sucesso
       document.getElementById('searchModal').classList.add('hidden');
+      location.reload(); //
     } else {
       alert('Erro ao adicionar aluno: ' + (data.error || 'Erro desconhecido'));
     }
   } catch (error) {
     console.error('Erro ao adicionar aluno:', error);
   }
+} 
+
+async function removerAluno(idAluno) {
+  const idAcademia = '54'; // Substitua pela lógica para obter o ID da academia
+
+  const confirmar = confirm("Tem certeza de que deseja remover este aluno?");
+  if (!confirmar) return;
+
+  try {
+    const response = await fetch(`/academia/removerAluno/${idAluno}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ idAcademia }),
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+      alert(data.message || "Aluno removido com sucesso!");
+      location.reload(); // Recarrega a página
+    } else {
+      alert(data.error || "Erro ao remover aluno.");
+    }
+  } catch (error) {
+    console.error("Erro ao remover aluno:", error);
+    alert("Erro inesperado. Tente novamente mais tarde.");
+  }
 }
+
     </script>
   </body>
 </html>

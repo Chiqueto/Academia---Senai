@@ -50,6 +50,7 @@ router.get(
 router.get("/encontrarPersonal", alunoController.renderizaListaPersonais);
 
 router.get("/montarTreino/:id_aluno", alunoController.renderizaMontarTreino);
+router.get("/buscarAluno/", alunoController.buscarAluno);
 
 router.post("/cadastro", alunoController.criarAluno);
 // router.get("/listaAlunos", authMiddleware, alunoController.listarAlunos);

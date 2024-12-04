@@ -106,7 +106,7 @@ const listarAlunos = async (req, res) => {
 
 
 const buscarPersonal = async (req, res) => {
-  const { nome } = req.query;
+  const { nome} = req.query;
 
   console.log("Nome recebido:", nome);
 

@@ -89,7 +89,7 @@ const listarAlunos = async (req, res) => {
 //   }
 // };
 
-const buscarAluno = async (req, res) => {
+/*const buscarAluno = async (req, res) => {
   const { id } = req.params;
 
   try {
@@ -105,7 +105,25 @@ const buscarAluno = async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
+};*/
+const buscarAluno = async (req, res) => {
+  const { nome} = req.query;
+
+  console.log("Nome recebido:", nome);
+
+  try {
+    const alunos = await Aluno.findByNome(nome);
+    if (alunos.length > 0) {
+      res.status(200).json(alunos);
+    } else {
+      res.status(404).json({ message: "Nenhum aluno encontrado." });
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 };
+
+
 
 const deletarAluno = async (req, res) => {
   const { id } = req.params;
