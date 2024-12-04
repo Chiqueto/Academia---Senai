@@ -57,6 +57,7 @@ const findStudents = async (id) => {
   return result.rows;
 };
 
+
 const findPersonais = async (id) => {
   const result = await pool.query(
     "SELECT * FROM tb_personal WHERE id in (SELECT id_personal FROM tb_academias_personais WHERE id_academia = $1)",

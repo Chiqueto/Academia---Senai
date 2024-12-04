@@ -89,20 +89,42 @@ const listarPersonais = async (req, res) => {
   }
 };
 
+// const listarAlunos = async (req, res) => {
+//   // console.log("Rota /personal/listaAlunos/:id acessada com ID:", req.params.id_personal);
+//   const { id_personal } = req.params;
+//   // console.log(id_personal)
+//   try {
+//     const alunos = await Personal.findAlunoByPersonalId(id_personal);
+//     const all_alunos = await Aluno.findAll();
+//     res.render("personal/listaAlunos", { alunos, message: null, id_personal });
+//   } catch (error) {
+//     console.error("Erro ao listar alunos:", error);
+//     res.status(500).render("personal/listaAlunos", {
+//       alunos: [],
+//       all_alunos: [],
+//       message: "Erro ao listar alunos. Tente novamente mais tarde.",
+//       id_personal,
+//     });
+//   }
+// };
+
 const listarAlunos = async (req, res) => {
-  console.log("Rota /personal/listaAlunos/:id acessada com ID:", req.params.id);
-  const { id } = req.params;
+  const { id_personal } = req.params;
   try {
-    const alunos = await Personal.findAlunoByPersonalId(id);
-    res.render("personal/listaAlunos", { alunos, message: null, id });
+    const alunos = await Personal.findAlunoByPersonalId(id_personal);
+    const all_alunos = await Aluno.findAll(); // Garante que pega todos os alunos
+    res.render("personal/listaAlunos", { alunos, all_alunos, message: null, id_personal });
   } catch (error) {
     console.error("Erro ao listar alunos:", error);
     res.status(500).render("personal/listaAlunos", {
       alunos: [],
+      all_alunos: [], // Inclua um array vazio como fallback
       message: "Erro ao listar alunos. Tente novamente mais tarde.",
+      id_personal,
     });
   }
 };
+
 
 
 const buscarPersonal = async (req, res) => {
@@ -262,18 +284,18 @@ const autenticaPersonal = async (req, res) => {
 
 const adicionarAluno = async (req, res) => {
   try {
-    const { idAluno } = req.body; // Pega o idAluno do corpo da requisição
-    const { idPersonal } = req.params; // Pega o idPersonal da URL
+    const { id_aluno } = req.body; // Pega o idAluno do corpo da requisição
+    const { id_personal } = req.params; // Pega o idPersonal da URL
 
-    console.log("ID do Aluno:", idAluno);
-    console.log("ID do Personal:", idPersonal);
+    console.log("ID do Aluno:", id_aluno);
+    console.log("ID do Personal:", id_personal);
 
-    if (!idAluno || !idPersonal) {
-      return res.status(400).json({ error: "idAluno e idPersonal são obrigatórios." });
+    if (!id_aluno || !id_personal) {
+      return res.status(400).json({ error: "id_aluno e id_personal são obrigatórios." });
     }
 
-    const alunoPersonal = await addAluno(idPersonal, idAluno);
-    res.status(201).json(alunoPersonal);
+    const alunoPersonal = await addAluno(id_personal, id_aluno);
+    res.status(201).json({alunoPersonal, message: "Aluno inserido com sucesso!"});
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Erro ao adicionar aluno." });
