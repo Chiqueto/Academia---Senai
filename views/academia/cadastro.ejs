@@ -46,6 +46,8 @@
               class="border-2 border-black rounded-full bg-pink-50 text-lg px-2 py-1 text-center"
               type="text"
               name="cnpj"
+              
+              maxlength="18"
               placeholder="00.000.000/0000-00"
               required
               
@@ -60,7 +62,7 @@
               type="email"
               name="email"
               placeholder="seuemail@exemplo.com.br"
-              required
+              required minlength="5" maxlength="30"
             />
           </div>
 
@@ -72,7 +74,7 @@
               name="senha"
               placeholder="*********"
               required
-              minlength="4"
+              minlength="6"
             />
           </div>
 
@@ -146,7 +148,7 @@
               type="text"
               name="cep"
               required
-              
+              maxlength="9"
               title="digite um cep com 8 digitos"
             />
           </div>
@@ -158,8 +160,8 @@
               type="text"
               name="telefone"
               required
-              
-              title="Digite um telefone com 10 ou 11 digitos"
+              maxlength="15"
+              title="Digite um telefone com 11 digitos"
             />
           </div>
 

@@ -5,16 +5,16 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="/styles/output.css" />
-    <script src="/scripts/academiaCadastro.js" defer></script>
+    <script src="/scripts/personalCadastro.js" defer></script>
 
-    <title>Editar Perfil Academia</title>
+    <title>Editar Perfil Personal</title>
   </head>
 
   <body class="flex flex-col min-h-screen">
     <header>
       <nav class="flex items-center bg-zinc-800 py-5 px-4">
         <div class="flex items-center gap-4">
-          <a href="/academia/perfil/<%= academia.id %>"><img src="/icons/back_arrow.svg" /></a>
+          <a href="/personal/perfilPersonal/<%= personal.id %>"><img src="/icons/back_arrow.svg" /></a>
           <h1 class="font-jaro text-zinc-50 text-3xl">GymFit</h1>
         </div>
       </nav>
@@ -24,7 +24,7 @@
       <section class="font-zain bg-zinc-50 text-zinc-950 py-4 rounded-2xl">
         <h2 class="text-4xl">Editar Dados</h2>
         <form
-          action="/academia/atualizar/<%= academia.id %>"
+          action="/personal/atualizar/<%= personal.id %>"
           method="POST"
           class="flex flex-col text-2xl gap-6 text-black max-w-screen-sm"
         >
@@ -34,43 +34,23 @@
               class="border-2 border-black rounded-full bg-pink-50 text-lg px-2 py-1 text-center"
               type="text"
               name="nome"
-              value="<%= academia.nome %>"
+              value="<%= personal.nome %>"
               required
             />
           </div>
 
           <div class="flex flex-col gap-2 px-6">
-            <label class="text-start" for="cidade">Cidade</label>
+            <label class="text-start" for="descricao">Descrição</label>
             <input
               class="border-2 border-black rounded-full bg-pink-50 text-lg px-2 py-1 text-center"
               type="text"
-              name="cidade"
-              value="<%= academia.cidade %>"
+              name="descricao"
+              value="<%= personal.descricao %>"
               required
             />
           </div>
 
-          <div class="flex flex-col gap-2 px-6">
-            <label class="text-start" for="bairro">Bairro</label>
-            <input
-              class="border-2 border-black rounded-full bg-pink-50 text-lg px-2 py-1 text-center"
-              type="text"
-              name="bairro"
-              value="<%= academia.bairro %>"
-              required
-            />
-          </div>
-
-          <div class="flex flex-col gap-2 px-6">
-            <label class="text-start" for="logradouro">Rua</label>
-            <input
-              class="border-2 border-black rounded-full bg-pink-50 text-lg px-2 py-1 text-center"
-              type="text"
-              name="logradouro"
-              value="<%= academia.logradouro %>"
-              required
-            />
-          </div>
+     
 
           <div class="flex flex-col gap-2 px-6">
             <label class="text-start" for="telefone">Telefone</label>
@@ -78,8 +58,8 @@
               class="border-2 border-black rounded-full bg-pink-50 text-lg px-2 py-1 text-center"
               type="text"
               name="telefone"
-              value="<%= academia.telefone %>"
-              required
+              value="<%= personal.telefone %>"
+              required minlength="11" maxlength="15"
             />
           </div>
 

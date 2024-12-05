@@ -113,9 +113,11 @@ const deleteAcademia = async (id) => {
 
   return result.rowCount;
 };
-const deleteAlunos = async (id) => {
-  const result = pool.query("DELETE FROM tb_academia WHERE id = $1", [id]);
-
+const deleteAluno = async (idAluno, idAcademia) => {
+  const result = await pool.query(
+    "DELETE FROM tb_alunos_academias WHERE id_aluno = $1 AND id_academia = $2",
+    [idAluno, idAcademia]
+  );
   return result.rowCount;
 };
 
@@ -166,21 +168,14 @@ const insertPersonal = async (id_academia, id_personal) => {
   return result.rows[0];
 };
 
-async function adicionarAluno(req, res) {
-  try {
-    const { idAcademia, idAluno } = req.body;
+const insertAluno= async (id_aluno, id_academia) => {
+  console.log("Inserindo no banco: ", { id_aluno, id_academia});
+  const result = await pool.query(
+    "INSERT INTO tb_alunos_academias (id_aluno, id_academia) VALUES ($1, $2) RETURNING *",
+    [id_aluno, id_academia]
+  );
 
-    // Validação simples
-    if (!idAcademia || !idAluno) {
-      return res.status(400).json({ error: 'ID da academia ou ID do aluno está faltando' });
-    }
-    await db.query('INSERT INTO tb_alunos_academias (idAcademia, idAluno) VALUES ($1, $2) RETURNING *', [idAcademia, idAluno]);
-
-    res.status(201).json({ message: 'Aluno adicionado com sucesso!' });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Erro ao adicionar aluno.' });
-  }
+  return result.rows[0];
 };
 
 module.exports = {
@@ -195,8 +190,9 @@ module.exports = {
   findStudents,
   findPersonais,
   insertPersonal,
-  deleteAlunos,
+  deleteAluno,
   deletePersonal,
-  adicionarAluno,
+  insertAluno,
+  
 
 };

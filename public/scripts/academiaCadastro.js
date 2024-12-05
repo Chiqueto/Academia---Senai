@@ -9,7 +9,7 @@
   const numero = document.querySelector("input[name='numero']").value.trim();
 
   const cnpjRegex = /^\d{2}\.\d{3}\.\d{3}\/\d{4}-\d{2}$/;
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i;
+  const emailRegex = /^[^\s@]+@(gmail\.com|hotmail\.com|outlook\.com)$/;
   const telefoneRegex = /^\(\d{2}\) \d{4,5}-\d{4}$/; // Aceita (XX) XXXX-XXXX ou (XX) XXXXX-XXXX
   const cepRegex = /^\d{5}-\d{3}$/; // Formato XXXXX-XXX
   const numeroRegex = /^\d{1,4}$/;

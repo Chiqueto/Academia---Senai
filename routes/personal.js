@@ -29,7 +29,7 @@ router.get("/opcaoTreinoPersonal", (req, res) => {
 
 //Sem a autenticação
 //router.get("/menuPersonal/:id", personalController.renderizaMenu);
-router.get("/menuPersonal/:id?", personalController.renderizaMenu);
+//router.get("/menuPersonal/:id?", personalController.renderizaMenu);
 
 router.post("/cadastro", personalController.criarPersonal);
 // router.get("/listaPersonais", authMiddleware, personalController.listarPersonais);
@@ -42,7 +42,7 @@ router.post("/login", personalController.autenticaPersonal);
 router.get("/listaPersonais", personalController.listarPersonais);
 router.get("/buscarPersonal/", personalController.buscarPersonal);
 router.delete("/deletar/:id", personalController.deletarPersonal);
-router.put("/atualizar/:id", personalController.atualizarPersonal);
+router.post("/atualizar/:id", personalController.atualizarPersonal);
 router.get('/listaAlunos/:id_personal', personalController.listarAlunos);
 
 
@@ -69,4 +69,5 @@ router.post(
   TreinoController.adicionarExercicios
 );
 
+router.get("/editar/:id",  personalController.editarPersonal);
 module.exports = router;

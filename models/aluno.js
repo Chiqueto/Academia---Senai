@@ -39,6 +39,18 @@ const findById = async (id) => {
   return null;
 };
 
+const findByNome = async (nome) => {
+  console.log("Nome recebido no modelo:", nome);
+
+  const result = await pool.query(
+    "SELECT * FROM tb_aluno WHERE nome ILIKE $1",
+    [`%${nome}%`] // Utiliza o operador LIKE para busca parcial
+  );
+
+  console.log("Resultado da query:", result.rows);
+
+  return result.rows; // Retorna todas as linhas encontradas
+};
 
 
 // const findById = async (id) => {
@@ -77,6 +89,7 @@ const findByEmail = async (email) => {
 
   return result.rows[0];
 };
+
 
 const insertInGym = async (idAluno, idAcademia) => {
   const result = await pool.query(
@@ -123,4 +136,5 @@ module.exports = {
   removeFromGyn,
   addPersonal,
   removePersonal,
+  findByNome,
 };

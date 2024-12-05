@@ -1,65 +1,57 @@
 <!DOCTYPE html>
-
-<html>
-  <head>
-    <meta lang="pt-br" />
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link href="/styles/output.css" rel="stylesheet" />
-    <title>Perfil do Personal</title>
-  </head>
-  <body class="flex flex-col min-h-screen">
-    <header>
-      <nav class="flex justify-between bg-zinc-800 py-5 px-4">
-        <div class="flex items-center gap-4">
-          <a href="/personal/menuPersonal/<%= personal.id %>"><img src="/icons/back_arrow.svg" /></a>
-          <a href="/views/index.ejs"
-            ><h1 class="font-jaro text-zinc-50 text-3xl">GymFit</h1></a
-          >
-          <!-- <img src="/icons/GymFit.svg" /> -->
-        </div>
-      </nav>
-      <form
-        action="/personal/uploadFoto/<%= personal.id %>"
-        method="POST"
-        enctype="multipart/form-data"
+      <html>
+        <head>
+          <meta lang="pt-br" />
+          <meta charset="UTF-8" />
+          <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+          <link href="/styles/output.css" rel="stylesheet" />
+          <title>Perfil do Personal</title>
+        </head>
+        <body class="flex flex-col min-h-screen">
+          <header>
+            <nav class="flex justify-between bg-zinc-800 py-5 px-4">
+              <div class="flex items-center gap-4">
+                <a href="/personal/menuPersonal/<%= personal.id %>"><img src="/icons/back_arrow.svg" /></a>
+                <a href="/views/index.ejs"
+                  ><h1 class="font-jaro text-zinc-50 text-3xl">GymFit</h1></a
+                >
+                <!-- <img src="/icons/GymFit.svg" /> -->
+              </div>
+            </nav>
+            
+          </header>
+      
+          <main class="rounded-3xl mx-4 bg-zinc-50 text-black font-zain flex-grow">
+            <section class="font-zain px-4">
+              <h2 class="text-4xl text-center uppercase"><%= personal.nome %></h2>
+              <div class="bg-slate-300 shadow-md rounded-lg flex flex-col items-center"
       >
-        <label for="fotoPerfil">Escolher imagem:</label>
-        <input type="file" id="fotoPerfil" name="fotoPerfil" accept="image/*" />
-        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">
-          Enviar
-        </button>
-      </form>
-    </header>
-
-    <main class="flex flex-col">
-      <div
-        class="shadow-md rounded p-3 flex flex-col justify-center items-center"
-      >
-        <div class="rounded-full p-2 bg-slate-300">
-          <img
-            src="<%= personal.foto_perfil ? personal.foto_perfil : '/icons/user.svg' %>"
-            alt="Foto de Perfil"
-            class="w-14 h-14"
-          />
-        </div>
-        <h4 class="ml-3 text-white"><%= personal.nome %></h4>
-        <p class="font-zain text-lg text-white mt-2"></p>
-      </div>
-      <div class="font-zain text-white p-5">
-        <h4><strong> <%= personal.cidade %>, <%= personal.uf %></strong></h4>
-        <h4 class="ml-3">
-          <%= personal.descricao %>
-        </h4>
-        <h4 class="ml-3">Telefone: <%= personal.telefone %></h4>
-      </div>
-    </main>
-
-    <button
-      type="submit"
-      class="bg-neonGreen rounded-xl py-2 hover:bg-neonGreenHover transition-colors text-zinc-50 font-zain text-4xl mx-12"
-    >
-      Sair
-    </button>
-  </body>
-</html>
+                <img src="/icons/upload.svg" class="w-25 h-25" />
+              </div>
+              <div class="p-2 text-2xl ">
+                <h2 class="font-bold"><%= personal.cidade %>,<%= personal.uf %></h2>
+                <h2 class="mx-2">Cref: <%= personal.cref %></h2>
+                <h2 class="mx-2">Especialidade: <%= personal.especialidade %></h2>
+                 <h2 class="mx-2">Descrição: <%= personal.descricao%></h2>
+                <h2 class="mx-2">Contato: <%= personal.telefone %></h2>
+               
+                  <a href="/personal/editar/<%= personal.id %>" class="ml-2">
+                  <img src="/icons/edit.svg" alt="Editar" class="inline-block w-6 h-6 cursor-pointer hover:opacity-80">
+                  </a></h2>
+              </div>
+              
+      
+              <button
+                class="flex justify-end mx-auto mt-60 bg-neonGreen rounded-xl px-12 py-2 hover:bg-neonGreenHover transition-colors text-zinc-50 text-4xl"
+              >
+                Sair
+              </button>
+            </section>
+          </main>
+      
+          <footer class="text-zinc-200">
+            <p>&copy Luís Felipe, Edney Araujo, Marília</p>
+          </footer>
+        </body>
+      </html>
+      

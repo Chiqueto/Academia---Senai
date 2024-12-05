@@ -39,9 +39,8 @@ const findAll = async () => {
 
 const findById = async (id) => {
   console.log("ID recebido no modelo:", id);
-
   const result = await pool.query("SELECT * FROM tb_personal WHERE id = $1", 
-    [id]);
+    [id,]);
   console.log("Resultado da query:", result.rows);
 
   return result.rows[0];
@@ -68,13 +67,19 @@ const deletePersonal = async (id) => {
 };
 
 const updatePersonal = async (id, personalData) => {
-  const { nome, cep, cidade, uf, descricao, especialidade, telefone } =
-    personalData;
-  const result = await pool.query(
-    "UPDATE tb_personal SET nome = $1, cep = $2, cidade = $3, uf = $4, descricao = $5, especialidade = $6, telefone = $7 WHERE id = $8 RETURNING *",
-    [nome, cep, cidade, uf, descricao, especialidade, telefone, id]
-  );
-  return result.rows[0];
+  const { descricao,  nome, telefone } = personalData;
+
+  try {
+    const result = await pool.query(
+      "UPDATE tb_personal SET descricao = $1, nome = $2, telefone = $3 WHERE id = $4 RETURNING *",
+      [descricao, nome, telefone, id]
+    );
+
+    return result.rows; // Deve retornar a linha atualizada
+  } catch (error) {
+    console.error("Erro na atualização do banco de dados:", error.message);
+    throw error;
+  }
 };
 
 const loginPersonal = async (email) => {
