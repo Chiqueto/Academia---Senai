@@ -32,22 +32,17 @@
         <br />
         <div >
           <% if (alunos && alunos.length > 0) { %>
-            <% alunos.forEach(aluno => { %>
-              <div class="flex items-center bg-white rounded-lg p-3 shadow-md mb-2">
-                <div class="rounded-full bg-pink-200 w-10 h-10 flex items-center justify-center">
-                  <img src="/icons/user.svg" class="w-8 h-8" alt="Usuário" />
-                </div>
-                <span class="ml-4 text-left text-xl text-gray-900 font-semibold">
-                  <%= aluno.nome %></span>
-                  <span class="ml-4 text-xl text-gray-900 ">Cod: <%= aluno.id %></span>
-                
-                <button 
-                  onclick="removerAluno('<%= aluno.id %>')" 
-                  class="ml-auto bg-transparent">
-                  <img src="/icons/delete.svg" class="w-8 h-8">
-                </button>
-              </div>
-            <% }) %>
+          <% alunos.forEach(aluno => { %>
+          <div class="container bg-white rounded-lg flex items-center p-3 shadow-md w-auto mb-2">
+            <div class="rounded-full bg-pink-200 flex-shrink-0 w-10 h-10">
+              <img src="/icons/user.svg" class="w-10 h-8" alt="Usuário" />
+            </div>
+            <span class="ml-4 text-2xl text-gray-900 font-semibold">
+              <%= aluno.nome %>
+            </span>
+           
+          </div>
+          <% }) %>
           <% } else { %>
             <p class="text-gray-300">Nenhum aluno encontrado.</p>
           <% } %>

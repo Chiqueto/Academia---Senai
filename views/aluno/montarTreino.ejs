@@ -63,13 +63,21 @@
                 <h3 class="text-xl font-bold text-white"><%= treino.nome %></h3>
                 <p class="text-gray-300"><%= treino.descricao %></p>
               </div>
-              <button
-                onclick="toggleModalExercicio(this)"
-                data-id="<%= treino.id %>"
-                class="bg-neonGreen text-white px-4 py-2 rounded-lg hover:bg-neonGreenHover"
-              >
-                Editar
-              </button>
+              <div class="flex gap-2">
+                <button
+                  onclick="toggleModalExercicio(this)"
+                  data-id="<%= treino.id %>"
+                  class="bg-neonGreen text-white px-4 py-2 rounded-lg hover:bg-neonGreenHover"
+                >
+                  Editar
+                </button>
+                <button
+                  onclick="confirmarDelecaoTreino('<%= treino.id %>')"
+                  class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600"
+                >
+                  Deletar
+                </button>
+              </div>
             </li>
             <% }) %>
           </ul>
@@ -183,7 +191,6 @@
                 >
                   <%= exercicio.nome %>
                 </label>
-
                 <input
                   type="number"
                   id="series-<%= exercicio.id %>"
@@ -210,6 +217,35 @@
               class="bg-red-500 text-white px-4 py-2 rounded-lg"
             >
               Fechar
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal de Confirmação de Exclusão -->
+      <div
+        id="modalConfirmacao"
+        class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-10"
+      >
+        <div class="bg-white p-6 rounded-lg w-96 flex flex-col items-center">
+          <h1 class="text-center text-4xl font-bold mb-4">
+            Confirmar Exclusão
+          </h1>
+          <p class="text-lg mb-4">
+            Tem certeza que deseja excluir este treino?
+          </p>
+          <div class="flex justify-between w-full">
+            <button
+              id="confirmarExclusaoBtn"
+              class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600"
+            >
+              Confirmar
+            </button>
+            <button
+              onclick="fecharModalConfirmacao()"
+              class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600"
+            >
+              Cancelar
             </button>
           </div>
         </div>
@@ -399,13 +435,16 @@
 
         exercicios.forEach((exercicio) => {
           const li = document.createElement("li");
-          li.innerHTML = `${exercicio.nome} - ${exercicio.series} séries      <button
+          li.className = "flex justify-between items-center";
+          li.innerHTML = `
+      <span>${exercicio.nome}</span>
+      <button
         onclick="removerExercicio('${exercicio.id}')"
         class="bg-red-500 text-white px-2 py-1 rounded-lg"
       >
         Remover
-      </button>`;
-          li.className = "flex justify-between items-center";
+      </button>
+    `;
           lista.appendChild(li);
         });
       }
@@ -434,16 +473,19 @@
 
       async function salvarExercicios() {
         const checkboxes = document.querySelectorAll(
-          'input[name="exercicios"]:checked'
+          "#formExercicios input[name='exercicios']:checked"
         );
+
         const exercicios = Array.from(checkboxes).map((checkbox) => {
           const id = checkbox.value;
-          const series = document.getElementById(`series-${id}`).value;
-          return { id: parseInt(id), series: parseInt(series) };
+          const series = checkbox
+            .closest("div")
+            .querySelector("input[name='series']").value;
+          return { id, series };
         });
 
-        if (!idTreinoAtual) {
-          alert("Selecione um treino antes de salvar os exercícios.");
+        if (exercicios.length === 0) {
+          alert("Selecione ao menos um exercício para adicionar.");
           return;
         }
 
@@ -452,21 +494,59 @@
             `/aluno/montarTreino/<%= id_aluno %>/treino/addExercicios`,
             {
               method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ id_treino: idTreinoAtual, exercicios }),
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                id_treino: idTreinoAtual,
+                exercicios,
+              }),
             }
           );
 
           const data = await response.json();
+
           if (response.ok) {
-            alert("Exercícios adicionados com sucesso!");
-            window.location.reload();
+            alert(data.message || "Exercícios adicionados com sucesso!");
+            toggleModalExercicio(); // Fecha o modal após salvar
           } else {
-            alert(`Erro: ${data.error}`);
+            alert(data.error || "Erro ao adicionar exercícios.");
           }
         } catch (error) {
-          console.error("Erro ao salvar exercícios:", error);
-          alert("Erro inesperado. Tente novamente.");
+          alert("Erro inesperado ao salvar exercícios.");
+        }
+      }
+
+      // Função para confirmar a exclusão do treino
+      function confirmarDelecaoTreino(idTreino) {
+        const modalConfirmacao = document.getElementById("modalConfirmacao");
+        const confirmarExclusaoBtn = document.getElementById(
+          "confirmarExclusaoBtn"
+        );
+
+        confirmarExclusaoBtn.onclick = () => deletarTreino(idTreino);
+        modalConfirmacao.classList.remove("hidden");
+      }
+
+      async function deletarTreino(idTreino) {
+        try {
+          const response = await fetch(
+            `/aluno/montarTreino/<%= id_aluno %>/treino/${idTreino}`,
+            {
+              method: "DELETE",
+            }
+          );
+
+          const data = await response.json();
+
+          if (response.ok) {
+            alert(data.message || "Treino excluído com sucesso!");
+            window.location.reload();
+          } else {
+            alert(data.error || "Erro ao excluir treino.");
+          }
+        } catch (error) {
+          alert("Erro inesperado ao excluir treino.");
         }
       }
     </script>

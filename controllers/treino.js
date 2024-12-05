@@ -61,11 +61,30 @@ const deletarTreino = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const result = await Treino.deleteTreino(id);
-    if (result === 0) {
+    // Verificar se o treino tem um id_personal
+    const treino = await Treino.getTreinoById(id);
+
+    if (!treino) {
       return res.status(404).json({ message: "Treino não encontrado!" });
     }
-    res.json({ message: "Treino deletado com sucesso!" });
+
+    if (treino.id_personal) {
+      // Se o treino tem um id_personal, excluir apenas da tabela tb_treino_alunos
+      const result = await Treino.deleteTreinoAluno(id);
+      if (result === 0) {
+        return res
+          .status(404)
+          .json({ message: "Treino não encontrado na tabela de alunos!" });
+      }
+      res.json({ message: "Treino excluído da tabela de alunos com sucesso!" });
+    } else {
+      // Se o treino não tem um id_personal, excluir da tabela treinos
+      const result = await Treino.deleteTreino(id);
+      if (result === 0) {
+        return res.status(404).json({ message: "Treino não encontrado!" });
+      }
+      res.json({ message: "Treino excluído com sucesso!" });
+    }
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -353,8 +372,19 @@ const cancelarTreino = async (req, res) => {
 
   try {
     const treinoCancelado = await Treino.deleteTreinoExec(id_aluno, id_treino);
+    if (treinoCancelado === 0) {
+      return res.status(404).json({ message: "Treino não encontrado!" });
+    } else {
+      const seriesCanceladas = await Treino.deleteDoneSeries(
+        id_aluno,
+        id_treino
+      );
+    }
 
-    res.status(201).json({ message: "Treino cancelado!", treinoCancelado });
+    res.status(201).json({
+      message: "Treino cancelado!",
+      treinoCancelado,
+    });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

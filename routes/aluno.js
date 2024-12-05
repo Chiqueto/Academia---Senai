@@ -23,7 +23,10 @@ router.get(
   alunoController.renderizaTreino
 );
 
-router.get("/encontrarAcademia", alunoController.renderizaEncontrarAcademias);
+router.get(
+  "/encontrarAcademia/:id_aluno",
+  alunoController.renderizaEncontrarAcademias
+);
 
 //add exercicio a um treino
 router.post(
@@ -47,7 +50,10 @@ router.get(
 //   res.render("aluno/encontrarPersonal");
 // });
 
-router.get("/encontrarPersonal", alunoController.renderizaListaPersonais);
+router.get(
+  "/encontrarPersonal/:id_aluno",
+  alunoController.renderizaListaPersonais
+);
 
 router.get("/montarTreino/:id_aluno", alunoController.renderizaMontarTreino);
 router.get("/buscarAluno/", alunoController.buscarAluno);
