@@ -66,6 +66,6 @@ router.delete(
 router.post("/login", academiaController.autenticaAcademia);
 
 router.post("/inserirPersonal", academiaController.inserirPersonal);
-// router.post('/adicionarAluno', academiaController.adicionarAluno);
+router.post('/adicionarAluno/:idAcademia', academiaController.adicionarAluno);
 
 module.exports = router;

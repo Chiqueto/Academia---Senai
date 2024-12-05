@@ -238,10 +238,15 @@ const renderizaEquipamento = (req, res) => {
 
 const renderizaListaAlunos = async (req, res) => {
   const { id } = req.params;
-  const alunos = await Academia.findStudents(id);
-  const academia = await Academia.findById(id);
-  console.log(alunos);
-  res.render("academia/alunos", { alunos, id, academia });
+  try {
+    const alunos = await Academia.findStudents(id);
+    const academia = await Academia.findById(id);
+
+    res.render("academia/alunos", { alunos, id, academia });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Erro ao carregar a lista de alunos.");
+  }
 };
 
 const renderizaListaPersonais = async (req, res) => {
@@ -291,6 +296,28 @@ const deletarPersonal = async (req, res) => {
 
 const adicionarAluno = async (req, res) => {
   try {
+    const { idAcademia } = req.params; // Pega o idPersonal da URL
+    const { idAluno } = req.body; // Pega o idAluno do corpo da requisição
+
+    console.log("ID do Aluno:", idAluno);
+    console.log("ID da Academia:", idAcademia);
+
+    if (!idAluno || !idAcademia) {
+      return res.status(400).json({ error: "idAluno e idAcademia são obrigatórios." });
+    }
+
+    const alunoAcademia = await adicionarAluno(idAcademia, idAluno);
+
+    res.status(201).json(alunoAcademia);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Erro ao adicionar aluno." });
+  }
+};
+
+
+const removerAluno = async (req, res) => {
+  try {
     const { idAluno } = req.body; // Pega o idAluno do corpo da requisição
     const { idAcademia } = req.params; // Pega o idPersonal da URL
 
@@ -301,11 +328,12 @@ const adicionarAluno = async (req, res) => {
       return res.status(400).json({ error: "idAluno e idAcademia são obrigatórios." });
     }
 
-    const alunoAcademia = await addAluno(idAcademia, idAluno);
+    const alunoAcademia = await removerAlunouno(idAcademia, idAluno);
+
     res.status(201).json(alunoAcademia);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Erro ao adicionar aluno." });
+    res.status(500).json({ error: "Erro ao remover aluno." });
   }
 };
 
@@ -330,4 +358,5 @@ module.exports = {
   editarAcademia,
   deletarPersonal,
  adicionarAluno,
+ removerAluno,
 };

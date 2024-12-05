@@ -1,36 +1,40 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-br">
   <head>
-    <meta lang="pt-br" />
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="/styles/output.css" />
-    <title>Lista de alunos</title>
+    <title>Lista de Alunos</title>
   </head>
   <body class="flex flex-col min-h-screen">
     <header>
       <nav class="flex justify-between bg-zinc-800 py-5 px-4">
         <div class="flex items-center gap-4">
-          <a href="/academia/menu/<%= id %>"><img src="/icons/back_arrow.svg" /></a>
+          <a href="/academia/menu/<%= id %>">
+            <img src="/icons/back_arrow.svg" alt="Voltar" />
+          </a>
           <h1 class="font-jaro text-zinc-50 text-3xl">GymFit</h1>
         </div>
       </nav>
     </header>
     <main class="mx-4 flex-grow">
       <section class="font-zain px-4">
-        <h2 class="text-3xl text-center text-white py-2">Lista de alunos</h2>
-        <div class="relative w-full">
-          <input
-            type="text"
-            placeholder="Pesquisar pelo nome do aluno..."
-            class="w-full py-1 pl-10 pr-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-gray-700 placeholder-gray-400"
+        <h2 class="text-3xl text-center text-white py-2">Lista de Alunos</h2>
+        <div class="relative w-full mb-6">
+          <input 
+            type="text" 
+            id="search-bar" 
+            placeholder="Pesquisar alunos por nome ou ID" 
+            oninput="buscarAlunos()" 
+            class="w-full py-3 pl-10 pr-4 border border-gray-300 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-pink-500"
           />
           <div class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none">
             <img src="/icons/lupa.svg" class="w-5 h-5" />
           </div>
         </div>
+        
         <br />
-        <div>
+        <div class="alunos">
           <% if (alunos && alunos.length > 0) { %>
           <% alunos.forEach(aluno => { %>
           <div class="container bg-white rounded-lg flex items-center p-3 shadow-md w-auto mb-2">
@@ -40,151 +44,174 @@
             <span class="ml-4 text-2xl text-gray-900 font-semibold">
               <%= aluno.nome %>
             </span>
-           
           </div>
           <% }) %>
           <% } else { %>
           <p class="text-gray-500">Nenhum aluno encontrado.</p>
           <% } %>
         </div>
+        
       </section>
-      <!-- Adicionar a barra de pesquisa na aba suspensa -->
-      <div id="searchModal" class="hidden fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center">
-        <div class="bg-white p-6 rounded-lg shadow-lg w-96">
-          <button id="closeSearchModal" class="text-red-600 float-right font-bold">Fechar</button>
-          <h3 class="text-xl font-semibold mb-4">Buscar aluno</h3>
-          <input
-            type="text"
-            id="searchInput"
-            class="w-full p-2 border border-gray-300 rounded-md mb-4"
-            placeholder="Buscar aluno..."
+      <!-- Modal de busca -->
+      <div id="searchModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+        <div class="bg-white p-6 rounded-lg shadow-lg w-96 relative">
+          <button 
+            id="closeSearchModal" 
+            class="absolute top-2 right-2 text-gray-500 hover:text-gray-800 text-lg font-bold"
+          >
+            ×
+          </button>
+          <h3 class="text-xl font-semibold mb-4">Buscar Aluno</h3>
+          <input 
+            type="text" 
+            id="searchInput" 
+            placeholder="Digite para buscar..." 
+            class="w-full py-2 px-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 mb-4"
           />
-          <ul id="searchResults" class="max-h-60 overflow-y-auto space-y-2">
-            <!-- Resultados da pesquisa serão inseridos aqui -->
+          <ul id="searchResults" class="max-h-60 overflow-y-auto space-y-2 text-gray-800">
+            <li class="bg-gray-100 p-2 rounded-lg shadow hover:bg-gray-200 transition duration-300">
+              Nome do Aluno
+            </li>
           </ul>
         </div>
-      </div> 
+      </div>
+      
     </main>
-    <button
-      id="openSearchModal"
-      class="mx-auto bg-neonGreen rounded-xl px-4 py-2 hover:bg-neonGreenHover transition-colors text-zinc-50 font-zain text-4xl"
-    >
-      Adicionar
-    </button>
-    <br />
+    <!-- <form action="/academia/adicionarAluno" method="POST">
+      <input type="hidden" name="idAcademia" value="<%= academia.id %>" />
+     
+      <button type="submit">Adicionar</button>
+    </form> -->
 
+    <!-- Formulário para adicionar aluno -->
+    <form id="adicionarAluno" class="mt-6 flex items-center gap-4">
+      <label for="idAluno" class="text-lg font-medium text-gray-800">ID do Aluno:</label>
+      <input 
+        type="text" 
+        id="aluno.id" 
+        name="aluno.id" 
+        required 
+        class="py-2 px-4 border border-gray-300 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-pink-500"
+      />
+      <button 
+        type="button" 
+        onclick="adicionarAluno()" 
+        class="bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-green-600 transition duration-300"
+      >
+        Adicionar Aluno
+      </button>
+    </form>
+    
+    
     <script>
-      // Abrir aba suspensa
-     document.getElementById('openSearchModal').addEventListener('click', () => {
-      document.getElementById('searchModal').classList.remove('hidden');
-    });
+      // Abrir modal
+      document
+        .getElementById("openSearchModal")
+        .addEventListener("click", () => {
+          document.getElementById("searchModal").classList.remove("hidden");
+        });
 
-    // Fechar aba suspensa
-    document.getElementById('closeSearchModal').addEventListener('click', () => {
-      document.getElementById('searchModal').classList.add('hidden');
-    });
+      // Fechar modal
+      document
+        .getElementById("closeSearchModal")
+        .addEventListener("click", () => {
+          document.getElementById("searchModal").classList.add("hidden");
+        });
 
-    document.addEventListener('DOMContentLoaded', atualizarListaAlunos);
-
-
-    // Buscar personais
-    document.getElementById('searchInput').addEventListener('input', async (event) => {
-      const query = event.target.value;
-
-      if (query.length > 1) {
+      // Atualizar lista de alunos
+      async function atualizarListaAlunos() {
+        const idAcademia = "<%= id %>";
         try {
-          const response = await fetch(`/aluno/buscarAluno?nome=${query}`);
-          const personais = await response.json();
-
-          const resultsList = document.getElementById('searchResults');
-          resultsList.innerHTML = ''; // Limpa os resultados anteriores
-
-          if (Array.isArray(alunos) && alunos.length > 0) {
-            palunos.forEach((aluno) => {
-              const li = document.createElement('li');
-              li.classList.add('flex', 'justify-between', 'items-center', 'p-2', 'border-b');
-              li.innerHTML = `
-                <span>${aluno.nome}</span>
-                <button class="bg-blue-500 text-white px-2 py-1 rounded" onclick="adicionarAluno(${aluno.id})">Selecionar</button>
+          const response = await fetch(`/academia/findStudents/${idAcademia}`);
+          const alunos = await response.json();
+          const listaAlunos = document.querySelector(".alunos");
+          listaAlunos.innerHTML = "";
+          if (alunos.length > 0) {
+            alunos.forEach((aluno) => {
+              const div = document.createElement("div");
+              div.classList.add(
+                "container",
+                "bg-white",
+                "rounded-lg",
+                "p-3",
+                "shadow-md",
+                "w-auto",
+                "mb-2"
+              );
+              div.innerHTML = `
+                <div class="rounded-full bg-pink-200 flex-shrink-0 w-10 h-10">
+                  <img src="/icons/user.svg" class="w-10 h-8" alt="Usuário" />
+                </div>
+                <span class="ml-4 text-2xl text-gray-900 font-semibold">${aluno.nome}</span>
               `;
-              resultsList.appendChild(li);
+              listaAlunos.appendChild(div);
             });
           } else {
-            resultsList.innerHTML = '<li>Nenhum aluno encontrado.</li>';
+            listaAlunos.innerHTML =
+              '<p class="text-gray-500">Nenhum aluno encontrado.</p>';
           }
         } catch (error) {
-          console.error('Erro ao buscar alunos:', error);
+          console.error("Erro ao atualizar lista de alunos:", error);
         }
       }
-    });
+
+// Função para busca
+function buscarAlunos() {
+            const query = document.getElementById("search-bar").value.toLowerCase();
+            const studentItems = document.querySelectorAll(".alunos .container");
+
+            studentItems.forEach(item => {
+                const text = item.textContent.toLowerCase();
+                item.style.display = text.includes(query) ? "flex" : "none";
+            });
+        }
 
 
+      // Adicionar aluno
+      async function adicionarAluno() {
+        const idAluno = document.getElementById("aluno.id").value;
+        const idAcademia = "<%= id %>";
+        if (!idAluno) {
+                alert("Por favor, insira o ID do aluno.");
+                return;
+            }
 
-    async function atualizarListaAlunos() {
-  const idAcademia = '<%= id %>'; // ID da academia da URL
+        try {
+          const response = await fetch(`/academia/adicionarAluno/${idAcademia}`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ idAluno }),
+          });
+          const result = await response.json();
+          if (response.ok) {
+            alert(result.message);
+            //document.getElementById("searchModal").classList.add("hidden");
+            atualizarListaAlunos();
+          } else {
+            alert("Erro: " + result.error || "Erro desconhecido.");
+          }
+        } catch (error) {
+          console.error("Erro ao adicionar aluno:", error);
+        }
+      }
 
-  try {
-    const response = await fetch(`/academia/findStudents/${idAcademia}`);
-    const alunos = await response.json();
+      // Função para remover aluno
+      function removerAluno(idAluno) {
+            const idAcademia = "<%= id %>"; // Captura o ID da academia pela URL
 
-    const listaAlunos = document.querySelector('.alunos'); // Div que contém a lista
-    listaAlunos.innerHTML = ''; // Limpa a lista atual
+            fetch(`/academia/${idAcademia}/alunos/${idAluno}`, {
+                method: "DELETE"
+            })
+            .then(response => {
+                if (response.ok) {
+                    location.reload(); // Recarregar a página para refletir as alterações
+                } else {
+                    alert("Erro ao remover aluno.");
+                }
+            });
+        }
 
-    if (alunos.length > 0) {
-      alunos.forEach((aluno) => {
-        const div = document.createElement('div');
-        div.classList.add('container', 'bg-white', 'rounded-lg', 'p-3', 'shadow-md', 'w-auto', 'mb-2');
-        div.innerHTML = `
-          <div class="rounded-full bg-pink-200 flex-shrink-0 w-10 h-10">
-            <img src="/icons/user.svg" class="w-10 h-8" alt="Usuário" />
-          </div>
-          <span class="ml-4 text-2xl text-gray-900 font-semibold">${aluno.nome}</span>
-        `;
-        listaAlunos.appendChild(div);
-      });
-    } else {
-      listaAlunos.innerHTML = '<p class="text-gray-500">Nenhum aluno encontrado.</p>';
-    }
-  } catch (error) {
-    console.error('Erro ao atualizar lista de alunos:', error);
-  }
-}
-
-
-
-
-    async function adicionarAluno(idAluno) {
-  const idAcademia = '<%= academia.id %>';  // Pega o idAcademia do EJS
-  
-  if (!idAcademia || !idAluno) {
-    alert('Erro: ID da academia ou do aluno não encontrado.');
-    return;
-  }
-
-  try {
-    // Fazendo uma requisição POST para o backend com os dados
-    const response = await fetch('/academia/adicionarAluno', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ idAcademia, idAluno }),  // Passa os dados como JSON
-    });
-
-    const data = await response.json();  // Converte a resposta em JSON
-
-    if (response.ok) {
-      alert(data.message);  // Exibe mensagem de sucesso
-
-      document.getElementById('searchModal').classList.add('hidden');
-      atualizarListaAlunos();
-    } else {
-      alert('Erro ao adicionar aluno: ' + (data.error || 'Erro desconhecido'));
-    }
-  } catch (error) {
-    console.error('Erro ao adicionar aluno:', error);
-  }
-}
+      document.addEventListener("DOMContentLoaded", atualizarListaAlunos);
     </script>
   </body>
 </html>
