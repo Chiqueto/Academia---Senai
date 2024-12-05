@@ -6,7 +6,7 @@ const { findAvailablePersonais } = require("../models/academia.js");
 
 const SECRET_KEY = process.env.SECRET_KEY;
 
-
+// ACADEMIA
 
 const cadastrar = async (req, res) => {
   const {
@@ -216,8 +216,6 @@ const editarAcademia = async (req, res) => {
   }
 };
 
-
-
 const renderizaPerfil = async (req, res) => {
   const { id } = req.params;
   const academia = await Academia.findById(id);
@@ -236,14 +234,8 @@ const renderizaEquipamento = (req, res) => {
 };
 
 
-const renderizaListaAlunos = async (req, res) => {
-  const { id } = req.params;
-  const alunos = await Academia.findStudents(id);
-  const academia = await Academia.findById(id);
-  console.log(alunos);
-  res.render("academia/alunos", { alunos, id, academia });
-};
 
+// PERSONAL
 const renderizaListaPersonais = async (req, res) => {
   const { id } = req.params;
   const personais = await Academia.findPersonais(id);
@@ -288,7 +280,16 @@ const deletarPersonal = async (req, res) => {
     res.status(500).json({ error: "Erro ao remover personal." });
   }
 };
- 
+
+ // ALUNOS
+const renderizaListaAlunos = async (req, res) => {
+  const { id } = req.params;
+  const alunos = await Academia.findStudents(id);
+  const academia = await Academia.findById(id);
+  console.log(alunos);
+  res.render("academia/alunos", { alunos, id, academia });
+};
+
 const inserirAluno = async (req, res) => {
   const { id_aluno, id_academia } = req.body;
   console.log('Dados recebidos:', { id_aluno, id_academia }); // Log para depuração
@@ -332,29 +333,6 @@ const deletarAluno = async (req, res) => {
     res.status(500).json({ error: "Erro ao remover aluno." });
   }
 };
-
-
-const adicionarAluno = async (req, res) => {
-  try {
-    const { idAluno } = req.body; // Pega o idAluno do corpo da requisição
-    const { idAcademia } = req.params; // Pega o idPersonal da URL
-
-    console.log("ID do Aluno:", idAluno);
-    console.log("ID da Academia:", idAcademia);
-
-    if (!idAluno || !idAcademia) {
-      return res.status(400).json({ error: "idAluno e idAcademia são obrigatórios." });
-    }
-
-    const alunoAcademia = await addAluno(idAcademia, idAluno);
-    res.status(201).json(alunoAcademia);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Erro ao adicionar aluno." });
-  }
-};
-
-
 
 
 module.exports = {

@@ -162,29 +162,19 @@ const deletarPersonal = async (req, res) => {
 
 const atualizarPersonal = async (req, res) => {
   const { id } = req.params;
-  const { nome, cep, cidade, uf, descricao, especialidade, telefone } =
+  const { nome, descricao, telefone } =
     req.body;
 
   //validações de campos em branco
-  if (!nome || !cep || !cidade || !uf || !telefone) {
+  if (!nome || !descricao || !telefone) {
     return res.status(400).json({ message: "Preencha todos os campos!" });
   }
   const telefoneFormatado = telefone.replace(/\D/g, "");
-  const cepFormatado = cep.replace(/[-]/g, "");
-
-  //verificar se o cep é válido
-  if (cepFormatado.length > 8) {
-    return res.status(400).json({ message: "CEP inválido!" });
-  }
 
   try {
     const result = await Personal.updatePersonal(id, {
       nome,
-      cep: cepFormatado,
-      cidade,
-      uf,
       descricao,
-      especialidade,
       telefone: telefoneFormatado,
     });
     if (result.length === 0) {
@@ -207,8 +197,8 @@ const renderizaCadastro = (req, res) => {
 
 const renderizaMenu = (req, res) => {
   const { id } = req.params;
-  if (!id) return res.status(400).send("ID não fornecido!");
-  res.render("personal/menuPersonal", { id });
+ // if (!id) return res.status(400).send("ID não fornecido!");
+  res.render(`personal/menuPersonal`, { id });
 };
 // const renderizaMenu = (req, res) => {
 //   res.render("personal/menuPersonal",{ id });
@@ -261,9 +251,12 @@ const autenticaPersonal = async (req, res) => {
     );
 
     // Redireciona para a página do menu diretamente
-    res.cookie("authToken", token, { httpOnly: true }); // Opcional: Define o token como cookie
-    return res.redirect(`/personal/menuPersonal/${personal.id}`);
-  } catch (error) {
+    return res.status(200).json({
+      message: "Personal autenticada com sucesso!",
+      token, 
+      redirectTo:  `/personal/menuPersonal/${personal.id}`,
+    }) ;// Opcional: Define o token como cookie
+      } catch (error) {
     console.error(error);
     return res.status(500).json({ error: "Erro interno do servidor" });
   }
@@ -323,7 +316,20 @@ const removerAluno = async (req, res) => {
   }
 };
 
+const editarPersonal = async (req, res) => {
+  const { id } = req.params;
 
+  try {
+    const personal = await Personal.findById(id);
+    if (!personal) {
+      return res.status(404).send("personal não encontrada");
+    }
+    res.render(`personal/editar`, { personal});
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Erro ao carregar a página de edição");
+  }
+};
 module.exports = {
   criarPersonal,
   listarPersonais,
@@ -339,4 +345,5 @@ module.exports = {
   formatarTelefone,
   adicionarAluno,
   removerAluno,
+  editarPersonal,
 };

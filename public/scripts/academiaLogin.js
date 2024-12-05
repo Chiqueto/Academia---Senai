@@ -54,8 +54,8 @@ async function autenticar(event) {
         }
 
         // Validação de senha
-        if (senha.length < 4) {
-          errors.push("A senha deve ter pelo menos 4 caracteres.");
+        if (senha.length < 6) {
+          errors.push("A senha deve ter pelo menos 6 caracteres.");
         }
 
         // Mostrar erros se houver

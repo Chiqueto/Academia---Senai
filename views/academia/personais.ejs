@@ -99,10 +99,13 @@
               const li = document.createElement('li');
               li.classList.add('flex', 'justify-between', 'items-center', 'p-2', 'border-b');
               li.innerHTML = `
-              <div class="rounded-full bg-pink-200  w-10 h-10">
-                    <img src="/icons/user.svg" class="w-10 h-8" alt="Usuário">
-                  </div>
-                  <spna>${personal.nome}</span><span>Cod:${personal.id}</span>
+              <div class="flex items-center gap-2">
+              <div class="rounded-full bg-pink-200  w-10 h-10 flex items-center justify-center">
+                <img src="/icons/user.svg" class="w-10 h-8" alt="Usuário">
+              </div>
+                <spna class="ml-4 text-2xl text-gray-900 font-semibold">${personal.nome}</span>
+                  <span class="ml-4 text-xl text-gray-900 ">Cod: ${personal.id}</span>
+                </div>
                 <button class="bg-blue-500 text-white px py-1 rounded" onclick="inserirPersonal(${personal.id})">Selecionar</button>
               `;
               resultsList.appendChild(li);
