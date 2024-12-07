@@ -30,7 +30,7 @@ router.get("/equipamento/:id", academiaController.renderizaEquipamento);
 router.get("/editar/:id", academiaController.editarAcademia);
 router.post("/atualizar/:id", academiaController.atualizaAcademia);
 router.delete("/removerPersonal/:idPersonal", academiaController.deletarPersonal);
-router.delete("/removerALuno/:idAluno" , academiaController.deletarAluno);
+router.delete("/removerALuno/:idAluno" , academiaController.removerAluno);
 
 router.get("/adcEquipamento", (req, res) => {
   res.render("academia/adcEquipamento");
@@ -64,7 +64,7 @@ router.delete(
 router.post("/login", academiaController.autenticaAcademia);
 
 router.post("/inserirPersonal", academiaController.inserirPersonal);
-router.post('/adicionarAluno/:idAcademia', academiaController.adicionarAluno);
+router.post('/inserirAluno/:id', academiaController.inserirAluno);
 
-router.post("/inserirAluno", academiaController.inserirAluno);
+// router.post("/inserirAluno", academiaController.inserirAluno);
 module.exports = router;
