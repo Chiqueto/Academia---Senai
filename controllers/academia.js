@@ -301,7 +301,7 @@ const renderizaListaAlunos = async (req, res) => {
 //   }
 
 
-const inserirAluno = async (req, res) => {
+const adicionarAluno = async (req, res) => {
   const { id_aluno, id_academia } = req.body;
   console.log('Dados recebidos:', { id_aluno, id_academia }); // Log para depuração
 
@@ -320,7 +320,7 @@ const inserirAluno = async (req, res) => {
       return res.status(400).json({ error: "idAluno e idAcademia são obrigatórios." });
     }
 
-    const alunoAcademia = await inserirAluno(idAcademia, idAluno);
+    const alunoAcademia = await insertAluno(idAcademia, idAluno);
 
     res.status(201).json(alunoAcademia);
   } catch (error) {
@@ -350,7 +350,7 @@ const inserirAluno = async (req, res) => {
 // };
 
 
-const removerAluno = async (req, res) => {
+const deletarAluno = async (req, res) => {
   try {
     const { idAcademia } = req.body; // ID da academia enviado no corpo da requisição
     const { idAluno } = req.params; // ID do personal enviado na URL
@@ -394,10 +394,8 @@ module.exports = {
   renderizaEquipamento,
   editarAcademia,
   deletarPersonal,
-//  adicionarAluno,
- removerAluno,
-  inserirAluno,
-  // deletarAluno,
+  adicionarAluno,
+  deletarAluno,
 
  
 };
