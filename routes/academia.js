@@ -21,7 +21,7 @@ router.get("/menu/:id", academiaController.renderizaMenu);
 
 router.get("/perfil/:id", academiaController.renderizaPerfil);
 
-router.get("/alunos/:id", academiaController.renderizaListaAlunos);
+router.get("/alunos/:idAcademia", academiaController.renderizaListaAlunos);
 
 router.get("/personais/:id", academiaController.renderizaListaPersonais);
 
@@ -64,5 +64,8 @@ router.delete(
 router.post("/login", academiaController.autenticaAcademia);
 
 router.post("/inserirPersonal", academiaController.inserirPersonal);
-router.post("/inserirAluno", academiaController.inserirAluno);
+router.post('/inserirAluno/:idAcademia', academiaController.adicionarAluno) 
+  console.log(`Adicionando aluno à academia `);
+
+// router.post("/inserirAluno", academiaController.inserirAluno);
 module.exports = router;

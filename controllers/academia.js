@@ -233,8 +233,6 @@ const renderizaEquipamento = (req, res) => {
   res.render(`academia/equipamento`, { id });
 };
 
-
-
 // PERSONAL
 const renderizaListaPersonais = async (req, res) => {
   const { id } = req.params;
@@ -290,7 +288,20 @@ const renderizaListaAlunos = async (req, res) => {
   res.render("academia/alunos", { alunos, id, academia });
 };
 
-const inserirAluno = async (req, res) => {
+// const renderizaListaAlunos = async (req, res) => {
+//   const { id } = req.params;
+//   try {
+//     const alunos = await Academia.findStudents(id);
+//     const academia = await Academia.findById(id);
+
+//     res.render("academia/alunos", { alunos, id, academia });
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).send("Erro ao carregar a lista de alunos.");
+//   }
+
+
+const adicionarAluno = async (req, res) => {
   const { id_aluno, id_academia } = req.body;
   console.log('Dados recebidos:', { id_aluno, id_academia }); // Log para depuração
 
@@ -299,13 +310,44 @@ const inserirAluno = async (req, res) => {
   }
 
   try {
-    const alunos = await Academia.insertAluno(id_aluno, id_academia);
-    res.status(201).json({ message: "Aluno inserido com sucesso!", data: alunos });
+    const { idAcademia } = req.params; // Pega o idPersonal da URL
+    const { idAluno } = req.body; // Pega o idAluno do corpo da requisição
+
+    console.log("ID do Aluno:", idAluno);
+    console.log("ID da Academia:", idAcademia);
+
+    if (!idAluno || !idAcademia) {
+      return res.status(400).json({ error: "idAluno e idAcademia são obrigatórios." });
+    }
+
+    const alunoAcademia = await insertAluno(idAcademia, idAluno);
+
+    res.status(201).json(alunoAcademia);
   } catch (error) {
-    console.error("Erro ao adicionar aluno: ", error);
-    res.status(500).json({ error: "Erro interno do servidor." });
+    console.error(error);
+    res.status(500).json({ error: "Erro ao adicionar aluno." });
   }
 };
+
+
+// const removerAluno = async (req, res) => {
+//   try {
+//     const { idAluno } = req.body; // Pega o idAluno do corpo da requisição
+//     const { idAcademia } = req.params; // Pega o idPersonal da URL
+
+//     console.log("ID do Aluno:", idAluno);
+//     console.log("ID da Academia:", idAcademia);
+
+//     if (!idAluno || !idAcademia) {
+//       return res.status(400).json({ error: "idAluno e idAcademia são obrigatórios." });
+//     }
+
+//     const alunoAcademia = await removerAlunouno(idAcademia, idAluno);
+//   } catch (error) {
+//     console.error("Erro ao adicionar aluno: ", error);
+//     res.status(500).json({ error: "Erro interno do servidor." });
+//   }
+// };
 
 
 const deletarAluno = async (req, res) => {
@@ -352,7 +394,7 @@ module.exports = {
   renderizaEquipamento,
   editarAcademia,
   deletarPersonal,
-  inserirAluno,
+  adicionarAluno,
   deletarAluno,
 
  
