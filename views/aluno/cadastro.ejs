@@ -127,7 +127,11 @@
               placeholder="*********"
               required
               maxlength="30"
+              oninput="validatePassword(this)"
             />
+            <small id="passwordMessage" class="text-red-500 hidden"
+              >A senha deve ter pelo menos 6 caracteres.</small
+            >
           </div>
           <!-- Elemento para exibir mensagens -->
           <div id="mensagem" class="text-lg font-bold mb-4"></div>
@@ -192,6 +196,15 @@
             mensagemEl.className = "text-red-500";
           }
         });
+
+      function validatePassword(input) {
+        const message = document.getElementById("passwordMessage");
+        if (input.value.length > 0 && input.value.length < 6) {
+          message.classList.remove("hidden"); // Mostra a mensagem
+        } else {
+          message.classList.add("hidden"); // Esconde a mensagem
+        }
+      }
     </script>
   </body>
 </html>

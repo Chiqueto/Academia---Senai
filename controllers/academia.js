@@ -56,7 +56,7 @@ const cadastrar = async (req, res) => {
   }
 
   try {
-    const novaAcademia = Academia.createAcademia({
+    const novaAcademia = await Academia.createAcademia({
       nome,
       email,
       senha: senhaCriptografada,
@@ -69,9 +69,15 @@ const cadastrar = async (req, res) => {
       uf,
       telefone: telefoneFormatado,
     });
-    res.redirect("/academia");
-    // .status(201)
-    //.json({ novaAcademia, message: "Academia inserida com sucesso!" });
+
+    if (!novaAcademia) {
+      return res.status(400).json({ message: "Erro ao cadastrar academia" });
+    }
+
+    res.status(201).json({
+      message: "Cadastro realizado com sucesso!",
+      redirectTo: "/academia",
+    });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -98,7 +104,6 @@ const listarAcademiaPorId = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
-
 
 const atualizaAcademia = async (req, res) => {
   const { id } = req.params;
@@ -128,8 +133,6 @@ const atualizaAcademia = async (req, res) => {
   }
 };
 
-
-
 // const deletar = async (req, res) => {
 //   const { id } = req.params;
 
@@ -141,7 +144,6 @@ const atualizaAcademia = async (req, res) => {
 //     res.status(500).json({ error: error.message });
 //   }
 // };
-
 
 const deletar = async (req, res) => {
   const { id } = req.params;
@@ -158,7 +160,6 @@ const deletar = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
-
 
 const autenticaAcademia = async (req, res) => {
   const { email, senha } = req.body;
@@ -220,7 +221,7 @@ const renderizaPerfil = async (req, res) => {
   const { id } = req.params;
   const academia = await Academia.findById(id);
   // console.log(academia);
-  res.render('academia/perfil', { academia });
+  res.render("academia/perfil", { academia });
 };
 
 const renderizaMenu = (req, res) => {
@@ -246,7 +247,9 @@ const inserirPersonal = async (req, res) => {
 
   try {
     const personais = await Academia.insertPersonal(id_academia, id_personal);
-    res.status(201).json({ message: "Personal inserido com sucesso!", data: personais });
+    res
+      .status(201)
+      .json({ message: "Personal inserido com sucesso!", data: personais });
   } catch (error) {
     console.error("Erro ao adicionar pessoasl: ", error);
     res.status(500).json({ error: error.message });
@@ -279,7 +282,7 @@ const deletarPersonal = async (req, res) => {
   }
 };
 
- // ALUNOS
+// ALUNOS
 const renderizaListaAlunos = async (req, res) => {
   const { id } = req.params;
   const alunos = await Academia.findStudents(id);
@@ -300,13 +303,14 @@ const renderizaListaAlunos = async (req, res) => {
 //     res.status(500).send("Erro ao carregar a lista de alunos.");
 //   }
 
-
 const adicionarAluno = async (req, res) => {
   const { id_aluno, id_academia } = req.body;
-  console.log('Dados recebidos:', { id_aluno, id_academia }); // Log para depuração
+  console.log("Dados recebidos:", { id_aluno, id_academia }); // Log para depuração
 
   if (!id_aluno || !id_academia) {
-    return res.status(400).json({ error: "ID do aluno ou da academia está faltando." });
+    return res
+      .status(400)
+      .json({ error: "ID do aluno ou da academia está faltando." });
   }
 
   try {
@@ -317,7 +321,9 @@ const adicionarAluno = async (req, res) => {
     console.log("ID da Academia:", idAcademia);
 
     if (!idAluno || !idAcademia) {
-      return res.status(400).json({ error: "idAluno e idAcademia são obrigatórios." });
+      return res
+        .status(400)
+        .json({ error: "idAluno e idAcademia são obrigatórios." });
     }
 
     const alunoAcademia = await insertAluno(idAcademia, idAluno);
@@ -328,7 +334,6 @@ const adicionarAluno = async (req, res) => {
     res.status(500).json({ error: "Erro ao adicionar aluno." });
   }
 };
-
 
 // const removerAluno = async (req, res) => {
 //   try {
@@ -348,7 +353,6 @@ const adicionarAluno = async (req, res) => {
 //     res.status(500).json({ error: "Erro interno do servidor." });
 //   }
 // };
-
 
 const deletarAluno = async (req, res) => {
   try {
@@ -376,7 +380,6 @@ const deletarAluno = async (req, res) => {
   }
 };
 
-
 module.exports = {
   cadastrar,
   listarAcademias,
@@ -396,6 +399,4 @@ module.exports = {
   deletarPersonal,
   adicionarAluno,
   deletarAluno,
-
- 
 };

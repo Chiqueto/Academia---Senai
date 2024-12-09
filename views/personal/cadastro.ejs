@@ -60,10 +60,12 @@
               class="border-2 border-black rounded-full bg-pink-50 text-lg px-2 py-1 text-center"
               type="text"
               name="cref"
-              placeholder="0000-G/SC"
+              placeholder="0000-G/XX"
               required
               minlength="7"
               maxlength="9"
+              oninput="this.value = this.value
+              .replace(/\W/g, '').replace(/^(\d{4})([A-Za-z])?/, '$1-$2').replace(/-(\w)(\w{0,2})?/, '-$1/$2').slice(0, 9)"
             />
           </div>
 
@@ -140,7 +142,11 @@
               placeholder="*********"
               required
               maxlength="30"
+              oninput="validatePassword(this)"
             />
+            <small id="passwordMessage" class="text-red-500 hidden"
+              >A senha deve ter pelo menos 6 caracteres.</small
+            >
           </div>
           <div id="mensagem" class="text-lg font-bold mb-4"></div>
           <button
@@ -158,6 +164,15 @@
     </footer>
 
     <script>
+      function validatePassword(input) {
+        const message = document.getElementById("passwordMessage");
+        if (input.value.length > 0 && input.value.length < 6) {
+          message.classList.remove("hidden"); // Mostra a mensagem
+        } else {
+          message.classList.add("hidden"); // Esconde a mensagem
+        }
+      }
+
       document
         .getElementById("formCadastro")
         .addEventListener("submit", async function (event) {

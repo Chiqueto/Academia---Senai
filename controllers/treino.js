@@ -272,6 +272,7 @@ const adicionarExercicios = async (req, res) => {
     );
 
     // Retorna erro se houver exercícios duplicados
+    console.log(exerciciosJaAdicionados);
     if (exerciciosJaAdicionados.length > 0) {
       return res.status(400).json({
         error: `Os exercícios já estão associados ao treino: ${nomeExerciciosAdicionados.join(
