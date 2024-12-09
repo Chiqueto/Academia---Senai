@@ -12,14 +12,16 @@
     <header>
       <nav class="flex justify-between bg-zinc-800 py-5 px-4">
         <div class="flex items-center gap-4">
-          <a href="/aluno/menu"><img src="/icons/back_arrow.svg" /></a>
+          <a href="/aluno/menu/<%= aluno.id %>"
+            ><img src="/icons/back_arrow.svg"
+          /></a>
           <a href="/views/index.ejs"
             ><h1 class="font-jaro text-zinc-50 text-3xl">GymFit</h1></a
           >
           <!-- <img src="/icons/GymFit.svg" /> -->
         </div>
       </nav>
-      <form
+      <!-- <form
         action="/aluno/uploadFoto/<%= aluno.id %>"
         method="POST"
         enctype="multipart/form-data"
@@ -29,40 +31,43 @@
         <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">
           Enviar
         </button>
-      </form>
+      </form> -->
     </header>
 
-    <main class="flex flex-col">
-      <div
-        class="shadow-md rounded p-3 flex flex-col justify-center items-center"
-      >
-        <div class="rounded-full p-2 bg-slate-300">
-          <img
-            src="<%= aluno.foto_perfil ? aluno.foto_perfil : '/icons/user.svg' %>"
-            alt="Foto de Perfil"
-            class="w-14 h-14"
-          />
+    <main
+      class="flex flex-col rounded-3xl mx-4 bg-zinc-50 text-black font-zain flex-grow"
+    >
+      <section class="font-zain px-4">
+        <h2 class="text-4xl text-center"><%= aluno.nome %></h2>
+        <div
+          class="bg-slate-300 shadow-md rounded-lg flex flex-col items-center h-52"
+        >
+          <img src="/icons/user.svg" class="h-52" />
         </div>
-        <h4 class="ml-3"><%= aluno.nome %></h4>
-        <p class="font-zain text-lg text-white mt-2"></p>
-      </div>
-      <div class="font-zain text-white p-5">
-        <h3>Dados Pessoais</h3>
-        <h4 class="ml-3">Idade: <%= aluno.idade %></h4>
-        <h4 class="ml-3">
-          Sexo: <%= aluno.genero == "M" ? "Masculino" : "Feminino" %>
-        </h4>
-        <h4 class="ml-3">Telefone: <%= aluno.telefone %></h4>
-      </div>
+        <div class="p-2 text-2xl">
+          <h2 class="mx-2">
+            Sexo: <%= aluno.genero == "M" ? "Masculino" : "Feminino" %>
+          </h2>
+          <h2 class="mx-2">Idade: <%= aluno.idade %></h2>
+          <h2 class="mx-2">Telefone: <%= aluno.telefone %></h2>
+        </div>
+
+        <!-- <button
+      class="flex justify-end mx-auto mt-60 bg-neonGreen rounded-xl px-12 py-2 hover:bg-neonGreenHover transition-colors text-zinc-50 text-4xl"
+    >
+      Sair
+    </button> -->
+
+        <!-- Calendário Automático -->
+        <div class="w-45 max-w-lg bg-zinc-700 p-4 rounded-lg shadow-md m-3">
+          <div
+            id="calendar"
+            class="grid grid-cols-7 gap-2 text-center text-white"
+          ></div>
+        </div>
+      </section>
     </main>
 
-    <!-- Calendário Automático -->
-    <div class="w-45 max-w-lg bg-zinc-700 p-4 rounded-lg shadow-md">
-      <div
-        id="calendar"
-        class="grid grid-cols-7 gap-2 text-center text-white"
-      ></div>
-    </div>
     <script>
       function generateCalendar() {
         const calendarContainer = document.getElementById("calendar");
@@ -111,8 +116,10 @@
       }
       document.addEventListener("DOMContentLoaded", generateCalendar);
     </script>
-
-    <div class="font-zain text-white p-5">
+    <footer class="text-center py-4 text-sm bg-zinc-800">
+      <p class="text-zinc-50">&copy Luís Felipe, Edney Araujo, Marília</p>
+    </footer>
+    <!-- <div class="font-zain text-white p-5">
       <h3>
         <p class="text-lime-500">Treino concluído</p>
         <p class="text-red-600">Marca falta</p>
@@ -123,7 +130,7 @@
       class="bg-neonGreen rounded-xl py-2 hover:bg-neonGreenHover transition-colors text-zinc-50 font-zain text-4xl mx-12"
     >
       Sair
-    </button>
+    </button> -->
 
     <!-- <script>
   // Recupera o token usando a função getToken

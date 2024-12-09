@@ -31,12 +31,14 @@
            <!-- Renderizar academias dinamicamente -->
         <% if (academias && academias.length > 0) { %>
           <% academias.forEach(academia => { %>
-            <div class="container bg-white rounded-lg flex items-center p-3 shadow-md w-auto mb-2">
-              <div class="rounded-full bg-pink-200 flex-shrink-0 w-10 h-10">
-                <img src="/icons/user.svg" class="w-10 h-8" alt="Usuário">
+            <a href="/aluno/<%= id_aluno%>/perfilAcademia/<%= academia.id %>">
+              <div class="container bg-white rounded-lg flex items-center p-3 shadow-md w-auto mb-2">
+                <div class="rounded-full bg-pink-200 flex-shrink-0 w-10 h-10">
+                  <img src="/icons/user.svg" class="w-10 h-8" alt="Usuário">
+                </div>
+                <span class="ml-4 text-2xl text-gray-900 font-semibold"><%= academia.nome %></span>
               </div>
-              <span class="ml-4 text-2xl text-gray-900 font-semibold"><%= academia.nome %></span>
-            </div>
+            </a>
           <% }) %>
         <% } else { %>
           <p class="text-gray-500">Nenhuma academia encontrado.</p>
@@ -65,6 +67,9 @@
    <button onclick="toggleAbaSuspensa()" class="mx-auto bg-neonGreen rounded-xl px-4 py-2 hover:bg-neonGreenHover transition-colors text-zinc-50 font-zain text-4xl ">
       Adicionar
     </button><br>
+    <footer class="text-center py-4 text-sm bg-zinc-800">
+      <p class="text-zinc-50">&copy Luís Felipe, Edney Araujo, Marília</p>
+    </footer>
     <script>// separar o script depois
       function toggleAbaSuspensa() {
         const abaSuspensa = document.getElementById("abaSuspensa");

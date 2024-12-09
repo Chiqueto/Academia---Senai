@@ -157,7 +157,7 @@
 
     <!-- Rodapé -->
     <footer class="text-center py-4 text-sm bg-zinc-800">
-      <p>&copy; 2024 Luís Felipe, Edney Araujo, Marília</p>
+      
       <p>
         Início: <%= treinoStatus ? new
         Date(treinoStatus.hr_inicio).toLocaleTimeString('pt-BR', { hour:
@@ -172,6 +172,7 @@
         '0')}:${String(diffSecs).padStart(2, '0')}` %> <% } else { %>
         <span id="tempo-decorrido">00:00:00</span>
         <% } %>
+        <p>&copy; 2024 Luís Felipe, Edney Araujo, Marília</p>
       </p>
     </footer>
 

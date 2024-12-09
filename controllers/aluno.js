@@ -107,7 +107,7 @@ const listarAlunos = async (req, res) => {
   }
 };*/
 const buscarAluno = async (req, res) => {
-  const { nome} = req.query;
+  const { nome } = req.query;
 
   console.log("Nome recebido:", nome);
 
@@ -122,8 +122,6 @@ const buscarAluno = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
-
-
 
 const deletarAluno = async (req, res) => {
   const { id } = req.params;
@@ -173,6 +171,20 @@ const renderizaMontarTreino = async (req, res) => {
   const exercicios = await Exercicio.getExercicios();
 
   res.render("aluno/montarTreino", { id_aluno, treinos, exercicios });
+};
+
+const renderizaPerfilPersonal = async (req, res) => {
+  const { id_aluno, id_personal } = req.params;
+  const personal = await Personal.findById(id_personal);
+
+  res.render("aluno/perfilPersonal", { id_aluno, personal });
+};
+
+const renderizaPerfilAcademia = async (req, res) => {
+  const { id_aluno, id_academia } = req.params;
+  const academia = await Academia.findById(id_academia);
+
+  res.render("aluno/perfilAcademia", { id_aluno, academia });
 };
 
 const renderizaMeusTreinos = async (req, res) => {
@@ -463,4 +475,6 @@ module.exports = {
   renderizaMeusTreinos,
   renderizaTreino,
   renderizaExercicio,
+  renderizaPerfilPersonal,
+  renderizaPerfilAcademia,
 };

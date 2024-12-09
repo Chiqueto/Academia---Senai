@@ -14,7 +14,9 @@
     <header>
       <nav class="flex items-center bg-zinc-800 py-5 px-4">
         <div class="flex items-center gap-4">
-          <a href="/personal/perfilPersonal/<%= personal.id %>"><img src="/icons/back_arrow.svg" /></a>
+          <a href="/personal/perfilPersonal/<%= personal.id %>"
+            ><img src="/icons/back_arrow.svg"
+          /></a>
           <h1 class="font-jaro text-zinc-50 text-3xl">GymFit</h1>
         </div>
       </nav>
@@ -50,8 +52,6 @@
             />
           </div>
 
-     
-
           <div class="flex flex-col gap-2 px-6">
             <label class="text-start" for="telefone">Telefone</label>
             <input
@@ -59,7 +59,9 @@
               type="text"
               name="telefone"
               value="<%= personal.telefone %>"
-              required minlength="11" maxlength="15"
+              required
+              minlength="11"
+              maxlength="15"
             />
           </div>
 
