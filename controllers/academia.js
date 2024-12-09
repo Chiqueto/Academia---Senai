@@ -380,6 +380,24 @@ const deletarAluno = async (req, res) => {
   }
 };
 
+
+const renderizaTreinos = async (req, res) => {
+  const { id } = req.params;
+  try {
+    // Caso você precise buscar dados do treino no banco
+    const treino = await Academia.findById(id);
+
+    if (!treino) {
+      return res.status(404).send("Treino não encontrado");
+    }
+
+    res.render("academia/treinos", { treino });
+  } catch (error) {
+    console.error("Erro ao renderizar treinos:", error.message);
+    res.status(500).send("Erro interno do servidor");
+  }
+};
+
 module.exports = {
   cadastrar,
   listarAcademias,
@@ -399,4 +417,5 @@ module.exports = {
   deletarPersonal,
   adicionarAluno,
   deletarAluno,
+  renderizaTreinos,
 };

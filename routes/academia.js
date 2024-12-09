@@ -40,9 +40,10 @@ router.get("/detalhe", (req, res) => {
   res.render("academia/adcdetalhe");
 });
 
-router.get("/treinos", (req, res) => {
-  res.render("academia/treinos");
-});
+// router.get("/treinos", (req, res) => {
+//   res.render("academia/treinos");
+// });
+router.get("/treinos/:id", academiaController.renderizaTreinos);
 
 router.post("/cadastro", academiaController.cadastrar);
 router.get(
