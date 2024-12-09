@@ -243,10 +243,12 @@ const renderizaListaPersonais = async (req, res) => {
 };
 
 const inserirPersonal = async (req, res) => {
-  const { id_academia, id_personal } = req.body;
-
+  const { id_personal } = req.body;
+  const { id_academia } = req.params;
+ console.log("Id do personal:", id_personal);
+ console.log("Id do personal:", id_academia);
   try {
-    const personais = await Academia.insertPersonal(id_academia, id_personal);
+    const personais = await Academia.insertPersonal( id_personal, id_academia);
     res
       .status(201)
       .json({ message: "Personal inserido com sucesso!", data: personais });
@@ -304,32 +306,19 @@ const renderizaListaAlunos = async (req, res) => {
 //   }
 
 const adicionarAluno = async (req, res) => {
-  const { id_aluno, id_academia } = req.body;
-  console.log("Dados recebidos:", { id_aluno, id_academia }); // Log para depuração
+  const { id_aluno } = req.body;
+  const { id_academia } = req.params;
+  console.log("Dados recebidos Aluno:", id_aluno);
+  console.log("Dados recebidos Academia:", id_academia);  // Log para depuração
 
-  if (!id_aluno || !id_academia) {
-    return res
-      .status(400)
-      .json({ error: "ID do aluno ou da academia está faltando." });
-  }
 
   try {
-    const { idAcademia } = req.params; // Pega o idPersonal da URL
-    const { idAluno } = req.body; // Pega o idAluno do corpo da requisição
-
-    console.log("ID do Aluno:", idAluno);
-    console.log("ID da Academia:", idAcademia);
-
-    if (!idAluno || !idAcademia) {
-      return res
-        .status(400)
-        .json({ error: "idAluno e idAcademia são obrigatórios." });
-    }
-
-    const alunoAcademia = await insertAluno(idAcademia, idAluno);
-
-    res.status(201).json(alunoAcademia);
-  } catch (error) {
+ 
+    const alunoAcademia = await Academia.insertAluno(id_aluno, id_academia);
+      res
+      .status(201)
+      .json({ alunoAcademia, message: "Aluno inserido com sucesso!" });
+    } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Erro ao adicionar aluno." });
   }

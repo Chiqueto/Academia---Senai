@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="/styles/output.css" />
     <title>Lista de Alunos</title>
   </head>
-  <body class="flex flex-col min-h-screen bg-gray-900">
+  <body class="flex flex-col min-h-screen">
     <header>
       <nav class="flex justify-between bg-zinc-800 py-5 px-4">
         <div class="flex items-center gap-4">
@@ -20,84 +20,115 @@
     <main class="mx-4 flex-grow">
       <section class="font-zain px-4">
         <h2 class="text-3xl text-center text-white py-4">Lista de Alunos</h2>
-        <!-- Barra de pesquisa -->
-        <div class="relative w-full mb-6">
+       
+        <% if (alunos && alunos.length > 0) { %>
+          <% alunos.forEach(aluno => { %>
+            <a href="/academia/<%= id_academia %>/perfilAluno/<%= aluno.id %>">
+            <div data-gender="<%= aluno.genero %>" class="container bg-white rounded-lg flex items-center p-3 shadow-md w-auto mb-2">
+              <div class="rounded-full bg-pink-200 flex-shrink-0 w-10 h-10">
+                <img src="/icons/user.svg" class="w-10 h-8" alt="Usuário">
+              </div>
+              <span class="ml-4 text-2xl text-gray-900 font-semibold"><%= aluno.nome %></span>
+              <span class="ml-4 text-xl text-gray-900 ">Cod: <%= aluno.id %></span>
+              <button 
+              class="ml-auto px-4 py-2 rounded-lg"
+              onclick="removerAluno('<%= aluno.id %>')">
+             <img src="/icons/delete.svg" class="w-8 h-8">
+            </button>
+            </div></a>
+          <% }) %>
+        <% } else { %>
+          <p class="text-gray-500">Nenhum aluno encontrado.</p>
+        <% } %>
+      </section>
+      <div id="searchModal" class="hidden fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center">
+        <div class="bg-white p-6 rounded-lg shadow-lg w-96">
+          <button id="closeSearchModal" class="text-red-600 float-right font-bold">Fechar</button>
+          <h3 class="text-xl font-semibold mb-4">Buscar Aluno</h3>
           <input
             type="text"
-            id="search-bar"
-            placeholder="Pesquisar por nome ou ID..."
-            oninput="buscarAlunos()"
-            class="w-full py-3 pl-10 pr-4 border border-gray-300 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-pink-500"
+            id="searchInput"
+            class="w-full p-2 border border-gray-300 rounded-md mb-4"
+            placeholder="Buscar aluno..."
           />
-          <div
-            class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none"
-          >
-            <img src="/icons/lupa.svg" class="w-5 h-5" />
-          </div>
+          <ul id="searchResults" class="max-h-60 overflow-y-auto space-y-2">
+            
+          </ul>
         </div>
-        <!-- Lista de alunos -->
-        <div class="alunos space-y-2" id="listaAlunos">
-          <% if (alunos && alunos.length > 0) { %> <% alunos.forEach(aluno => {
-          %>
-          <div
-            class="flex justify-between items-center bg-white rounded-lg p-4 shadow-md"
-          >
-            <span class="text-2xl text-gray-800 font-semibold"
-              ><%= aluno.nome %></span
-            >
-            <span class="text-xl text-gray-600">ID: <%= aluno.id %></span>
-          </div>
-          <% }) %> <% } else { %>
-          <p class="text-gray-300">Nenhum aluno encontrado.</p>
-          <% } %>
-        </div>
-      </section>
-      <form id="adicionarAluno" class="mt-6 flex items-center gap-4">
-        <label for="aluno.id" class="text-lg font-medium text-gray-800">
-          ID do Aluno:
-        </label>
-        <input
-          type="text"
-          id="aluno.id"
-          name="aluno.id"
-          required
-          class="py-2 px-4 border border-gray-300 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-pink-500"
-        />
-        <button
-          type="submit"
-          class="bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-green-600 transition duration-300"
-        >
-          Adicionar Aluno
-        </button>
-      </form>
+      </div>
+      
+      <button id="openSearchModal" class="mx-auto bg-neonGreen rounded-xl px-4 py-2 hover:bg-neonGreenHover transition-colors text-zinc-50 font-zain text-4xl">
+      Adicionar
+    </button>
     </main>
     <script>
+       document.getElementById('openSearchModal').addEventListener('click', () => {
+      document.getElementById('searchModal').classList.remove('hidden');
+    });
+
+    document.getElementById('closeSearchModal').addEventListener('click', () => {
+      document.getElementById('searchModal').classList.add('hidden');
+    });
+
+    // Buscar personais
+    document.getElementById('searchInput').addEventListener('input', async (event) => {
+      const query = event.target.value.trim();
+
+      if (query.length > 1) {
+    try {
+      const response = await fetch(`/aluno/buscarAluno?nome=${query}`);
+      const alunos = await response.json();
+
+      const resultsList = document.getElementById('searchResults');
+      resultsList.innerHTML = ''; 
+
+      if (Array.isArray(alunos) && alunos.length > 0) {
+        alunos.forEach((aluno) => {
+          const li = document.createElement('li');
+          li.classList.add('flex', 'justify-between', 'items-center', 'p-2', 'border-b');
+          li.innerHTML = `
+            <div class="flex items-center gap-2">
+              <div class="rounded-full bg-pink-200 w-10 h-10 flex items-center justify-center">
+                <img src="/icons/user.svg" class="w-7 h-8" alt="Usuário">
+              </div>
+              <span class="ml-4 text-2xl text-gray-900 font-semibold">${aluno.nome}</span>
+              <span class="ml-4 text-xl text-gray-900 ">Cod: ${aluno.id}</span>
+            </div>
+            <button 
+              class="bg-blue-500 text-white px-2 py-1 rounded" 
+             onclick="adicionarAluno(${aluno.id})">
+              Selecionar
+            </button>
+          `;
+
+          resultsList.appendChild(li);
+        });
+      } else {
+        resultsList.innerHTML = '<li>Nenhum aluno encontrado.</li>';
+      }
+    } catch (error) {
+      console.error('Erro ao buscar alunos:', error);
+    }
+  }
+});
+
       async function adicionarAluno() {
-        const idAluno = document.getElementById("aluno.id").value.trim();
-        const idAcademia = "<%= id %>"; // ID da academia vindo do EJS
-        if (!idAluno) {
-          alert("Por favor, insira o ID do aluno.");
-          return;
-        }
-
-        console.log("Iniciando requisição para adicionar aluno...");
-
         try {
+          const id_academia = '54';
+        console.log(id_academia)
           const response = await fetch(
-            `/academia/adicionarAluno/${idAcademia}`,
+            `/academia/inserirAluno/${id_academia}`,
             {
               method: "POST",
               headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ idAluno }),
+              body: JSON.stringify({ id_aluno }),
             }
           );
 
-          console.log("Resposta recebida:", response);
-
           const result = await response.json();
           if (response.ok) {
-            alert("Aluno adicionado com sucesso!");
-            atualizarListaAlunos(); // Atualiza a lista de alunos após adicionar
+            alert(result.message);
+            location.reload();
           } else {
             alert(result.error || "Erro ao adicionar aluno.");
           }
@@ -105,54 +136,9 @@
           console.error("Erro ao adicionar aluno:", error);
         }
       }
+    
 
-      async function atualizarListaAlunos() {
-        const idAluno = document.getElementById("aluno.id").value.trim();
-        const idAcademia = "<%= id %>";
-        console.log("Atualizando lista de alunos para a academia:", idAcademia);
-
-        try {
-          const response = await fetch(`/academia/findStudents/${idAcademia}`);
-          const alunos = await response.json();
-          console.log("Lista de alunos recebida:", alunos);
-          const listaAlunos = document.getElementById("listaAlunos");
-
-          listaAlunos.innerHTML = "";
-
-          if (alunos.length > 0) {
-            alunos.forEach((aluno) => {
-              const div = document.createElement("div");
-              div.classList.add(
-                "flex",
-                "justify-between",
-                "items-center",
-                "bg-white",
-                "rounded-lg",
-                "p-4",
-                "shadow-md"
-              );
-              div.innerHTML = `
-                <span class="text-2xl text-gray-800 font-semibold">${aluno.nome}</span>
-                <span class="text-xl text-gray-600">ID: ${aluno.id}</span>
-              `;
-              listaAlunos.appendChild(div);
-            });
-          } else {
-            listaAlunos.innerHTML =
-              '<p class="text-gray-300">Nenhum aluno encontrado.</p>';
-          }
-        } catch (error) {
-          console.error("Erro ao atualizar lista de alunos:", error);
-        }
-      }
-      document
-        .getElementById("adicionarAluno")
-        .addEventListener("submit", async (e) => {
-          e.preventDefault(); // Evita o comportamento padrão do formulário
-          adicionarAluno();
-          const idAluno = document.getElementById("aluno.id").value.trim();
-          const idAcademia = "<%= id %>"; // ID da academia vindo do EJS
-        });
+      
     </script>
   </body>
 </html>

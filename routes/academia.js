@@ -64,8 +64,8 @@ router.delete(
 );
 router.post("/login", academiaController.autenticaAcademia);
 
-router.post("/inserirPersonal", academiaController.inserirPersonal);
-router.post('/inserirAluno/:idAcademia', academiaController.adicionarAluno) 
+router.post("/inserirPersonal/:id_academia", academiaController.inserirPersonal);
+router.post("/inserirAluno/:id_academia", academiaController.adicionarAluno) 
   console.log(`Adicionando aluno à academia `);
 
 // router.post("/inserirAluno", academiaController.inserirAluno);

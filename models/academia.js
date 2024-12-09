@@ -159,17 +159,16 @@ const loginAcademia = async (email) => {
   return result.rows[0];
 };
 
-const insertPersonal = async (id_academia, id_personal) => {
+const insertPersonal = async ( id_personal, id_academia) => {
   const result = await pool.query(
     "INSERT INTO tb_academias_personais (id_academia, id_personal) VALUES ($1, $2) RETURNING *",
-    [id_academia, id_personal]
+    [id_personal, id_academia ]
   );
 
   return result.rows[0];
 };
 
 const insertAluno= async (id_aluno, id_academia) => {
-  console.log("Inserindo no banco: ", { id_aluno, id_academia});
   const result = await pool.query(
     "INSERT INTO tb_alunos_academias (id_aluno, id_academia) VALUES ($1, $2) RETURNING *",
     [id_aluno, id_academia]
