@@ -294,9 +294,8 @@ try {
 
 const removerAluno = async (req, res) => {
   try {
-    const { id_aluno } = req.body; 
-    const { id_personal } = req.params; // Pega o idPersonal da URL
-   
+    const { id_aluno, id_personal } = req.params; // Pegue ambos os parâmetros da URL
+
     if (!id_personal || !id_aluno) {
       return res.status(400).json({ error: "ID do Aluno e ID do Personal são obrigatórios." });
     }
@@ -313,6 +312,7 @@ const removerAluno = async (req, res) => {
   }
 };
 
+
 const editarPersonal = async (req, res) => {
   const { id } = req.params;
 
@@ -327,6 +327,25 @@ const editarPersonal = async (req, res) => {
     res.status(500).send("Erro ao carregar a página de edição");
   }
 };
+const renderizaPerfilAluno = async (req, res) => {
+  try {
+    const { id_aluno } = req.params; // Pega o id do aluno da URL
+
+    // Aqui, você pode buscar o aluno pelo ID no banco de dados
+    const aluno = await Aluno.findById(id_aluno); // Substitua pelo método de consulta do seu banco de dados
+
+    if (!aluno) {
+      return res.status(404).send('Aluno não encontrado');
+    }
+
+    // Passa o aluno para o template
+    res.render('personal/perfilAluno', { aluno });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Erro ao carregar perfil do aluno');
+  }
+};
+
 module.exports = {
   criarPersonal,
   listarPersonais,
@@ -343,4 +362,5 @@ module.exports = {
   adicionarAluno,
   removerAluno,
   editarPersonal,
+  renderizaPerfilAluno
 };

@@ -38,6 +38,7 @@
           
             <% if (alunos && alunos.length > 0) { %>
               <% alunos.forEach(aluno => { %>
+                <a href="/personal/<%= id_personal %>/perfilAluno/<%= aluno.id %>">
                 <div data-gender="<%= aluno.genero %>" class="container bg-white rounded-lg flex items-center p-3 shadow-md w-auto mb-2">
                   <div class="rounded-full bg-pink-200 flex-shrink-0 w-10 h-10">
                     <img src="/icons/user.svg" class="w-10 h-8" alt="Usuário">
@@ -49,7 +50,7 @@
                   onclick="removerAluno('<%= aluno.id %>')">
                  <img src="/icons/delete.svg" class="w-8 h-8">
                 </button>
-                </div>
+                </div></a>
               <% }) %>
             <% } else { %>
               <p class="text-gray-500">Nenhum aluno encontrado.</p>
@@ -130,19 +131,18 @@
 // Inserir aluno
 async function adicionarAluno(id_aluno) {
   try {
-    const id_personal = '<%= id_personal %>'; // Substitua pelo ID real do personal
     const response = await fetch(`/personal/adicionarAluno/${id_personal}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ id_aluno: id_aluno }),
+      body: JSON.stringify({ id_aluno }),
     });
 
     const result = await response.json();
     if (response.ok) {
       alert(result.message);
-      location.reload(); // Recarrega a lista após a adição
+      location.reload();
     } else {
       console.error(result.error);
       alert('Erro ao adicionar aluno.');
@@ -155,19 +155,18 @@ async function adicionarAluno(id_aluno) {
 // Remover aluno
 async function removerAluno(id_aluno) {
   try {
-    const id_personal = '<%= id_personal %>'; // Substitua pelo ID real do personal
-    const response = await fetch(`/personal/removerAluno/${id_aluno}`, {
+    const response = await fetch(`/personal/removerAluno/${id_aluno}/${id_personal}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ id_personal: id_personal }),
+      body: JSON.stringify({ id_aluno }),
     });
 
     const result = await response.json();
     if (response.ok) {
       alert(result.message);
-      location.reload(); // Recarrega a lista após a remoção
+      location.reload();
     } else {
       console.error(result.error);
       alert('Erro ao remover aluno.');
