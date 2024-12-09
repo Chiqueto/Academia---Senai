@@ -650,6 +650,10 @@ video {
   float: right;
 }
 
+.m-3{
+  margin: 0.75rem;
+}
+
 .mx-12{
   margin-left: 3rem;
   margin-right: 3rem;
@@ -800,6 +804,10 @@ video {
 
 .h-full{
   height: 100%;
+}
+
+.h-52{
+  height: 13rem;
 }
 
 .max-h-60{

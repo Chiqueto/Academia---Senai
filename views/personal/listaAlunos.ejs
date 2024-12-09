@@ -131,6 +131,7 @@
 async function adicionarAluno(id_aluno) {
   try {
     const id_personal = '<%= id_personal %>'; // Substitua pelo ID real do personal
+    console.log(id_personal)
     const response = await fetch(`/personal/adicionarAluno/${id_personal}`, {
       method: 'POST',
       headers: {
