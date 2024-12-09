@@ -224,10 +224,26 @@ const renderizaPerfil = async (req, res) => {
   res.render("academia/perfil", { academia });
 };
 
-const renderizaMenu = (req, res) => {
+const renderizaMenu = async (req, res) => {
   const { id } = req.params;
-  res.render(`academia/menuAcademia`, { id });
+
+  if (!id || isNaN(id)) {
+    return res.status(400).send("ID inválido.");
+  }
+
+  try {
+    const academia = await Academia.findById(id); // Supondo que essa função existe
+    if (!academia) {
+      return res.status(404).send("Academia não encontrada.");
+    }
+
+    res.render("menuAcademia", { id, academia });
+  } catch (error) {
+    console.error("Erro ao carregar o menu:", error.message);
+    res.status(500).send("Erro interno do servidor.");
+  }
 };
+
 
 const renderizaEquipamento = (req, res) => {
   const { id } = req.params;
