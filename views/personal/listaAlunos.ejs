@@ -21,16 +21,24 @@
       <section class="font-zain  px-4">
           <h2 class="text-3xl text-center text-white py-2">Lista de Alunos</h2>
           <div class="relative w-full ">
-            <input type="text" placeholder="Pesquisar pelo nome do personal..."
+            <!--<input type="text" placeholder="Pesquisar pelo nome do personal..."
               class="w-full py-1 pl-10 pr-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-gray-700 placeholder-gray-400">
             <div class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none">
               <img src="/icons/lupa.svg" class="w-5 h-5">
             </div>
+          </div> -->
+          <div class="relative w-full mb-4">
+            <label for="genderFilter" class="block text-gray-700 font-semibold mb-2">Filtrar por gênero:</label>
+            <select id="genderFilter" class="w-full py-2 pl-3 pr-4 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500">
+              <option value="all">Todos</option>
+              <option value="M">Masculino</option>
+              <option value="F">Feminino</option>
+            </select>
           </div><br>
           
             <% if (alunos && alunos.length > 0) { %>
               <% alunos.forEach(aluno => { %>
-                <div class="container bg-white rounded-lg flex items-center p-3 shadow-md w-auto mb-2">
+                <div data-gender="<%= aluno.genero %>" class="container bg-white rounded-lg flex items-center p-3 shadow-md w-auto mb-2">
                   <div class="rounded-full bg-pink-200 flex-shrink-0 w-10 h-10">
                     <img src="/icons/user.svg" class="w-10 h-8" alt="Usuário">
                   </div>
@@ -169,7 +177,29 @@ async function removerAluno(id_aluno) {
   }
 }
 
-  
+  // Obtenha o seletor e a lista de alunos
+const genderFilter = document.getElementById('genderFilter');
+const alunosContainer = document.querySelector('section'); // Atualize conforme necessário para o container correto
+
+// Função para filtrar alunos
+function filtrarAlunosPorGenero(gender) {
+  const alunos = Array.from(alunosContainer.querySelectorAll('.container')); // Todos os containers de alunos
+
+  alunos.forEach(aluno => {
+    const genero = aluno.getAttribute('data-gender'); // Obtém o gênero do atributo personalizado
+    if (gender === 'all' || genero === gender) {
+      aluno.classList.remove('hidden'); // Mostra o aluno
+    } else {
+      aluno.classList.add('hidden'); // Esconde o aluno
+    }
+  });
+}
+
+// Adicione evento de mudança no seletor
+genderFilter.addEventListener('change', (event) => {
+  filtrarAlunosPorGenero(event.target.value);
+});
+
         </script>
 
   </body>
