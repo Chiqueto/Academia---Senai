@@ -58,19 +58,19 @@ const criarTreinoPersonal = async (req, res) => {
 };
 
 const deletarTreino = async (req, res) => {
-  const { id } = req.params;
-
+  const { id_treino } = req.params;
+  console;
   try {
     // Verificar se o treino tem um id_personal
-    const treino = await Treino.getTreinoById(id);
-
+    const treino = await Treino.getTreinoById(id_treino);
     if (!treino) {
       return res.status(404).json({ message: "Treino não encontrado!" });
     }
 
     if (treino.id_personal) {
       // Se o treino tem um id_personal, excluir apenas da tabela tb_treino_alunos
-      const result = await Treino.deleteTreinoAluno(id);
+      const result = await Treino.deleteTreinoAluno(id_treino);
+      console.log("ENTROUUUU COMO PERSONALLLL");
       if (result === 0) {
         return res
           .status(404)
@@ -79,7 +79,8 @@ const deletarTreino = async (req, res) => {
       res.json({ message: "Treino excluído da tabela de alunos com sucesso!" });
     } else {
       // Se o treino não tem um id_personal, excluir da tabela treinos
-      const result = await Treino.deleteTreino(id);
+      const deleteTreinoAluno = await Treino.deleteTreinoAluno(id_treino);
+      const result = await Treino.deleteTreino(id_treino);
       if (result === 0) {
         return res.status(404).json({ message: "Treino não encontrado!" });
       }
@@ -255,7 +256,8 @@ const adicionarExercicios = async (req, res) => {
   try {
     // Consultar exercícios já associados ao treino
     const exerciciosExistentes = await Treino.getExerciciosByTreino(id_treino);
-
+    console.log("teste exercicios existentes");
+    console.log(exerciciosExistentes);
     // Verificar se algum dos IDs enviados já está associado
     const exerciciosJaAdicionados = exercicios.filter((exercicio) =>
       exerciciosExistentes.some(

@@ -40,6 +40,12 @@ router.delete(
   TreinoController.removerExercicio
 );
 
+//DeletarTreino
+router.delete(
+  `/montarTreino/:id_aluno/treino/:id_treino`,
+  TreinoController.deletarTreino
+);
+
 //get exercicio by treino
 router.get(
   "/montarTreino/:id_aluno/treino/:id_treino/exercicios",

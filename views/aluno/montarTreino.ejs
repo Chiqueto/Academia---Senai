@@ -292,6 +292,12 @@
         window.location.reload();
       }
 
+      //função para fechar o modal
+      function fecharModalConfirmacao() {
+        const modalConfirmacao = document.getElementById("modalConfirmacao");
+        modalConfirmacao.classList.add("hidden");
+      }
+
       // Função para criar treino
       async function criarTreino(event) {
         event.preventDefault();
