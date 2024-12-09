@@ -179,11 +179,10 @@ const atualizarPersonal = async (req, res) => {
     });
     if (result.length === 0) {
       return res.status(404).json({ error: "Personal não encontrado" });
-    } else {
-      return res.json({ message: "Personal atualizado com sucesso!" });
-    }
+    } res.redirect(`/personal/perfilPersonal/${id}`);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error("Erro ao atualizar a personal:", error.message);
+    res.status(500).send("Erro interno do servidor.");
   }
 };
 
