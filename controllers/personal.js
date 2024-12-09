@@ -2,7 +2,7 @@ const Personal = require("../models/personal.js");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const Aluno = require("../models/aluno.js");
-const { addAluno, removeAluno } = require('../models/personal');
+const { addAluno, removeAluno } = require("../models/personal");
 require("dotenv").config();
 
 const SECRET_KEY = process.env.SECRET_KEY;
@@ -26,7 +26,7 @@ const criarPersonal = async (req, res) => {
     telefone,
   } = req.body;
 
-  //validações de campos em branco
+  // Validações de campos em branco
   if (
     !nome ||
     !email ||
@@ -40,22 +40,30 @@ const criarPersonal = async (req, res) => {
     return res.status(400).json({ message: "Preencha todos os campos!" });
   }
 
+  // Formatação do telefone e outros campos
   const telefoneFormatado = telefone.replace(/\D/g, "");
   const senhaCriptografada = await bcrypt.hash(senha, 10);
   const cepFormatado = cep.replace(/[-]/g, "");
 
-  //verificar email
-  const db_email = await Aluno.findByEmail(email);
+  // Verificar email
+  const db_email = await Personal.findByEmail(email);
   if (db_email) {
     return res.status(400).json({ message: "Email já cadastrado!" });
   }
 
-  //verificar se o cep é válido
-  if (cepFormatado.length > 8) {
+  // Verificar CREF
+  const db_cref = await Personal.findByCref(cref);
+  if (db_cref) {
+    return res.status(400).json({ message: "CREF já cadastrado!" });
+  }
+
+  // Verificar se o CEP é válido
+  if (cepFormatado.length !== 8) {
     return res.status(400).json({ message: "CEP inválido!" });
   }
 
   try {
+    // Criar o novo personal
     const novoPersonal = await Personal.createPersonal({
       nome,
       email,
@@ -73,8 +81,11 @@ const criarPersonal = async (req, res) => {
       return res.status(400).json({ message: "Erro ao cadastrar personal" });
     }
 
-    // res.status(201).json(novoPersonal);
-    res.redirect("/personal");
+    // Retornar uma resposta JSON com a URL de redirecionamento
+    res.status(201).json({
+      message: "Cadastro realizado com sucesso!",
+      redirectTo: "/personal",
+    });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -113,7 +124,7 @@ const listarAlunos = async (req, res) => {
   try {
     const alunos = await Personal.findAluno(id_personal);
     const all_alunos = await Aluno.findAll(); // Garante que pega todos os alunos
-    res.render("personal/listaAlunos", { alunos, all_alunos,  id_personal });
+    res.render("personal/listaAlunos", { alunos, all_alunos, id_personal });
   } catch (error) {
     console.error("Erro ao listar alunos:", error);
     res.status(500).render("personal/listaAlunos", {
@@ -125,10 +136,8 @@ const listarAlunos = async (req, res) => {
   }
 };
 
-
-
 const buscarPersonal = async (req, res) => {
-  const { nome} = req.query;
+  const { nome } = req.query;
 
   console.log("Nome recebido:", nome);
 
@@ -143,7 +152,6 @@ const buscarPersonal = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
-
 
 const deletarPersonal = async (req, res) => {
   const { id } = req.params;
@@ -162,8 +170,7 @@ const deletarPersonal = async (req, res) => {
 
 const atualizarPersonal = async (req, res) => {
   const { id } = req.params;
-  const { nome, descricao, telefone } =
-    req.body;
+  const { nome, descricao, telefone } = req.body;
 
   //validações de campos em branco
   if (!nome || !descricao || !telefone) {
@@ -179,7 +186,8 @@ const atualizarPersonal = async (req, res) => {
     });
     if (result.length === 0) {
       return res.status(404).json({ error: "Personal não encontrado" });
-    } res.redirect(`/personal/perfilPersonal/${id}`);
+    }
+    res.redirect(`/personal/perfilPersonal/${id}`);
   } catch (error) {
     console.error("Erro ao atualizar a personal:", error.message);
     res.status(500).send("Erro interno do servidor.");
@@ -196,7 +204,7 @@ const renderizaCadastro = (req, res) => {
 
 const renderizaMenu = (req, res) => {
   const { id } = req.params;
- // if (!id) return res.status(400).send("ID não fornecido!");
+  // if (!id) return res.status(400).send("ID não fornecido!");
   res.render(`personal/menuPersonal`, { id });
 };
 // const renderizaMenu = (req, res) => {
@@ -252,10 +260,10 @@ const autenticaPersonal = async (req, res) => {
     // Redireciona para a página do menu diretamente
     return res.status(200).json({
       message: "Personal autenticada com sucesso!",
-      token, 
-      redirectTo:  `/personal/menuPersonal/${personal.id}`,
-    }) ;// Opcional: Define o token como cookie
-      } catch (error) {
+      token,
+      redirectTo: `/personal/menuPersonal/${personal.id}`,
+    }); // Opcional: Define o token como cookie
+  } catch (error) {
     console.error(error);
     return res.status(500).json({ error: "Erro interno do servidor" });
   }
@@ -273,32 +281,33 @@ const autenticaPersonal = async (req, res) => {
 
 // controllers/AlunoPersonalController.js
 
-
 const adicionarAluno = async (req, res) => {
-  
-    const { id_aluno } = req.body; // Pega o idAluno do corpo da requisição
-    const { id_personal } = req.params; // Pega o idPersonal da URL
+  const { id_aluno } = req.body; // Pega o idAluno do corpo da requisição
+  const { id_personal } = req.params; // Pega o idPersonal da URL
 
-    console.log("ID do Aluno:", id_aluno);
-    console.log("ID do Personal:", id_personal);
+  console.log("ID do Aluno:", id_aluno);
+  console.log("ID do Personal:", id_personal);
 
-try {
-    const alunoPersonal = await adicionarAluno(id_personal, id_aluno);
-    res.status(201).json({alunoPersonal, message: "Aluno inserido com sucesso!"});
+  try {
+    const alunoPersonal = await Personal.adicionarAluno(id_aluno, id_personal);
+    res
+      .status(201)
+      .json({ alunoPersonal, message: "Aluno inserido com sucesso!" });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Erro ao adicionar aluno." });
   }
 };
 
-
 const removerAluno = async (req, res) => {
   try {
-    const { id_aluno } = req.body; 
+    const { id_aluno } = req.body;
     const { id_personal } = req.params; // Pega o idPersonal da URL
-   
+
     if (!id_personal || !id_aluno) {
-      return res.status(400).json({ error: "ID do Aluno e ID do Personal são obrigatórios." });
+      return res
+        .status(400)
+        .json({ error: "ID do Aluno e ID do Personal são obrigatórios." });
     }
 
     const rowsDeleted = await removerAluno(id_aluno, id_personal);
@@ -321,12 +330,31 @@ const editarPersonal = async (req, res) => {
     if (!personal) {
       return res.status(404).send("personal não encontrada");
     }
-    res.render(`personal/editar`, { personal});
+    res.render(`personal/editar`, { personal });
   } catch (error) {
     console.error(error);
     res.status(500).send("Erro ao carregar a página de edição");
   }
 };
+const renderizaPerfilAluno = async (req, res) => {
+  try {
+    const { id_aluno } = req.params; // Pega o id do aluno da URL
+
+    // Aqui, você pode buscar o aluno pelo ID no banco de dados
+    const aluno = await Aluno.findById(id_aluno); // Substitua pelo método de consulta do seu banco de dados
+
+    if (!aluno) {
+      return res.status(404).send("Aluno não encontrado");
+    }
+
+    // Passa o aluno para o template
+    res.render("personal/perfilAluno", { aluno });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Erro ao carregar perfil do aluno");
+  }
+};
+
 module.exports = {
   criarPersonal,
   listarPersonais,
@@ -343,4 +371,5 @@ module.exports = {
   adicionarAluno,
   removerAluno,
   editarPersonal,
+  renderizaPerfilAluno,
 };

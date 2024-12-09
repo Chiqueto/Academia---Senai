@@ -47,12 +47,16 @@ router.get("/buscarPersonal/", personalController.buscarPersonal);
 router.delete("/deletar/:id", personalController.deletarPersonal);
 router.post("/atualizar/:id", personalController.atualizarPersonal);
 router.get('/listaAlunos/:id_personal', personalController.listarAlunos);
+router.get(
+  "/:id_personal/perfilAluno/:id_aluno",
+  personalController.renderizaPerfilAluno
+);
 
 
 //exercicios para personais
 router.post("/criarExercicio/:id_personal", ExercicioController.criarExercicio);
 router.post('/adicionarAluno/:id_personal', personalController.adicionarAluno);
-router.delete('/removerAluno/:id_aluno', personalController.removerAluno);
+router.delete('/removerAluno/:id_aluno/:id_personal', personalController.removerAluno);
 
 //router.post('/:id_personal/adicionarAluno', personalController.adicionarAluno);
 
