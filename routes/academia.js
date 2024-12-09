@@ -17,7 +17,10 @@ router.get("/academia/alunos", (req, res) => {
   res.render("academia/alunos", { id: id });
 });
 
-router.get("/menu/:id", academiaController.renderizaMenu);
+router.get('/academia/menu/:id', async (req, res) => {
+  const { id } = req.params;
+  res.render("academia/menuAcademia", {id: id});
+});
 
 router.get("/perfil/:id", academiaController.renderizaPerfil);
 
@@ -29,11 +32,8 @@ router.get("/equipamento/:id", academiaController.renderizaEquipamento);
 
 router.get("/editar/:id", academiaController.editarAcademia);
 router.post("/atualizar/:id", academiaController.atualizaAcademia);
-router.delete(
-  "/removerPersonal/:idPersonal",
-  academiaController.deletarPersonal
-);
-router.delete("/removerALuno/:idAluno", academiaController.deletarAluno);
+router.delete("/removerPersonal/:idPersonal", academiaController.deletarPersonal);
+router.delete("/removerALuno/:idAluno" , academiaController.deletarAluno);
 
 router.get("/adcEquipamento", (req, res) => {
   res.render("academia/adcEquipamento");
@@ -67,12 +67,9 @@ router.delete(
 );
 router.post("/login", academiaController.autenticaAcademia);
 
-router.post(
-  "/inserirPersonal/:id_academia",
-  academiaController.inserirPersonal
-);
-router.post("/inserirAluno/:id_academia", academiaController.adicionarAluno);
-console.log(`Adicionando aluno à academia `);
+router.post("/inserirPersonal/:id_academia", academiaController.inserirPersonal);
+router.post("/inserirAluno/:id_academia", academiaController.adicionarAluno) 
+  console.log(`Adicionando aluno à academia `);
 
 // router.post("/inserirAluno", academiaController.inserirAluno);
 module.exports = router;
