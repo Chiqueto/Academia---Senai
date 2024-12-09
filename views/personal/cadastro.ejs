@@ -1,13 +1,11 @@
 <!DOCTYPE html>
-
 <html>
   <head>
     <meta lang="pt-br" />
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="/styles/output.css" />
-    <script src="/scripts/personalCadastro.js" defer></script>
-    <title>Cadastro</title>
+    <title>Cadastro de Personal</title>
   </head>
   <body class="flex flex-col min-h-screen">
     <header>
@@ -15,16 +13,21 @@
         <div class="flex items-center gap-4">
           <a href="/personal"><img src="/icons/back_arrow.svg" /></a>
           <h1 class="font-jaro text-zinc-50 text-3xl">GymFit</h1>
-          <!-- <img src="/icons/GymFit.svg" /> -->
         </div>
       </nav>
     </header>
 
     <main class="text-center my-10 text-white mx-4 flex-grow">
       <section class="font-zain bg-zinc-50 text-zinc-950 py-4 rounded-2xl">
-        <h2 class="text-4xl">Cadastrar</h2>
-        <!-- Formulário de inserção -->
-        <form onsubmit="/personal/cadastro" method="post" class="flex flex-col text-2xl gap-6 text-black">
+        <h2 class="text-4xl">Cadastrar Personal</h2>
+        <!-- Elemento para exibir mensagens -->
+
+        <form
+          id="formCadastro"
+          action="/personal/cadastro"
+          method="post"
+          class="flex flex-col text-2xl gap-6 text-black"
+        >
           <div class="flex flex-col gap-2 px-6">
             <label class="text-start" for="nome">Nome</label>
             <input
@@ -32,7 +35,9 @@
               type="text"
               name="nome"
               placeholder="Nome"
-              required minlength="5" maxlength="50" placeholder="Nome"
+              required
+              minlength="5"
+              maxlength="50"
             />
           </div>
 
@@ -43,11 +48,11 @@
               type="email"
               name="email"
               placeholder="seuemail@exemplo.com.br"
-              required minlength="5" maxlength="25"
+              required
+              minlength="5"
+              maxlength="25"
             />
           </div>
-
-          
 
           <div class="flex flex-col gap-2 px-6">
             <label class="text-start" for="cref">CREF</label>
@@ -56,78 +61,57 @@
               type="text"
               name="cref"
               placeholder="0000-G/SC"
-              required minlength="7" maxlength="9"
+              required
+              minlength="7"
+              maxlength="9"
             />
           </div>
-          <div class="flex flex-row px-6 gap-3">
-<div class="flex flex-col w-2/3 gap-2">
-            <label class="text-start" for="cidade">Cidade</label>
-            <input
-              class="border-2 border-black rounded-full bg-pink-50 text-lg px-2 py-1 text-center"
-              type="text"
-              name="cidade"
-              placeholder="Cidade"
-              required minlength="3"
-            />
-          </div>
-          <div class="flex flex-col w-1/3 gap-2">
-            <label class="text-start" for="uf">UF</label>
-            <select
-              name="uf"
-              id="uf"
-              class="border-2 border-black rounded-full bg-pink-50 text-lg px-2 py-1 text-center"
-            >
-              <option value="SP">SP</option>
-              <option value="MG">MG</option>
-              <option value="RJ">RJ</option>
-            </select>
-          </div></div>
+
           <div class="flex flex-col gap-2 px-6">
             <label class="text-start" for="cep">CEP</label>
             <input
               class="border-2 border-black rounded-full bg-pink-50 text-lg px-2 py-1 text-center"
               type="text"
               name="cep"
-              placeholder="Apenas números. Ex: 14610000"
+              placeholder="00000-000"
               required
-              minlength="9"
+              minlength="8"
               maxlength="9"
-              title="Digite um CEP com 8 digitos"
+              pattern="\d{5}-\d{3}"
+              title="Digite um CEP válido, ex 00000-000"
+              id="cep"
+              inputmode="numeric"
+              oninput="this.value = this.value.replace(/\D/g, '').replace(/^(\d{5})(\d)/, '$1-$2').slice(0, 9)"
             />
           </div>
 
-          
-
           <div class="flex flex-col gap-2 px-6">
-            <label class="text-start" for="especialidade">Especialidade</label>
-
-            <select
-              name="especialidade"
-              id="especialidade"
-              class="border-2 border-black rounded-full bg-pink-50 text-lg px-2 py-1 text-center"
-              placeholder="Especialidade"
-              required
-            >
-              >
-              <option class="text-sm" value="teste">Hipertrofia</option>
-              <option class="text-sm" value="teste">Esporte</option>
-              <option class="text-sm" value="teste">Força</option>
-            </select>
-          </div>
-
-          <div class="flex flex-col gap-2 px-6">
-            <label class="text-start" for="descricao">Descrição</label>
+            <label class="text-start" for="cidade">Cidade</label>
             <input
               class="border-2 border-black rounded-full bg-pink-50 text-lg px-2 py-1 text-center"
               type="text"
-              name="descricao"
-              placeholder="Descreva suas habilidades como personal"
-              required minlength="20" maxlength="500"
+              name="cidade"
+              placeholder="Cidade"
+              required
+              minlength="2"
+              maxlength="50"
             />
           </div>
 
-
-          
+          <div class="flex flex-col gap-2 px-6">
+            <label class="text-start" for="uf">UF</label>
+            <input
+              class="border-2 border-black rounded-full bg-pink-50 text-lg px-2 py-1 text-center"
+              type="text"
+              name="uf"
+              placeholder="UF"
+              required
+              minlength="2"
+              maxlength="2"
+              pattern="[A-Z]{2}"
+              title="Digite a UF com 2 letras maiúsculas"
+            />
+          </div>
 
           <div class="flex flex-col gap-2 px-6">
             <label class="text-start" for="telefone">Telefone</label>
@@ -136,25 +120,33 @@
               type="text"
               name="telefone"
               placeholder="(16) 99996-6044"
-              required minlength="14" maxlength="15"
-              
-              title="Digite um telefone com 11"
-              
-              
+              required
+              minlength="15"
+              maxlength="16"
+              pattern="\(\d{2}\) \d{4,5}-\d{4}"
+              title="Digite um telefone com 10 ou 11 dígitos"
+              id="telefone"
+              inputmode="numeric"
+              oninput="this.value = this.value.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3')"
             />
           </div>
-<div class="flex flex-col gap-2 px-6">
+
+          <div class="flex flex-col gap-2 px-6">
             <label class="text-start" for="senha">Senha</label>
             <input
               class="border-2 border-black rounded-full bg-pink-50 text-lg px-2 py-1 text-center"
               type="password"
               name="senha"
               placeholder="*********"
-              required minlength="6" maxlength="30"
+              required
+              maxlength="30"
             />
           </div>
+          <div id="mensagem" class="text-lg font-bold mb-4"></div>
           <button
-            class="bg-neonGreen rounded-xl py-2 hover:bg-neonGreenHover transition-colors text-zinc-50 font-zain text-4xl mx-12">
+            type="submit"
+            class="bg-neonGreen rounded-xl py-2 hover:bg-neonGreenHover transition-colors text-zinc-50 font-zain text-4xl mx-12"
+          >
             Cadastrar
           </button>
         </form>
@@ -164,5 +156,54 @@
     <footer class="text-zinc-200 p-4 text-center">
       <p>&copy Luís Felipe, Edney Araujo, Marília</p>
     </footer>
+
+    <script>
+      document
+        .getElementById("formCadastro")
+        .addEventListener("submit", async function (event) {
+          event.preventDefault(); // Evita o envio padrão do formulário
+
+          const form = event.target;
+          const formData = new FormData(form);
+          const formDataJson = JSON.stringify(
+            Object.fromEntries(formData.entries())
+          );
+          const url = form.action;
+
+          try {
+            const response = await fetch(url, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: formDataJson,
+            });
+
+            const data = await response.json();
+            const mensagemEl = document.getElementById("mensagem");
+
+            if (response.ok) {
+              mensagemEl.textContent =
+                data.message || "Cadastro realizado com sucesso!";
+              mensagemEl.className = "text-green-500";
+              form.reset(); // Limpa o formulário após o sucesso
+
+              // Redireciona após 2 segundos
+              setTimeout(() => {
+                window.location.href = data.redirectTo;
+              }, 2000);
+            } else {
+              mensagemEl.textContent =
+                data.message || "Erro ao realizar cadastro.";
+              mensagemEl.className = "text-red-500";
+            }
+          } catch (error) {
+            console.error("Erro:", error);
+            const mensagemEl = document.getElementById("mensagem");
+            mensagemEl.textContent = "Ocorreu um erro. Tente novamente.";
+            mensagemEl.className = "text-red-500";
+          }
+        });
+    </script>
   </body>
 </html>

@@ -14,7 +14,6 @@
         <div class="flex items-center gap-4">
           <a href="/aluno"><img src="/icons/back_arrow.svg" /></a>
           <h1 class="font-jaro text-zinc-50 text-3xl">GymFit</h1>
-          <!-- <img src="/icons/GymFit.svg" /> -->
         </div>
       </nav>
     </header>
@@ -22,7 +21,13 @@
     <main class="text-center my-10 text-white mx-4 flex-grow">
       <section class="font-zain bg-zinc-50 text-zinc-950 py-4 rounded-2xl">
         <h2 class="text-4xl">Cadastrar</h2>
-        <form onsubmit="/aluno/cadastro" method="post" class="flex flex-col text-2xl gap-6 text-black">
+
+        <form
+          id="formCadastro"
+          action="/aluno/cadastro"
+          method="post"
+          class="flex flex-col text-2xl gap-6 text-black"
+        >
           <div class="flex flex-col gap-2 px-6">
             <label class="text-start" for="nome">Nome</label>
             <input
@@ -30,9 +35,10 @@
               type="text"
               name="nome"
               placeholder="Nome"
-              required minlength="5" maxlength="50"
+              required
+              minlength="5"
+              maxlength="50"
             />
-           
           </div>
 
           <div class="flex flex-col gap-2 px-6">
@@ -42,9 +48,10 @@
               type="email"
               name="email"
               placeholder="seuemail@exemplo.com.br"
-              required minlength="5" maxlength="25"
+              required
+              minlength="5"
+              maxlength="25"
             />
-            
           </div>
 
           <div class="flex flex-col gap-2 px-6">
@@ -55,7 +62,8 @@
               class="border-2 border-black rounded-full bg-pink-50 text-lg px-2 py-1 text-center"
               type="date"
               name="dt_nascimento"
-              min="1900-01-01" max="2023-12-31"
+              min="1900-01-01"
+              max="2023-12-31"
               required
             />
           </div>
@@ -99,15 +107,16 @@
               type="text"
               name="telefone"
               placeholder="(16) 99996-6044"
-              required minlength="11" maxlength="12"
-              pattern="\d{10,11}"
+              required
+              minlength="15"
+              maxlength="16"
+              pattern="\(\d{2}\) \d{4,5}-\d{4}"
               title="Digite um telefone com 10 ou 11 dígitos"
               id="telefone"
               inputmode="numeric"
-              oninput="this.value = this.value.replace(/[^0-9]/g, '')"
-              />
+              oninput="this.value = this.value.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3')"
+            />
           </div>
-          
 
           <div class="flex flex-col gap-2 px-6">
             <label class="text-start" for="senha">Senha</label>
@@ -116,12 +125,16 @@
               type="password"
               name="senha"
               placeholder="*********"
-              required minlength="4" maxlength="30"
+              required
+              maxlength="30"
             />
           </div>
-
+          <!-- Elemento para exibir mensagens -->
+          <div id="mensagem" class="text-lg font-bold mb-4"></div>
           <button
-            class="bg-neonGreen rounded-xl py-2 hover:bg-neonGreenHover transition-colors text-zinc-50 font-zain text-4xl mx-12">
+            type="submit"
+            class="bg-neonGreen rounded-xl py-2 hover:bg-neonGreenHover transition-colors text-zinc-50 font-zain text-4xl mx-12"
+          >
             Cadastrar
           </button>
         </form>
@@ -131,5 +144,54 @@
     <footer class="text-zinc-200 p-4 text-center">
       <p>&copy Luís Felipe, Edney Araujo, Marília</p>
     </footer>
+
+    <script>
+      document
+        .getElementById("formCadastro")
+        .addEventListener("submit", async function (event) {
+          event.preventDefault(); // Evita o envio padrão do formulário
+
+          const form = event.target;
+          const formData = new FormData(form);
+          const formDataJson = JSON.stringify(
+            Object.fromEntries(formData.entries())
+          );
+          const url = form.action;
+
+          try {
+            const response = await fetch(url, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: formDataJson,
+            });
+
+            const data = await response.json();
+            const mensagemEl = document.getElementById("mensagem");
+
+            if (response.ok) {
+              mensagemEl.textContent =
+                data.message || "Cadastro realizado com sucesso!";
+              mensagemEl.className = "text-green-500";
+              form.reset(); // Limpa o formulário após o sucesso
+
+              // Redireciona após 2 segundos
+              setTimeout(() => {
+                window.location.href = data.redirectTo;
+              }, 2000);
+            } else {
+              mensagemEl.textContent =
+                data.message || "Erro ao realizar cadastro.";
+              mensagemEl.className = "text-red-500";
+            }
+          } catch (error) {
+            console.error("Erro:", error);
+            const mensagemEl = document.getElementById("mensagem");
+            mensagemEl.textContent = "Ocorreu um erro. Tente novamente.";
+            mensagemEl.className = "text-red-500";
+          }
+        });
+    </script>
   </body>
 </html>
