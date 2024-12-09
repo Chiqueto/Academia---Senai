@@ -56,10 +56,31 @@ router.get(
 //exercicios para personais
 router.post("/criarExercicio/:id_personal", ExercicioController.criarExercicio);
 router.post("/adicionarAluno/:id_personal", personalController.adicionarAluno);
-router.delete(
-  "/removerAluno/:id_aluno/:id_personal",
-  personalController.removerAluno
-);
+// router.delete('/personal/removerAluno/:id_personal/:id_aluno', async (req, res) => {
+//   const { id_personal, id_aluno } = req.params;
+//   try {
+//     // Lógica para remover aluno do banco de dados
+//     const alunoRemovido = await Aluno.destroy({
+//       where: {
+//         id: id_aluno,
+//         personalId: id_personal, // Certifique-se de que a relação existe no banco
+//       },
+//     });
+
+//     if (alunoRemovido) {
+//       res.status(200).json({ message: 'Aluno removido com sucesso!' });
+//     } else {
+//       res.status(404).json({ error: 'Aluno não encontrado ou já removido.' });
+//     }
+//   } catch (error) {
+//     console.error('Erro ao remover aluno:', error);
+//     res.status(500).json({ error: 'Erro interno no servidor.' });
+//   }
+// });
+
+router.delete("/personal/removerAluno/:id_personal/:id_aluno", personalController.removerAluno)
+
+
 
 //router.post('/:id_personal/adicionarAluno', personalController.adicionarAluno);
 
