@@ -351,7 +351,7 @@ const editarPersonal = async (req, res) => {
 };
 const renderizaPerfilAluno = async (req, res) => {
   try {
-    const { id_aluno } = req.params; // Pega o id do aluno da URL
+    const { id_personal, id_aluno } = req.params; // Pega o id do aluno da URL
 
     // Aqui, você pode buscar o aluno pelo ID no banco de dados
     const aluno = await Aluno.findById(id_aluno); // Substitua pelo método de consulta do seu banco de dados
@@ -361,7 +361,7 @@ const renderizaPerfilAluno = async (req, res) => {
     }
 
     // Passa o aluno para o template
-    res.render("personal/perfilAluno", { aluno });
+    res.render("personal/perfilAluno", { id_personal, aluno });
   } catch (error) {
     console.error(error);
     res.status(500).send("Erro ao carregar perfil do aluno");

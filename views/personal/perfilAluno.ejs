@@ -11,7 +11,7 @@
     <header>
       <nav class="flex justify-between bg-zinc-800 py-5 px-4">
         <div class="flex items-center gap-4">
-          <a href="/personal/menuPersonal/"
+          <a href="/personal/listaAlunos/<%= id_personal %>"
             ><img src="/icons/back_arrow.svg"
           /></a>
           <a href="/views/index.ejs"
@@ -32,15 +32,15 @@
         </div>
         <div class="p-2 text-2xl">
           <h2 class="mx-2">Email: <%= aluno.email %></h2>
-          <h2 class="mx-2"> Sexo: <%= aluno.genero == "M" ? "Masculino" : "Feminino" %></h2>
+          <h2 class="mx-2">
+            Sexo: <%= aluno.genero == "M" ? "Masculino" : "Feminino" %>
+          </h2>
           <h2 class="mx-2">Idade: <%= aluno.idade %></h2>
           <h2 class="mx-2">
             Contato: <%= aluno.telefone.replace(/\D/g,
             '').replace(/^(\d{2})(\d)/, '($1) $2').replace(/(\d{5})(\d)/,
             '$1-$2').slice(0, 15) %>
           </h2>
-
-         
         </div>
 
         <!-- <button
