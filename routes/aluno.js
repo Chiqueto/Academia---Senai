@@ -57,8 +57,18 @@ router.get(
 // });
 
 router.get(
+  "/:id_aluno/perfilPersonal/:id_personal",
+  alunoController.renderizaPerfilPersonal
+);
+
+router.get(
   "/encontrarPersonal/:id_aluno",
   alunoController.renderizaListaPersonais
+);
+
+router.get(
+  "/:id_aluno/perfilAcademia/:id_academia",
+  alunoController.renderizaPerfilAcademia
 );
 
 router.get("/montarTreino/:id_aluno", alunoController.renderizaMontarTreino);
