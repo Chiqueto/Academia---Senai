@@ -58,10 +58,8 @@ const criarAluno = async (req, res) => {
       return res.status(400).json({ message: "Erro ao cadastrar aluno" });
     }
 
-    res.status(201).json({
-      message: "Cadastro realizado com sucesso!",
-      redirectTo: "/aluno",
-    });
+    // res.status(201).json(novoAluno);
+    res.redirect("/aluno");
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -109,7 +107,7 @@ const listarAlunos = async (req, res) => {
   }
 };*/
 const buscarAluno = async (req, res) => {
-  const { nome } = req.query;
+  const { nome} = req.query;
 
   console.log("Nome recebido:", nome);
 
@@ -124,6 +122,8 @@ const buscarAluno = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+
 
 const deletarAluno = async (req, res) => {
   const { id } = req.params;
