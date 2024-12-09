@@ -17,7 +17,10 @@ router.get("/academia/alunos", (req, res) => {
   res.render("academia/alunos", { id: id });
 });
 
-router.get("/menu/:id", academiaController.renderizaMenu);
+router.get('/academia/menu/:id', async (req, res) => {
+  const { id } = req.params;
+  res.render("academia/menuAcademia", {id: id});
+});
 
 router.get("/perfil/:id", academiaController.renderizaPerfil);
 

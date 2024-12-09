@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken");
 const Aluno = require("../models/aluno.js");
 const { addAluno, removeAluno } = require("../models/personal");
 require("dotenv").config();
+const Exercicio = require("../models/exercicio.js");
 
 const SECRET_KEY = process.env.SECRET_KEY;
 
@@ -322,6 +323,18 @@ const removerAluno = async (req, res) => {
   }
 };
 
+const renderizaCriarExercicio = async (req, res) => {
+  const { id_personal } = req.params;
+
+  try {
+    const exercicios = await Exercicio.getExerciciosByPersonal(id_personal);
+    res.render(`personal/criarExercicio`, { id_personal, exercicios });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Erro ao renderizar tela." });
+  }
+};
+
 const editarPersonal = async (req, res) => {
   const { id } = req.params;
 
@@ -372,4 +385,5 @@ module.exports = {
   removerAluno,
   editarPersonal,
   renderizaPerfilAluno,
+  renderizaCriarExercicio,
 };

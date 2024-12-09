@@ -5,12 +5,9 @@ const ExercicioController = require("../controllers/exercicio");
 const TreinoController = require("../controllers/treino");
 // const { authMiddleware } = require("../middleware/authMiddleware");
 
-
-router.get('/personal/:id', (req, res) => {
-  res.send('Rota interceptada!');
+router.get("/personal/:id", (req, res) => {
+  res.send("Rota interceptada!");
 });
-
-
 
 router.get("/", personalController.renderizaLogin);
 router.get("/cadastro", personalController.renderizaCadastro);
@@ -22,9 +19,8 @@ router.get("/menuPersonal", (req, res) => {
 });
 router.get("/menuPersonal/:id", personalController.renderizaMenu);
 
-
 //router.get("/opcaoTreinoPersonal", (req, res) => {
- // res.render("personal/opcaoTreinoPersonal");
+// res.render("personal/opcaoTreinoPersonal");
 //});
 
 router.get("/opcaoTreinoPersonal/:id", (req, res) => {
@@ -46,17 +42,24 @@ router.get("/listaPersonais", personalController.listarPersonais);
 router.get("/buscarPersonal/", personalController.buscarPersonal);
 router.delete("/deletar/:id", personalController.deletarPersonal);
 router.post("/atualizar/:id", personalController.atualizarPersonal);
-router.get('/listaAlunos/:id_personal', personalController.listarAlunos);
+router.get("/listaAlunos/:id_personal", personalController.listarAlunos);
 router.get(
   "/:id_personal/perfilAluno/:id_aluno",
   personalController.renderizaPerfilAluno
 );
 
+router.get(
+  "/criarExercicio/:id_personal",
+  personalController.renderizaCriarExercicio
+);
 
 //exercicios para personais
 router.post("/criarExercicio/:id_personal", ExercicioController.criarExercicio);
-router.post('/adicionarAluno/:id_personal', personalController.adicionarAluno);
-router.delete('/removerAluno/:id_aluno/:id_personal', personalController.removerAluno);
+router.post("/adicionarAluno/:id_personal", personalController.adicionarAluno);
+router.delete(
+  "/removerAluno/:id_aluno/:id_personal",
+  personalController.removerAluno
+);
 
 //router.post('/:id_personal/adicionarAluno', personalController.adicionarAluno);
 
@@ -78,5 +81,5 @@ router.post(
   "/:id_aluno/treino/:id_treino/addExercicio",
   TreinoController.adicionarExercicios
 );
-router.get("/editar/:id",  personalController.editarPersonal);
+router.get("/editar/:id", personalController.editarPersonal);
 module.exports = router;
