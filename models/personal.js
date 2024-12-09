@@ -93,7 +93,7 @@ const loginPersonal = async (email) => {
   return result.rows[0];
 };
 
-const findAlunoByPersonalId = async (personalId) => {
+const findAluno = async (personalId) => {
   console.log("Personal ID recebido:", personalId);
   const result = await pool.query(
     "SELECT * FROM tb_aluno WHERE id IN (SELECT id_aluno FROM tb_alunos_personais WHERE id_personal = $1 )",
@@ -114,19 +114,19 @@ const findByEmail = async (email) => {
   return result.rows[0];
 };
 
-const addAluno = async (idPersonal, idAluno) => {
+const adicionarAluno = async ( id_aluno,id_personal) => {
   const result = await pool.query(
-    "INSERT INTO tb_alunos_personais (id_personal, id_aluno) VALUES ($1, $2) RETURNING *",
-    [idPersonal, idAluno]
+    "INSERT INTO tb_alunos_personais (id_aluno, id_personal) VALUES ($1, $2) RETURNING *",
+    [id_aluno,id_personal ]
   );
 
   return result.rows[0];
 };
 
-const removeAluno = async (idPersonal, idAluno) => {
+const removerAluno = async ( id_aluno,id_personal) => {
   const result = await pool.query(
-    "DELETE FROM tb_alunos_personais WHERE id_personal = $1 AND id_aluno = $2",
-    [idPersonal, idAluno]
+    "DELETE FROM tb_alunos_personais WHERE id_aluno = $1 AND id_personal = $2",
+    [id_aluno,id_personal]
   );
   return result.rowCount;
 };
@@ -140,7 +140,7 @@ module.exports = {
   loginPersonal,
   findByEmail,
   findByNome,
-  findAlunoByPersonalId,
-  removeAluno,
-  addAluno,
+  findAluno,
+  removerAluno,
+  adicionarAluno,
 };

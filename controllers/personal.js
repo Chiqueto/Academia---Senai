@@ -111,9 +111,9 @@ const listarPersonais = async (req, res) => {
 const listarAlunos = async (req, res) => {
   const { id_personal } = req.params;
   try {
-    const alunos = await Personal.findAlunoByPersonalId(id_personal);
+    const alunos = await Personal.findAluno(id_personal);
     const all_alunos = await Aluno.findAll(); // Garante que pega todos os alunos
-    res.render("personal/listaAlunos", { alunos, all_alunos, message: null, id_personal });
+    res.render("personal/listaAlunos", { alunos, all_alunos,  id_personal });
   } catch (error) {
     console.error("Erro ao listar alunos:", error);
     res.status(500).render("personal/listaAlunos", {
@@ -276,18 +276,15 @@ const autenticaPersonal = async (req, res) => {
 
 
 const adicionarAluno = async (req, res) => {
-  try {
+  
     const { id_aluno } = req.body; // Pega o idAluno do corpo da requisição
     const { id_personal } = req.params; // Pega o idPersonal da URL
 
     console.log("ID do Aluno:", id_aluno);
     console.log("ID do Personal:", id_personal);
 
-    if (!id_aluno || !id_personal) {
-      return res.status(400).json({ error: "id_aluno e id_personal são obrigatórios." });
-    }
-
-    const alunoPersonal = await addAluno(id_personal, id_aluno);
+try {
+    const alunoPersonal = await adicionarAluno(id_personal, id_aluno);
     res.status(201).json({alunoPersonal, message: "Aluno inserido com sucesso!"});
   } catch (error) {
     console.error(error);
@@ -295,16 +292,17 @@ const adicionarAluno = async (req, res) => {
   }
 };
 
+
 const removerAluno = async (req, res) => {
   try {
-    const { idAluno } = req.body; // Pega o idAluno do corpo da requisição
-    const { idPersonal } = req.params; // Pega o idPersonal da URL
-
-    if (!idAluno || !idPersonal) {
+    const { id_aluno } = req.body; 
+    const { id_personal } = req.params; // Pega o idPersonal da URL
+   
+    if (!id_personal || !id_aluno) {
       return res.status(400).json({ error: "ID do Aluno e ID do Personal são obrigatórios." });
     }
 
-    const rowsDeleted = await removeAluno(idPersonal, idAluno);
+    const rowsDeleted = await removerAluno(id_aluno, id_personal);
     if (rowsDeleted === 0) {
       return res.status(404).json({ error: "Relação não encontrada." });
     }

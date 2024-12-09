@@ -48,13 +48,16 @@ router.get('/listaAlunos/:id_personal', personalController.listarAlunos);
 
 //exercicios para personais
 router.post("/criarExercicio/:id_personal", ExercicioController.criarExercicio);
-router.post('/:id_personal/adicionarAluno', personalController.adicionarAluno);
+router.post('/adicionarAluno/:id_personal', personalController.adicionarAluno);
+router.delete('/removerAluno/:id_aluno', personalController.removerAluno);
+
+//router.post('/:id_personal/adicionarAluno', personalController.adicionarAluno);
+
 router.put(
   "/atualizarExercicio/:id_personal/:id_exercicio",
   ExercicioController.atualizarExercicio
 );
 router.delete("/deletarExercicio/:id", ExercicioController.deletarExercicio);
-router.delete('/:id_personal/remover', personalController.removerAluno);
 router.get(
   "/exercicios/:id_personal",
   ExercicioController.listarExerciciosByPersonal
@@ -68,6 +71,5 @@ router.post(
   "/:id_aluno/treino/:id_treino/addExercicio",
   TreinoController.adicionarExercicios
 );
-
 router.get("/editar/:id",  personalController.editarPersonal);
 module.exports = router;

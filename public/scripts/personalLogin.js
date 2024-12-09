@@ -33,6 +33,32 @@ async function autenticar(event) {
     }
   }
   
+   // Validação do formulário de login
+   document.querySelector("#loginForm").addEventListener("submit", function (event) {
+    const email = document.querySelector("input[name='email']").value.trim();
+    const senha = document.querySelector("input[name='senha']").value.trim();
+
+    // Regex para validação do email e senha
+    const emailRegex = /^[^\s@]+@(gmail\.com|hotmail\.com|outlook\.com)$/; // Valida domínio específico
+    const errors = [];
+
+    // Validação de email
+    if (!emailRegex.test(email)) {
+      errors.push("Email inválido. O domínio deve ser gmail.com, hotmail.com ou outlook.com.");
+    }
+
+    // Validação de senha
+    if (senha.length < 6) {
+      errors.push("A senha deve ter pelo menos 6 caracteres.");
+    }
+
+    // Mostrar erros se houver
+    if (errors.length > 0) {
+      event.preventDefault(); // Evita o envio do formulário
+      alert(errors.join("\n"));
+    }
+  });
+
   // Adiciona o evento de submit ao formulário de login
   document.getElementById("loginForm").addEventListener("submit", autenticar);
   

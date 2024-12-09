@@ -5,21 +5,21 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link href="/styles/output.css" rel="stylesheet" />
-    <title>Opções de Treinos</title>
+    <title>Lista de Alunos</title>
   </head>
 
   <body class="flex flex-col min-h-screen">
     <header>
       <nav class="flex justify-between bg-zinc-800 py-5 px-4">
         <div class="flex items-center gap-4">
-          <a href="/aluno/menu"><img src="/icons/back_arrow.svg" /></a>
+          <a href="/aluno/menu/"><img src="/icons/back_arrow.svg" /></a>
           <h1 class="font-jaro text-zinc-50 text-3xl">GymFit</h1>
         </div>
       </nav>
     </header> 
     <main class=" mx-4 flex-grow"><!--Começo do perfil-->
       <section class="font-zain  px-4">
-          <h2 class="text-3xl text-center text-white py-2">Lista de Personal</h2>
+          <h2 class="text-3xl text-center text-white py-2">Lista de Alunos</h2>
           <div class="relative w-full ">
             <input type="text" placeholder="Pesquisar pelo nome do personal..."
               class="w-full py-1 pl-10 pr-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-gray-700 placeholder-gray-400">
@@ -28,7 +28,6 @@
             </div>
           </div><br>
           
-          <div>
             <% if (alunos && alunos.length > 0) { %>
               <% alunos.forEach(aluno => { %>
                 <div class="container bg-white rounded-lg flex items-center p-3 shadow-md w-auto mb-2">
@@ -36,20 +35,18 @@
                     <img src="/icons/user.svg" class="w-10 h-8" alt="Usuário">
                   </div>
                   <span class="ml-4 text-2xl text-gray-900 font-semibold"><%= aluno.nome %></span>
-          
-                  <!-- Botão de Delete com evento para chamar função de deletação -->
+                  <span class="ml-4 text-xl text-gray-900 ">Cod: <%= aluno.id %></span>
                   <button 
-                  class="ml-auto bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors"
-                  onclick="desmatricularAluno('<%= aluno.id %>')">
-                  
-                  Desvincular
+                  class="ml-auto px-4 py-2 rounded-lg"
+                  onclick="removerAluno('<%= aluno.id %>')">
+                 <img src="/icons/delete.svg" class="w-8 h-8">
                 </button>
                 </div>
               <% }) %>
             <% } else { %>
               <p class="text-gray-500">Nenhum aluno encontrado.</p>
             <% } %>
-          </div>
+      </section>
 
           <div id="searchModal" class="hidden fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center">
             <div class="bg-white p-6 rounded-lg shadow-lg w-96">
@@ -62,113 +59,117 @@
                 placeholder="Buscar aluno..."
               />
               <ul id="searchResults" class="max-h-60 overflow-y-auto space-y-2">
-                <% if (all_alunos && all_alunos.length > 0) { %>
-                  <% all_alunos.forEach(aluno => { %>
-                    <li
-                      class="flex justify-between items-center p-2 border-b bg-gray-50 hover:bg-gray-100 transition"
-                      data-nome="<%= aluno.nome.toLowerCase() %>">
-                      <span><%= aluno.nome %></span>
-                      <button
-                        class="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600 transition"
-                        onclick="inserirAluno('<%= aluno.id %>')">
-                        Adicionar
-                      </button>
-                    </li>
-                  <% }) %>
-                <% } else { %>
-                  <p class="text-gray-500 text-center">Nenhum aluno encontrado.</p>
-                <% } %>
+                
               </ul>
             </div>
           </div>
           
-    
+          <button id="openSearchModal" class="mx-auto bg-neonGreen rounded-xl px-4 py-2 hover:bg-neonGreenHover transition-colors text-zinc-50 font-zain text-4xl">
+          Adicionar
+        </button>
+
         <script>
+    document.getElementById('openSearchModal').addEventListener('click', () => {
+      document.getElementById('searchModal').classList.remove('hidden');
+    });
 
-async function inserirAluno(id_aluno) {
-  try {
-    const id_personal = '<%= id_personal %>'; // Obtemos o ID do personal do EJS
+    document.getElementById('closeSearchModal').addEventListener('click', () => {
+      document.getElementById('searchModal').classList.add('hidden');
+    });
 
-    if (!id_aluno || !id_personal) {
-      alert('Erro: ID do aluno ou do personal não encontrado.');
-      return;
+    // Buscar personais
+    document.getElementById('searchInput').addEventListener('input', async (event) => {
+      const query = event.target.value.trim();
+
+  if (query.length > 1) {
+    try {
+      const response = await fetch(`/aluno/buscarAluno?nome=${query}`);
+      const alunos = await response.json();
+
+      const resultsList = document.getElementById('searchResults');
+      resultsList.innerHTML = ''; 
+
+      if (Array.isArray(alunos) && alunos.length > 0) {
+        alunos.forEach((aluno) => {
+          const li = document.createElement('li');
+          li.classList.add('flex', 'justify-between', 'items-center', 'p-2', 'border-b');
+          li.innerHTML = `
+            <div class="flex items-center gap-2">
+              <div class="rounded-full bg-pink-200 w-10 h-10 flex items-center justify-center">
+                <img src="/icons/user.svg" class="w-7 h-8" alt="Usuário">
+              </div>
+              <span class="ml-4 text-2xl text-gray-900 font-semibold">${aluno.nome}</span>
+              <span class="ml-4 text-xl text-gray-900 ">Cod: ${aluno.id}</span>
+            </div>
+            <button 
+              class="bg-blue-500 text-white px-2 py-1 rounded" 
+             onclick="adicionarAluno(${aluno.id})">
+              Selecionar
+            </button>
+          `;
+
+          resultsList.appendChild(li);
+        });
+      } else {
+        resultsList.innerHTML = '<li>Nenhum aluno encontrado.</li>';
+      }
+    } catch (error) {
+      console.error('Erro ao buscar alunos:', error);
     }
+  }
+});
 
-    const response = await fetch(`/personal/${id_personal}/adicionarAluno`, {
+// Inserir aluno
+async function adicionarAluno(id_aluno) {
+  try {
+    const id_personal = '<%= id_personal %>'; // Substitua pelo ID real do personal
+    const response = await fetch(`/personal/adicionarAluno/${id_personal}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ id_academia, id_aluno }), // Passando os dados como JSON
+      body: JSON.stringify({ id_aluno: id_aluno }),
     });
 
-    const data = await response.json();
-
+    const result = await response.json();
     if (response.ok) {
-      alert(data.message); // Mensagem de sucesso
-      document.getElementById('searchModal').classList.add('hidden'); // Fechando modal
-      location.reload();
+      alert(result.message);
+      location.reload(); // Recarrega a lista após a adição
     } else {
-      alert('Erro ao adicionar aluno: ' + (data.error || 'Erro desconhecido')); // Mensagem de erro
+      console.error(result.error);
+      alert('Erro ao adicionar aluno.');
     }
   } catch (error) {
-    console.error('Erro ao adicionar aluno:', error); // Log do erro no console
+    console.error('Erro:', error);
   }
 }
-        
 
-         // Abrir aba suspensa
-         document.getElementById('openSearchModal').addEventListener('click', () => {
-          document.getElementById('searchModal').classList.remove('hidden');
-        });
-    
-        // Fechar aba suspensa
-        document.getElementById('closeSearchModal').addEventListener('click', () => {
-          document.getElementById('searchModal').classList.add('hidden');
-        });
-    
-        // Buscar alunos
-        document.getElementById('searchInput').addEventListener('input', async (event) => {
-          const query = event.target.value.toLowerCase();
-          const items = document.querySelectorAll('#searchResults li');
+// Remover aluno
+async function removerAluno(id_aluno) {
+  try {
+    const id_personal = '<%= id_personal %>'; // Substitua pelo ID real do personal
+    const response = await fetch(`/personal/removerAluno/${id_aluno}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ id_personal: id_personal }),
+    });
 
-          items.forEach((item) => {
-    const nome = item.getAttribute('data-nome');
-    if (nome.includes(query)) {
-      item.style.display = 'flex'; // Mostra itens que correspondem
+    const result = await response.json();
+    if (response.ok) {
+      alert(result.message);
+      location.reload(); // Recarrega a lista após a remoção
     } else {
-      item.style.display = 'none'; // Oculta os demais
+      console.error(result.error);
+      alert('Erro ao remover aluno.');
     }
-  });
-});
+  } catch (error) {
+    console.error('Erro:', error);
+  }
+}
 
-          if (query.length > 1) {
-            try {
-              const response = await fetch(`/personal/buscarPersonal?nome=${query}`);
-              const personais = await response.json();
-    
-              const resultsList = document.getElementById('searchResults');
-              resultsList.innerHTML = ''; // Limpa os resultados anteriores
-    
-              if (Array.isArray(personais) && personais.length > 0) {
-                personais.forEach((personal) => {
-                  const li = document.createElement('li');
-                  li.classList.add('flex', 'justify-between', 'items-center', 'p-2', 'border-b');
-                  li.innerHTML = `
-                    <span>${personal.nome}</span>
-                    <button class="bg-blue-500 text-white px-2 py-1 rounded" onclick="inserirPersonal(${personal.id})">Selecionar</button>
-                  `;
-                  resultsList.appendChild(li);
-                });
-              } else {
-                resultsList.innerHTML = '<li>Nenhum personal encontrado.</li>';
-              }
-            } catch (error) {
-              console.error('Erro ao buscar personais:', error);
-            }
-          };
-    
-
+  
         </script>
 
   </body>
