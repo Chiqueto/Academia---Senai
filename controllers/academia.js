@@ -237,13 +237,12 @@ const renderizaMenu = async (req, res) => {
       return res.status(404).send("Academia não encontrada.");
     }
 
-    res.render("menuAcademia", { id, academia });
+    res.render("academia/menuAcademia", { id, academia });
   } catch (error) {
     console.error("Erro ao carregar o menu:", error.message);
     res.status(500).send("Erro interno do servidor.");
   }
 };
-
 
 const renderizaEquipamento = (req, res) => {
   const { id } = req.params;
@@ -261,10 +260,10 @@ const renderizaListaPersonais = async (req, res) => {
 const inserirPersonal = async (req, res) => {
   const { id_personal } = req.body;
   const { id_academia } = req.params;
- console.log("Id do personal:", id_personal);
- console.log("Id do personal:", id_academia);
+  console.log("Id do personal:", id_personal);
+  console.log("Id do personal:", id_academia);
   try {
-    const personais = await Academia.insertPersonal( id_personal, id_academia);
+    const personais = await Academia.insertPersonal(id_personal, id_academia);
     res
       .status(201)
       .json({ message: "Personal inserido com sucesso!", data: personais });
@@ -325,16 +324,14 @@ const adicionarAluno = async (req, res) => {
   const { id_aluno } = req.body;
   const { id_academia } = req.params;
   console.log("Dados recebidos Aluno:", id_aluno);
-  console.log("Dados recebidos Academia:", id_academia);  // Log para depuração
-
+  console.log("Dados recebidos Academia:", id_academia); // Log para depuração
 
   try {
- 
     const alunoAcademia = await Academia.insertAluno(id_aluno, id_academia);
-      res
+    res
       .status(201)
       .json({ alunoAcademia, message: "Aluno inserido com sucesso!" });
-    } catch (error) {
+  } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Erro ao adicionar aluno." });
   }
@@ -384,7 +381,6 @@ const deletarAluno = async (req, res) => {
     res.status(500).json({ error: "Erro ao remover aluno." });
   }
 };
-
 
 const renderizaTreinos = async (req, res) => {
   const { id } = req.params;
