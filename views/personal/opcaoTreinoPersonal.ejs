@@ -1,15 +1,56 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+
+<html>
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Perfil do Personal</title>
+  <meta lang="pt-br" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="/styles/output.css" rel="stylesheet" />
+  <title>Opções de treino</title>
 </head>
-<body>
-  <h1>Perfil do Personal</h1>
-  <p><strong>Nome:</strong> <%= personal.nome %></p>
-  <p><strong>Email:</strong> <%= personal.email %></p>
-  <p><strong>Telefone:</strong> <%= personal.telefone %></p>
-  <p><strong>Descrição:</strong> <%= personal.descricao %></p>
+
+<body class="flex flex-col min-h-screen">
+  <header>
+    <nav class="flex justify-between bg-zinc-800 py-5 px-4">
+      <div class="flex items-center gap-4">
+        <a href="/personal/menuPersonal/<%= id %>"><img src="/icons/back_arrow.svg" /></a>
+        <h1 class="font-jaro text-zinc-50 text-3xl">GymFit</h1>
+        <!-- <img src="/icons/GymFit.svg" /> -->
+      </div>
+    </nav>
+  </header>
+
+  <main class="text-center mt-10 text-white mx-4 flex-grow">
+    <h1>Selecione o Treino</h1>
+    <div class="container mx-auto bg-zinc-600">
+      <div class="grid grid-cols-1 gap-4">
+        <a href="/aluno/treinoA">
+          <div class="bg-neonGreen shadow-md rounded p-3 flex flex-col justify-center items-center">
+            <p class="font-zain text-lg mt-2">Treino A</p>
+          </div>
+        </a>
+
+        <a href="/aluno/treinoB/<%= id %>">
+          <div class="bg-neonGreen shadow-md rounded p-3 flex flex-col justify-center items-center">
+            <p class="font-zain text-lg mt-2">Treino B</p>
+          </div>
+        </a>
+
+        <a href="/aluno/treinoC">
+          <div class="bg-neonGreen shadow-md rounded p-3 flex flex-col justify-center items-center">
+            <p class="font-zain text-lg mt-2">Treino C</p>
+          </div>
+        </a>
+
+      </div>
+    </div>
+    <div class="grid-cols-2 mt-60">
+    <button class="  mt-60 bg-neonGreen rounded-xl px-2 py-2 hover:bg-neonGreenHover transition-colors text-zinc-50  text-3xl ">Novo Treino</button>
+    <button class="   bg-neonGreen rounded-xl px-2 py-2 hover:bg-neonGreenHover transition-colors text-zinc-50  text-3xl ">Criar Treino</button>
+    </div>
+  </main>
+
 </body>
+
 </html>

@@ -40,6 +40,12 @@ router.delete(
   TreinoController.removerExercicio
 );
 
+//DeletarTreino
+router.delete(
+  `/montarTreino/:id_aluno/treino/:id_treino`,
+  TreinoController.deletarTreino
+);
+
 //get exercicio by treino
 router.get(
   "/montarTreino/:id_aluno/treino/:id_treino/exercicios",
@@ -51,8 +57,18 @@ router.get(
 // });
 
 router.get(
+  "/:id_aluno/perfilPersonal/:id_personal",
+  alunoController.renderizaPerfilPersonal
+);
+
+router.get(
   "/encontrarPersonal/:id_aluno",
   alunoController.renderizaListaPersonais
+);
+
+router.get(
+  "/:id_aluno/perfilAcademia/:id_academia",
+  alunoController.renderizaPerfilAcademia
 );
 
 router.get("/montarTreino/:id_aluno", alunoController.renderizaMontarTreino);

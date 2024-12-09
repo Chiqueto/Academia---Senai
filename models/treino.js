@@ -128,7 +128,7 @@ const removeExercise = async (id_treino, id_exercicio) => {
 
 const getExerciciosByTreino = async (id_treino) => {
   const result = await pool.query(
-    "SELECT e.* FROM tb_treino t, tb_exercicio e WHERE t.id = $1 AND e.id IN (SELECT id_exercicio FROM tb_treino_exercicio WHERE id_exercicio = e.id) ",
+    "SELECT e.* FROM tb_treino t, tb_exercicio e WHERE t.id = $1 AND e.id IN (SELECT id_exercicio FROM tb_treino_exercicio WHERE id_exercicio = e.id AND id_treino = t.id) ",
     [id_treino]
   );
 

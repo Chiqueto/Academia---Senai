@@ -259,6 +259,9 @@
         Adicionar
       </button>
     </div>
+    <footer class="text-center py-4 text-sm bg-zinc-800">
+      <p class="text-zinc-50">&copy Luís Felipe, Edney Araujo, Marília</p>
+    </footer>
     <!-- Scripts -->
     <script>
       let idTreinoAtual = null;
@@ -290,6 +293,12 @@
       function fecharMensagem() {
         abrirFormulario();
         window.location.reload();
+      }
+
+      //função para fechar o modal
+      function fecharModalConfirmacao() {
+        const modalConfirmacao = document.getElementById("modalConfirmacao");
+        modalConfirmacao.classList.add("hidden");
       }
 
       // Função para criar treino

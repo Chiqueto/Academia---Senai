@@ -23,10 +23,13 @@ router.get("/menuPersonal", (req, res) => {
 router.get("/menuPersonal/:id", personalController.renderizaMenu);
 
 
-router.get("/opcaoTreinoPersonal", (req, res) => {
-  res.render("personal/opcaoTreinoPersonal");
-});
+//router.get("/opcaoTreinoPersonal", (req, res) => {
+ // res.render("personal/opcaoTreinoPersonal");
+//});
 
+router.get("/opcaoTreinoPersonal/:id", (req, res) => {
+  res.render("personal/opcaoTreinoPersonal", { id: null });
+});
 //Sem a autenticação
 //router.get("/menuPersonal/:id", personalController.renderizaMenu);
 //router.get("/menuPersonal/:id?", personalController.renderizaMenu);
