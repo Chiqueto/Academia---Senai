@@ -6,6 +6,9 @@ const { addAluno, removeAluno } = require("../models/personal");
 require("dotenv").config();
 const Exercicio = require("../models/exercicio.js");
 
+// const id_personal = document.getElementById('listaAlunos').getAttribute('data-id-personal');
+
+
 const SECRET_KEY = process.env.SECRET_KEY;
 
 const formatarTelefone = (telefone) => {
@@ -301,27 +304,46 @@ const adicionarAluno = async (req, res) => {
 };
 
 const removerAluno = async (req, res) => {
-  try {
-    const { id_aluno } = req.body;
-    const { id_personal } = req.params; // Pega o idPersonal da URL
+  const {id_personal, id_aluno} = req.params
+  // const { } = req.body
 
-    if (!id_personal || !id_aluno) {
-      return res
-        .status(400)
-        .json({ error: "ID do Aluno e ID do Personal são obrigatórios." });
-    }
+  try{
+    const response = await Personal.removerAluno(id_aluno, id_personal)
 
-    const rowsDeleted = await removerAluno(id_aluno, id_personal);
-    if (rowsDeleted === 0) {
-      return res.status(404).json({ error: "Relação não encontrada." });
-    }
-
-    res.status(200).json({ message: "Aluno removido com sucesso." });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Erro ao remover aluno." });
+    res.status(201).json({message: "Aluno excluído com sucesso!"})
+  }catch(error){
+    res.status(500).json({error: error.message})
   }
-};
+}
+
+// async function removerAluno(id_aluno) {
+//   try {
+//     const id_personal = document.getElementById('listaAlunos').getAttribute('data-id-personal');
+//     const response = await fetch(`/personal/removerAluno/${id_personal}/${id_aluno}`, {
+//       method: 'DELETE',
+//       headers: {
+//         'Content-Type': 'application/json',
+//       },
+//     });
+
+//     if (response.ok) {
+//       const result = await response.json();
+//       alert(result.message);
+//       // Remove o elemento do DOM
+//       const alunoElement = document.querySelector(`[data-id-aluno="${id_aluno}"]`).parentElement;
+//       alunoElement.remove();
+//     } else {
+//       const error = await response.json();
+//       console.error('Erro no servidor:', error);
+//       alert('Erro ao remover aluno.');
+//     }
+//   } catch (error) {
+//     console.error('Erro no cliente:', error);
+//     alert('Erro ao tentar remover o aluno.');
+//   }
+// }
+
+
 
 const renderizaCriarExercicio = async (req, res) => {
   const { id_personal } = req.params;
