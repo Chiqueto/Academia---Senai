@@ -72,7 +72,11 @@ router.post(
   academiaController.inserirPersonal
 );
 router.post("/inserirAluno/:id_academia", academiaController.adicionarAluno);
-console.log(`Adicionando aluno à academia `);
+
+router.get(
+  "/:id_academia/aluno/:id_aluno",
+  academiaController.renderizaPerfilAluno
+);
 
 // router.post("/inserirAluno", academiaController.inserirAluno);
 module.exports = router;

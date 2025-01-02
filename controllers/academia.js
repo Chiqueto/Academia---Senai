@@ -1,4 +1,5 @@
 const Academia = require("../models/academia.js");
+const Aluno = require("../models/aluno.js");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
@@ -304,9 +305,16 @@ const renderizaListaAlunos = async (req, res) => {
   const { id_academia } = req.params;
   const alunos = await Academia.findStudents(id_academia);
   const academia = await Academia.findById(id_academia);
-  console.log(alunos);
-  console.log(id_academia);
+
   res.render("academia/alunos", { alunos, id_academia, academia });
+};
+
+const renderizaPerfilAluno = async (req, res) => {
+  const { id_academia, id_aluno } = req.params;
+  const aluno = await Aluno.findById(id_aluno);
+
+  console.log(aluno);
+  res.render("academia/perfilAluno", { id_academia, aluno });
 };
 
 // const renderizaListaAlunos = async (req, res) => {
@@ -420,4 +428,5 @@ module.exports = {
   adicionarAluno,
   deletarAluno,
   renderizaTreinos,
+  renderizaPerfilAluno,
 };

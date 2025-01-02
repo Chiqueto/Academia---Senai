@@ -18,11 +18,11 @@
       </nav>
     </header>
     <main class="mx-4 flex-grow">
-      <section class="font-zain px-4">
+      <section class="font-zain px-4 text-center">
         <h2 class="text-3xl text-center text-white py-4">Lista de Alunos</h2>
 
         <% if (alunos && alunos.length > 0) { %> <% alunos.forEach(aluno => { %>
-        <a href="/academia/<%= id_academia %>/perfilAluno/<%= aluno.id %>">
+        <a href="/academia/<%= id_academia %>/aluno/<%= aluno.id %>">
           <div
             data-gender="<%= aluno.genero %>"
             class="container bg-white rounded-lg flex items-center p-3 shadow-md w-auto mb-2"
@@ -44,6 +44,12 @@
         <% }) %> <% } else { %>
         <p class="text-gray-500">Nenhum aluno encontrado.</p>
         <% } %>
+        <button
+          id="openSearchModal"
+          class="fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-neonGreen rounded-xl px-4 py-2 hover:bg-neonGreenHover transition-colors text-zinc-50 font-zain text-4xl shadow-lg"
+        >
+          Adicionar
+        </button>
       </section>
       <div
         id="searchModal"
@@ -69,13 +75,6 @@
           ></ul>
         </div>
       </div>
-
-      <button
-        id="openSearchModal"
-        class="mx-auto bg-neonGreen rounded-xl px-4 py-2 hover:bg-neonGreenHover transition-colors text-zinc-50 font-zain text-4xl"
-      >
-        Adicionar
-      </button>
     </main>
     <script>
       document
