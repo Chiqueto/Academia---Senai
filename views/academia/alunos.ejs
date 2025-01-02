@@ -10,7 +10,7 @@
     <header>
       <nav class="flex justify-between bg-zinc-800 py-5 px-4">
         <div class="flex items-center gap-4">
-          <a href="/academia/menu/<%= id %>">
+          <a href="/academia/menu/<%= id_academia %>">
             <img src="/icons/back_arrow.svg" alt="Voltar" />
           </a>
           <h1 class="font-jaro text-zinc-50 text-3xl">GymFit</h1>
@@ -20,30 +20,42 @@
     <main class="mx-4 flex-grow">
       <section class="font-zain px-4">
         <h2 class="text-3xl text-center text-white py-4">Lista de Alunos</h2>
-       
-        <% if (alunos && alunos.length > 0) { %>
-          <% alunos.forEach(aluno => { %>
-            <a href="/academia/<%= id_academia %>/perfilAluno/<%= aluno.id %>">
-            <div data-gender="<%= aluno.genero %>" class="container bg-white rounded-lg flex items-center p-3 shadow-md w-auto mb-2">
-              <div class="rounded-full bg-pink-200 flex-shrink-0 w-10 h-10">
-                <img src="/icons/user.svg" class="w-10 h-8" alt="Usuário">
-              </div>
-              <span class="ml-4 text-2xl text-gray-900 font-semibold"><%= aluno.nome %></span>
-              <span class="ml-4 text-xl text-gray-900 ">Cod: <%= aluno.id %></span>
-              <button 
+
+        <% if (alunos && alunos.length > 0) { %> <% alunos.forEach(aluno => { %>
+        <a href="/academia/<%= id_academia %>/perfilAluno/<%= aluno.id %>">
+          <div
+            data-gender="<%= aluno.genero %>"
+            class="container bg-white rounded-lg flex items-center p-3 shadow-md w-auto mb-2"
+          >
+            <div class="rounded-full bg-pink-200 flex-shrink-0 w-10 h-10">
+              <img src="/icons/user.svg" class="w-10 h-8" alt="Usuário" />
+            </div>
+            <span class="ml-4 text-2xl text-gray-900 font-semibold"
+              ><%= aluno.nome %></span
+            >
+            <span class="ml-4 text-xl text-gray-900">Cod: <%= aluno.id %></span>
+            <button
               class="ml-auto px-4 py-2 rounded-lg"
-              onclick="removerAluno('<%= aluno.id %>')">
-             <img src="/icons/delete.svg" class="w-8 h-8">
-            </button>
-            </div></a>
-          <% }) %>
-        <% } else { %>
-          <p class="text-gray-500">Nenhum aluno encontrado.</p>
+              onclick="removerAluno('<%= aluno.id %>')"
+            >
+              <img src="/icons/delete.svg" class="w-8 h-8" />
+            </button></div
+        ></a>
+        <% }) %> <% } else { %>
+        <p class="text-gray-500">Nenhum aluno encontrado.</p>
         <% } %>
       </section>
-      <div id="searchModal" class="hidden fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center">
+      <div
+        id="searchModal"
+        class="hidden fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center"
+      >
         <div class="bg-white p-6 rounded-lg shadow-lg w-96">
-          <button id="closeSearchModal" class="text-red-600 float-right font-bold">Fechar</button>
+          <button
+            id="closeSearchModal"
+            class="text-red-600 float-right font-bold"
+          >
+            Fechar
+          </button>
           <h3 class="text-xl font-semibold mb-4">Buscar Aluno</h3>
           <input
             type="text"
@@ -51,42 +63,58 @@
             class="w-full p-2 border border-gray-300 rounded-md mb-4"
             placeholder="Buscar aluno..."
           />
-          <ul id="searchResults" class="max-h-60 overflow-y-auto space-y-2">
-            
-          </ul>
+          <ul
+            id="searchResults"
+            class="max-h-60 overflow-y-auto space-y-2"
+          ></ul>
         </div>
       </div>
-      
-      <button id="openSearchModal" class="mx-auto bg-neonGreen rounded-xl px-4 py-2 hover:bg-neonGreenHover transition-colors text-zinc-50 font-zain text-4xl">
-      Adicionar
-    </button>
+
+      <button
+        id="openSearchModal"
+        class="mx-auto bg-neonGreen rounded-xl px-4 py-2 hover:bg-neonGreenHover transition-colors text-zinc-50 font-zain text-4xl"
+      >
+        Adicionar
+      </button>
     </main>
     <script>
-       document.getElementById('openSearchModal').addEventListener('click', () => {
-      document.getElementById('searchModal').classList.remove('hidden');
-    });
+      document
+        .getElementById("openSearchModal")
+        .addEventListener("click", () => {
+          document.getElementById("searchModal").classList.remove("hidden");
+        });
 
-    document.getElementById('closeSearchModal').addEventListener('click', () => {
-      document.getElementById('searchModal').classList.add('hidden');
-    });
+      document
+        .getElementById("closeSearchModal")
+        .addEventListener("click", () => {
+          document.getElementById("searchModal").classList.add("hidden");
+        });
 
-    // Buscar personais
-    document.getElementById('searchInput').addEventListener('input', async (event) => {
-      const query = event.target.value.trim();
+      // Buscar personais
+      document
+        .getElementById("searchInput")
+        .addEventListener("input", async (event) => {
+          const query = event.target.value.trim();
 
-      if (query.length > 1) {
-    try {
-      const response = await fetch(`/aluno/buscarAluno?nome=${query}`);
-      const alunos = await response.json();
+          if (query.length > 1) {
+            try {
+              const response = await fetch(`/aluno/buscarAluno?nome=${query}`);
+              const alunos = await response.json();
 
-      const resultsList = document.getElementById('searchResults');
-      resultsList.innerHTML = ''; 
+              const resultsList = document.getElementById("searchResults");
+              resultsList.innerHTML = "";
 
-      if (Array.isArray(alunos) && alunos.length > 0) {
-        alunos.forEach((aluno) => {
-          const li = document.createElement('li');
-          li.classList.add('flex', 'justify-between', 'items-center', 'p-2', 'border-b');
-          li.innerHTML = `
+              if (Array.isArray(alunos) && alunos.length > 0) {
+                alunos.forEach((aluno) => {
+                  const li = document.createElement("li");
+                  li.classList.add(
+                    "flex",
+                    "justify-between",
+                    "items-center",
+                    "p-2",
+                    "border-b"
+                  );
+                  li.innerHTML = `
             <div class="flex items-center gap-2">
               <div class="rounded-full bg-pink-200 w-10 h-10 flex items-center justify-center">
                 <img src="/icons/user.svg" class="w-7 h-8" alt="Usuário">
@@ -94,28 +122,28 @@
               <span class="ml-4 text-2xl text-gray-900 font-semibold">${aluno.nome}</span>
               <span class="ml-4 text-xl text-gray-900 ">Cod: ${aluno.id}</span>
             </div>
-            <button 
-              class="bg-blue-500 text-white px-2 py-1 rounded" 
+            <button
+              class="bg-blue-500 text-white px-2 py-1 rounded"
              onclick="adicionarAluno(${aluno.id})">
               Selecionar
             </button>
           `;
 
-          resultsList.appendChild(li);
+                  resultsList.appendChild(li);
+                });
+              } else {
+                resultsList.innerHTML = "<li>Nenhum aluno encontrado.</li>";
+              }
+            } catch (error) {
+              console.error("Erro ao buscar alunos:", error);
+            }
+          }
         });
-      } else {
-        resultsList.innerHTML = '<li>Nenhum aluno encontrado.</li>';
-      }
-    } catch (error) {
-      console.error('Erro ao buscar alunos:', error);
-    }
-  }
-});
 
-      async function adicionarAluno() {
+      async function adicionarAluno(id_aluno) {
         try {
-          const id_academia = '54';
-        console.log(id_academia)
+          const id_academia = "<%= id_academia %>";
+          console.log(id_academia);
           const response = await fetch(
             `/academia/inserirAluno/${id_academia}`,
             {
@@ -136,9 +164,6 @@
           console.error("Erro ao adicionar aluno:", error);
         }
       }
-    
-
-      
     </script>
   </body>
 </html>

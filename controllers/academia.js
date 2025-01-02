@@ -301,11 +301,12 @@ const deletarPersonal = async (req, res) => {
 
 // ALUNOS
 const renderizaListaAlunos = async (req, res) => {
-  const { id } = req.params;
-  const alunos = await Academia.findStudents(id);
-  const academia = await Academia.findById(id);
+  const { id_academia } = req.params;
+  const alunos = await Academia.findStudents(id_academia);
+  const academia = await Academia.findById(id_academia);
   console.log(alunos);
-  res.render("academia/alunos", { alunos, id, academia });
+  console.log(id_academia);
+  res.render("academia/alunos", { alunos, id_academia, academia });
 };
 
 // const renderizaListaAlunos = async (req, res) => {
