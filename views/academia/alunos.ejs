@@ -22,11 +22,12 @@
         <h2 class="text-3xl text-center text-white py-4">Lista de Alunos</h2>
 
         <% if (alunos && alunos.length > 0) { %> <% alunos.forEach(aluno => { %>
-        <a href="/academia/<%= id_academia %>/aluno/<%= aluno.id %>">
+        
           <div
             data-gender="<%= aluno.genero %>"
             class="container bg-white rounded-lg flex items-center p-3 shadow-md w-auto mb-2"
           >
+          <a href="/academia/<%= id_academia %>/aluno/<%= aluno.id %>"></a>
             <div class="rounded-full bg-pink-200 flex-shrink-0 w-10 h-10">
               <img src="/icons/user.svg" class="w-10 h-8" alt="Usuário" />
             </div>
@@ -34,13 +35,14 @@
               ><%= aluno.nome %></span
             >
             <span class="ml-4 text-xl text-gray-900">Cod: <%= aluno.id %></span>
+          </a>
             <button
               class="ml-auto px-4 py-2 rounded-lg"
               onclick="removerAluno('<%= aluno.id %>')"
             >
               <img src="/icons/delete.svg" class="w-8 h-8" />
             </button></div
-        ></a>
+        >
         <% }) %> <% } else { %>
         <p class="text-gray-500">Nenhum aluno encontrado.</p>
         <% } %>
@@ -158,6 +160,27 @@
             location.reload();
           } else {
             alert(result.error || "Erro ao adicionar aluno.");
+          }
+        } catch (error) {
+          console.error("Erro ao adicionar aluno:", error);
+        }
+      }
+
+      async function removerAluno(id_aluno){
+        try{
+          const response = await fetch(
+            `/academia/<%= id_academia %>/removerAluno/${id_aluno}`,
+            {
+              method: "DELETE",
+              headers: { "Content-Type": "application/json" },
+            }
+          )
+         const result = await response.json();
+          if (response.ok) {
+            alert(result.message);
+            location.reload();
+          } else {
+            alert(result.error || "Erro ao remover aluno.");
           }
         } catch (error) {
           console.error("Erro ao adicionar aluno:", error);

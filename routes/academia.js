@@ -33,7 +33,10 @@ router.delete(
   "/removerPersonal/:idPersonal",
   academiaController.deletarPersonal
 );
-router.delete("/removerALuno/:idAluno", academiaController.deletarAluno);
+router.delete(
+  "/:id_academia/removerAluno/:id_aluno",
+  academiaController.deletarAluno
+);
 
 router.get("/adcEquipamento", (req, res) => {
   res.render("academia/adcEquipamento");

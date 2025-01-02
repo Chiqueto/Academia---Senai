@@ -313,7 +313,7 @@ const renderizaPerfilAluno = async (req, res) => {
   const { id_academia, id_aluno } = req.params;
   const aluno = await Aluno.findById(id_aluno);
 
-  console.log(aluno);
+  // console.log(aluno);
   res.render("academia/perfilAluno", { id_academia, aluno });
 };
 
@@ -367,16 +367,15 @@ const adicionarAluno = async (req, res) => {
 
 const deletarAluno = async (req, res) => {
   try {
-    const { idAcademia } = req.body; // ID da academia enviado no corpo da requisição
-    const { idAluno } = req.params; // ID do personal enviado na URL
+    const { id_academia, id_aluno } = req.params; // ID do personal enviado na URL
 
-    if (!idAluno || !idAcademia) {
+    if (!id_aluno || !id_academia) {
       return res
         .status(400)
         .json({ error: "ID da academia e ID do aluno são obrigatórios." });
     }
 
-    const rowsDeleted = await Academia.deleteAluno(idAluno, idAcademia);
+    const rowsDeleted = await Academia.deleteAluno(id_aluno, id_academia);
 
     if (rowsDeleted === 0) {
       return res
