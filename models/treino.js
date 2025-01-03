@@ -2,7 +2,7 @@ const pool = require("../db.js");
 
 const createTreino = async (treinoData) => {
   const { id_personal, nome, descricao } = treinoData;
-
+  console.log(id_personal, nome, descricao);
   const result = await pool.query(
     "INSERT INTO tb_treino (id_personal, nome, descricao) VALUES ($1, $2, $3) RETURNING *",
     [id_personal, nome, descricao]

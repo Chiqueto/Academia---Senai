@@ -19,13 +19,7 @@ router.get("/menuPersonal", (req, res) => {
 });
 router.get("/menuPersonal/:id", personalController.renderizaMenu);
 
-//router.get("/opcaoTreinoPersonal", (req, res) => {
-// res.render("personal/opcaoTreinoPersonal");
-//});
-
-router.get("/opcaoTreinoPersonal/:id", (req, res) => {
-  res.render("personal/opcaoTreinoPersonal", { id: null });
-});
+router.get("/treinos/:id_personal", personalController.renderizaTreinos);
 //Sem a autenticação
 //router.get("/menuPersonal/:id", personalController.renderizaMenu);
 //router.get("/menuPersonal/:id?", personalController.renderizaMenu);
@@ -78,9 +72,10 @@ router.post("/adicionarAluno/:id_personal", personalController.adicionarAluno);
 //   }
 // });
 
-router.delete("/personal/removerAluno/:id_personal/:id_aluno", personalController.removerAluno)
-
-
+router.delete(
+  "/removerAluno/:id_personal/:id_aluno",
+  personalController.removerAluno
+);
 
 //router.post('/:id_personal/adicionarAluno', personalController.adicionarAluno);
 
@@ -103,4 +98,6 @@ router.post(
   TreinoController.adicionarExercicios
 );
 router.get("/editar/:id", personalController.editarPersonal);
+
+router.post("/treino/:id_personal", personalController.criarTreino);
 module.exports = router;

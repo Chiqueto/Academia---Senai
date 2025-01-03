@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/styles/output.css" />
+    <title>Meus Treinos</title>
+  </head>
+
+  <body class="flex flex-col min-h-screen">
+    <!-- Cabeçalho -->
+    <header>
+      <nav class="flex justify-between bg-zinc-800 py-5 px-4">
+        <div class="flex items-center gap-4">
+          <a href="/aluno/menu/<%= id_personal %>"
+            ><img src="/icons/back_arrow.svg" alt="Voltar"
+          /></a>
+          <h1 class="font-jaro text-zinc-50 text-3xl">GymFit</h1>
+        </div>
+      </nav>
+      <style>
+        .modal {
+          transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        .hidden {
+          opacity: 0;
+          visibility: hidden;
+        }
+        .visible {
+          opacity: 1;
+          visibility: visible;
+        }
+      </style>
+    </header>
+
+    <!-- Conteúdo Principal -->
+    <main class="mx-4 flex-grow">
+      <section class="font-zain px-4">
+        <h2 class="text-3xl text-center text-white py-2">Meus Treinos</h2>
+
+        <!-- Barra de Busca -->
+        <div class="relative w-full mb-4">
+          <input
+            type="text"
+            placeholder="Buscar pelo treino..."
+            class="w-full py-1 pl-10 pr-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-gray-700 placeholder-gray-400"
+          />
+          <div
+            class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none"
+          >
+            <img src="/icons/lupa.svg" alt="Buscar" class="w-5 h-5" />
+          </div>
+        </div>
+
+        <!-- Lista de Treinos -->
+        <div class="max-h-[400px] overflow-y-auto">
+          <ul class="grid grid-cols-1 gap-4">
+            <% treinos.forEach(treino => { %>
+            <li
+              class="bg-zinc-600 p-4 rounded-lg flex justify-between items-center"
+            >
+              <div>
+                <h3 class="text-xl font-bold text-white"><%= treino.nome %></h3>
+                <p class="text-gray-300"><%= treino.descricao %></p>
+              </div>
+              <div class="flex gap-2">
+                <button
+                  onclick="toggleModalExercicio(this)"
+                  data-id="<%= treino.id %>"
+                  class="bg-neonGreen text-white px-4 py-2 rounded-lg hover:bg-neonGreenHover"
+                >
+                  Editar
+                </button>
+                <button
+                  onclick="confirmarDelecaoTreino('<%= treino.id %>')"
+                  class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600"
+                >
+                  Deletar
+                </button>
+              </div>
+            </li>
+            <% }) %>
+          </ul>
+        </div>
+      </section>
+
+      <!-- Modal -->
+      <div
+        id="modal"
+        class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-10"
+      >
+        <!-- Conteúdo do Modal -->
+        <div
+          id="formContainer"
+          class="bg-white p-6 rounded-lg w-96 flex flex-col items-center"
+        >
+          <!-- Formulário -->
+          <h1 class="text-center text-4xl font-bold mb-4">Crie seu treino!</h1>
+          <form
+            id="formTreino"
+            onsubmit="criarTreino(event)"
+            class="flex flex-col w-full"
+          >
+            <label for="nome">Nome do treino:</label>
+            <input
+              type="text"
+              name="nome"
+              id="nome"
+              required
+              class="w-full py-1 pl-4 pr-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-gray-700 placeholder-gray-400 border border-gray-300"
+            />
+
+            <label for="descricao">Descrição do treino:</label>
+            <textarea
+              name="descricao"
+              id="descricao"
+              required
+              class="w-full py-1 pl-4 pr-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-gray-700 placeholder-gray-400 border border-gray-300 mb-4"
+            ></textarea>
+
+            <div class="flex justify-between">
+              <button
+                type="submit"
+                class="bg-neonGreen text-white px-4 py-2 rounded-lg hover:bg-neonGreenHover"
+              >
+                Criar treino
+              </button>
+              <button
+                type="button"
+                onclick="toggleModal()"
+                class="bg-red-500 text-white px-4 py-2 rounded-lg"
+              >
+                Fechar
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Mensagem de Confirmação -->
+        <div
+          id="mensagemContainer"
+          class="hidden bg-white p-6 rounded-lg w-96 text-center flex flex-col items-center"
+        >
+          <p id="mensagemTexto" class="text-lg font-bold"></p>
+          <button
+            onclick="fecharMensagem()"
+            class="bg-red-500 text-white px-4 py-2 rounded-lg mt-4"
+          >
+            Fechar
+          </button>
+        </div>
+      </div>
+      <!-- Modal adicionar exercícios -->
+      <div
+        id="modalExercicio"
+        class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-10"
+      >
+        <div class="bg-white p-6 rounded-lg w-96 flex flex-col items-center">
+          <h1 class="text-center text-4xl font-bold mb-4">
+            Gerenciar Exercícios
+          </h1>
+
+          <!-- Lista de Exercícios Adicionados -->
+          <div class="w-full mb-4">
+            <h2 class="text-lg font-bold text-gray-700 mb-2">
+              Exercícios Adicionados
+            </h2>
+            <ul id="exerciciosAdicionados" class="flex flex-col gap-2">
+              <!-- Os exercícios já vinculados ao treino serão inseridos dinamicamente aqui -->
+            </ul>
+          </div>
+
+          <!-- Lista de Exercícios Disponíveis -->
+          <div class="w-full mb-4">
+            <h2 class="text-lg font-bold text-gray-700 mb-2">
+              Adicionar Exercícios
+            </h2>
+            <form id="formExercicios" class="flex flex-col gap-2">
+              <% exercicios.forEach(exercicio => { %>
+              <div class="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  id="exercicio-<%= exercicio.id %>"
+                  name="exercicios"
+                  value="<%= exercicio.id %>"
+                  class="cursor-pointer"
+                />
+                <label
+                  for="exercicio-<%= exercicio.id %>"
+                  class="cursor-pointer"
+                >
+                  <%= exercicio.nome %>
+                </label>
+                <input
+                  type="number"
+                  id="series-<%= exercicio.id %>"
+                  name="series"
+                  placeholder="Séries"
+                  min="1"
+                  class="w-16 py-1 pl-2 pr-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-gray-700 placeholder-gray-400 border border-gray-300"
+                />
+              </div>
+              <% }) %>
+            </form>
+          </div>
+
+          <!-- Botões -->
+          <div class="flex justify-between mt-4 w-full">
+            <button
+              onclick="salvarExercicios()"
+              class="bg-neonGreen text-white px-4 py-2 rounded-lg hover:bg-neonGreenHover"
+            >
+              Salvar Alterações
+            </button>
+            <button
+              onclick="toggleModalExercicio()"
+              class="bg-red-500 text-white px-4 py-2 rounded-lg"
+            >
+              Fechar
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal de Confirmação de Exclusão -->
+      <div
+        id="modalConfirmacao"
+        class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-10"
+      >
+        <div class="bg-white p-6 rounded-lg w-96 flex flex-col items-center">
+          <h1 class="text-center text-4xl font-bold mb-4">
+            Confirmar Exclusão
+          </h1>
+          <p class="text-lg mb-4">
+            Tem certeza que deseja excluir este treino?
+          </p>
+          <div class="flex justify-between w-full">
+            <button
+              id="confirmarExclusaoBtn"
+              class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600"
+            >
+              Confirmar
+            </button>
+            <button
+              onclick="fecharModalConfirmacao()"
+              class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600"
+            >
+              Cancelar
+            </button>
+          </div>
+        </div>
+      </div>
+    </main>
+    <div class="my-3 mx-auto">
+      <button
+        onclick="abrirFormulario()"
+        class="mx-auto bg-neonGreen rounded-xl px-4 py-2 hover:bg-neonGreenHover transition-colors text-zinc-50 font-zain text-4xl"
+      >
+        Adicionar
+      </button>
+    </div>
+    <footer class="text-center py-4 text-sm bg-zinc-800">
+      <p class="text-zinc-50">&copy Luís Felipe, Edney Araujo, Marília</p>
+    </footer>
+    <!-- Scripts -->
+    <script>
+      let idTreinoAtual = null;
+      // Função para exibir/ocultar o modal
+      function toggleModal() {
+        const modal = document.getElementById("modal");
+        modal.classList.toggle("hidden");
+      }
+
+      // Exibir o formulário no modal
+      function abrirFormulario() {
+        toggleModal();
+        document.getElementById("formContainer").classList.remove("hidden");
+        document.getElementById("mensagemContainer").classList.add("hidden");
+      }
+
+      // Exibir a mensagem no modal
+      function exibirMensagem(mensagem, sucesso = true) {
+        document.getElementById("mensagemTexto").textContent = mensagem;
+        document.getElementById("mensagemTexto").className = sucesso
+          ? "text-green-500"
+          : "text-red-500";
+
+        document.getElementById("formContainer").classList.add("hidden");
+        document.getElementById("mensagemContainer").classList.remove("hidden");
+      }
+
+      // Fechar a mensagem e reabrir o formulário
+      function fecharMensagem() {
+        abrirFormulario();
+        window.location.reload();
+      }
+
+      //função para fechar o modal
+      function fecharModalConfirmacao() {
+        const modalConfirmacao = document.getElementById("modalConfirmacao");
+        modalConfirmacao.classList.add("hidden");
+      }
+
+      // Função para criar treino
+      async function criarTreino(event) {
+        event.preventDefault();
+        const formButton = event.target.querySelector("button[type='submit']");
+        const originalText = formButton.textContent;
+
+        formButton.disabled = true;
+        formButton.textContent = "Criando...";
+
+        try {
+          const nome = document.getElementById("nome").value.trim();
+          const descricao = document.getElementById("descricao").value.trim();
+          const response = await fetch(`/personal/treino/<%= id_personal %>`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ nome, descricao }),
+          });
+
+          const data = await response.json();
+
+          if (response.ok) {
+            exibirMensagem(data.message || "Treino criado com sucesso!");
+          } else {
+            exibirMensagem(data.message || "Erro ao criar treino.", false);
+          }
+        } catch (error) {
+          exibirMensagem("Erro inesperado. Tente novamente mais tarde.", false);
+        } finally {
+          formButton.disabled = false;
+          formButton.textContent = originalText;
+        }
+      }
+
+      //   async function adicionarExerciciosSelecionados() {
+      //     if (!idTreinoAtual) {
+      //       alert("ID do treino não encontrado. Tente novamente.");
+      //       return;
+      //     }
+      //     console.log(idTreinoAtual);
+      //     const checkboxes = document.querySelectorAll(
+      //       "#formExercicios input[name='exercicios']:checked"
+      //     );
+      //     const ids_exercicios = Array.from(checkboxes).map(
+      //       (checkbox) => checkbox.value
+      //     );
+
+      //     const seriesInputs = document.querySelectorAll(
+      //       "#formExercicios input[name='series']"
+      //     );
+      //     const series = Array.from(seriesInputs).map((input) => input.value);
+
+      //     console.log(ids_exercicios, series);
+
+      //     if (ids_exercicios.length === 0) {
+      //       alert("Selecione ao menos um exercício.");
+      //       return;
+      //     }
+      //     try {
+      //       const response = await fetch(
+      //         `/aluno/montarTreino/<%= id_personal %>/treino/addExercicios`,
+      //         {
+      //           method: "POST",
+      //           headers: {
+      //             "Content-Type": "application/json",
+      //           },
+      //           body: JSON.stringify({
+      //             id_treino: idTreinoAtual,
+      //             ids_exercicios,
+      //             series,
+      //           }),
+      //         }
+      //       );
+
+      //       const data = await response.json();
+
+      //       if (response.ok) {
+      //         alert(data.message || "Exercícios adicionados com sucesso!");
+      //         toggleModalExercicio();
+      //       } else {
+      //         alert(data.error || "Erro ao adicionar exercícios.");
+      //       }
+      //     } catch (error) {
+      //       alert("Erro inesperado. Tente novamente mais tarde.");
+      //     }
+      //   }
+
+      //   async function toggleModalExercicio(button) {
+      //     const modal = document.getElementById("modalExercicio");
+      //     modal.classList.toggle("hidden");
+      //     const checkboxes = document.querySelectorAll(
+      //       "#formExercicios input[name='exercicios']:checked"
+      //     );
+
+      //     checkboxes.forEach((checkbox) => {
+      //       checkbox.checked = false; // Desmarcar os checkboxes
+      //     });
+
+      //     if (button) {
+      //       idTreinoAtual = button.getAttribute("data-id");
+
+      //       // Carregar exercícios adicionados ao treino
+      //       try {
+      //         const response = await fetch(
+      //           `/aluno/montarTreino/<%= id_personal %>/treino/${idTreinoAtual}/exercicios`
+      //         );
+      //         const data = await response.json();
+
+      //         if (response.ok) {
+      //           renderizarExerciciosAdicionados(data || []);
+      //         } else {
+      //           alert(data.error || "Erro ao carregar os exercícios do treino.");
+      //         }
+      //       } catch (error) {
+      //         alert("Erro inesperado ao carregar os exercícios.");
+      //       }
+      //     }
+      //   }
+
+      //   async function carregarExerciciosAdicionados() {
+      //     try {
+      //       const response = await fetch(
+      //         `/aluno/montarTreino/<%= id_personal %>/treino/${idTreinoAtual}/exercicios`
+      //       );
+
+      //       const data = await response.json();
+
+      //       if (response.ok) {
+      //         renderizarExerciciosAdicionados(data || []);
+      //       } else {
+      //         alert(data.error || "Erro ao carregar exercícios.");
+      //       }
+      //     } catch (error) {
+      //       alert("Erro ao atualizar a lista de exercícios.");
+      //     }
+      //   }
+
+      //   function renderizarExerciciosAdicionados(exercicios) {
+      //     const lista = document.getElementById("exerciciosAdicionados");
+      //     lista.innerHTML = ""; // Limpa a lista atual
+
+      //     exercicios.forEach((exercicio) => {
+      //       const li = document.createElement("li");
+      //       li.className = "flex justify-between items-center";
+      //       li.innerHTML = `
+      //   <span>${exercicio.nome}</span>
+      //   <button
+      //     onclick="removerExercicio('${exercicio.id}')"
+      //     class="bg-red-500 text-white px-2 py-1 rounded-lg"
+      //   >
+      //     Remover
+      //   </button>
+      // `;
+      //       lista.appendChild(li);
+      //     });
+      //   }
+
+      //   async function removerExercicio(idExercicio) {
+      //     try {
+      //       const response = await fetch(
+      //         `/aluno/montarTreino/<%= id_personal %>/treino/${idTreinoAtual}/exercicio/${idExercicio}`,
+      //         {
+      //           method: "DELETE",
+      //         }
+      //       );
+
+      //       const data = await response.json();
+
+      //       if (response.ok) {
+      //         alert(data.message || "Exercício removido com sucesso!");
+      //         carregarExerciciosAdicionados();
+      //       } else {
+      //         alert(data.error || "Erro ao remover exercício.");
+      //       }
+      //     } catch (error) {
+      //       alert("Erro inesperado ao remover exercício.");
+      //     }
+      //   }
+
+      //   async function salvarExercicios() {
+      //     const checkboxes = document.querySelectorAll(
+      //       "#formExercicios input[name='exercicios']:checked"
+      //     );
+
+      //     const exercicios = Array.from(checkboxes).map((checkbox) => {
+      //       const id = checkbox.value;
+      //       const series = checkbox
+      //         .closest("div")
+      //         .querySelector("input[name='series']").value;
+      //       return { id, series };
+      //     });
+
+      //     if (exercicios.length === 0) {
+      //       alert("Selecione ao menos um exercício para adicionar.");
+      //       return;
+      //     }
+
+      //     try {
+      //       const response = await fetch(
+      //         `/aluno/montarTreino/<%= id_personal %>/treino/addExercicios`,
+      //         {
+      //           method: "POST",
+      //           headers: {
+      //             "Content-Type": "application/json",
+      //           },
+      //           body: JSON.stringify({
+      //             id_treino: idTreinoAtual,
+      //             exercicios,
+      //           }),
+      //         }
+      //       );
+
+      //       const data = await response.json();
+
+      //       if (response.ok) {
+      //         alert(data.message || "Exercícios adicionados com sucesso!");
+      //         toggleModalExercicio(); // Fecha o modal após salvar
+      //       } else {
+      //         alert(data.error || "Erro ao adicionar exercícios.");
+      //       }
+      //     } catch (error) {
+      //       alert("Erro inesperado ao salvar exercícios.");
+      //     }
+      //   }
+
+      //   // Função para confirmar a exclusão do treino
+      //   function confirmarDelecaoTreino(idTreino) {
+      //     const modalConfirmacao = document.getElementById("modalConfirmacao");
+      //     const confirmarExclusaoBtn = document.getElementById(
+      //       "confirmarExclusaoBtn"
+      //     );
+
+      //     confirmarExclusaoBtn.onclick = () => deletarTreino(idTreino);
+      //     modalConfirmacao.classList.remove("hidden");
+      //   }
+
+      //   async function deletarTreino(idTreino) {
+      //     try {
+      //       const response = await fetch(
+      //         `/aluno/montarTreino/<%= id_personal %>/treino/${idTreino}`,
+      //         {
+      //           method: "DELETE",
+      //         }
+      //       );
+
+      //       const data = await response.json();
+
+      //       if (response.ok) {
+      //         alert(data.message || "Treino excluído com sucesso!");
+      //         window.location.reload();
+      //       } else {
+      //         alert(data.error || "Erro ao excluir treino.");
+      //       }
+      //     } catch (error) {
+      //       alert("Erro inesperado ao excluir treino.");
+      //     }
+      //   }
+    </script>
+  </body>
+</html>

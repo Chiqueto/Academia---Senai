@@ -1,4 +1,6 @@
 const Personal = require("../models/personal.js");
+const Treino = require("../models/treino.js");
+
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const Aluno = require("../models/aluno.js");
@@ -238,6 +240,19 @@ const renderizaPerfil = async (req, res) => {
   }
 };
 
+const renderizaTreinos = async (req, res) => {
+  const { id_personal } = req.params;
+
+  try {
+    const treinos = await Treino.getTreinosByPersonal(id_personal);
+    const exercicios = await Exercicio.getExercicios();
+
+    res.render("personal/treinos", { id_personal, treinos, exercicios });
+  } catch (error) {
+    res.status(500).json({ error: "Falha ao carregar treinos" });
+  }
+};
+
 const autenticaPersonal = async (req, res) => {
   const { email, senha } = req.body;
   try {
@@ -387,6 +402,22 @@ const renderizaPerfilAluno = async (req, res) => {
   }
 };
 
+const criarTreino = async (req, res) => {
+  const { id_personal } = req.params;
+  const { nome, descricao } = req.body;
+  try {
+    const novoTreino = await Treino.createTreino({
+      id_personal,
+      nome,
+      descricao,
+    });
+
+    res.status(201).json({ message: "Treino criado com sucesso!" });
+  } catch (error) {
+    res.status(500).json({ message: "Falha ao criar treino: " + error });
+  }
+};
+
 module.exports = {
   criarPersonal,
   listarPersonais,
@@ -405,4 +436,6 @@ module.exports = {
   editarPersonal,
   renderizaPerfilAluno,
   renderizaCriarExercicio,
+  renderizaTreinos,
+  criarTreino,
 };
