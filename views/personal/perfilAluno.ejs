@@ -13,7 +13,7 @@
       <nav class="flex justify-between bg-zinc-800 py-5 px-4">
         <div class="flex items-center gap-4">
           <a href="/personal/listaAlunos/<%= id_personal %>"
-            ><img src="/icons/back_arrow.svg"
+            ><img src="/icons/back_arrow.svg" alt="Voltar"
           /></a>
           <a href="/views/index.ejs"
             ><h1 class="font-jaro text-zinc-50 text-3xl">GymFit</h1></a
@@ -21,17 +21,6 @@
           <!-- <img src="/icons/GymFit.svg" /> -->
         </div>
       </nav>
-      <!-- <form
-        action="/aluno/uploadFoto/<%= aluno.id %>"
-        method="POST"
-        enctype="multipart/form-data"
-      >
-        <label for="fotoPerfil">Escolher imagem:</label>
-        <input type="file" id="fotoPerfil" name="fotoPerfil" accept="image/*" />
-        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">
-          Enviar
-        </button>
-      </form> -->
     </header>
 
     <main
@@ -98,7 +87,7 @@
         <% } %>
         <button>Criar treino exclusivo</button>
         <button
-          onclick="atribuirTreino()"
+          onclick="abrirModalTreinos()"
           class="bg-neonGreen text-white px-4 py-2 rounded-lg hover:bg-neonGreenHover"
         >
           Adicionar treino existente
@@ -109,8 +98,77 @@
     <footer class="text-center py-4 text-sm bg-zinc-800">
       <p class="text-zinc-50">&copy Luís Felipe, Edney Araujo, Marília</p>
     </footer>
+
+    <!-- Modal de Treinos -->
+    <div
+      id="modalTreinos"
+      class="hidden fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center"
+    >
+      <div class="bg-white p-6 rounded-lg shadow-lg w-96">
+        <button
+          onclick="fecharModalTreinos()"
+          class="text-red-600 float-right font-bold"
+        >
+          Fechar
+        </button>
+        <h3 class="text-xl font-semibold mb-4">Selecionar Treino</h3>
+        <ul class="max-h-60 overflow-y-auto space-y-2">
+          <% if (treinosPersonal && treinosPersonal.length > 0) { %> <%
+          treinosPersonal.forEach(treino => { %>
+          <li class="flex justify-between items-center p-2 border-b">
+            <div>
+              <h4 class="text-lg font-bold"><%= treino.nome %></h4>
+              <p class="text-gray-600"><%= treino.descricao %></p>
+            </div>
+            <button
+              onclick="atribuirTreino('<%= treino.id %>')"
+              class="bg-blue-500 text-white px-2 py-1 rounded"
+            >
+              Selecionar
+            </button>
+          </li>
+          <% }) %> <% } else { %>
+          <p class="text-center text-gray-600">Nenhum treino disponível.</p>
+          <% } %>
+        </ul>
+      </div>
+    </div>
+
     <script>
-      async function atribuirTreino() {}
+      function abrirModalTreinos() {
+        document.getElementById("modalTreinos").classList.remove("hidden");
+      }
+
+      function fecharModalTreinos() {
+        document.getElementById("modalTreinos").classList.add("hidden");
+      }
+
+      async function atribuirTreino(idTreino) {
+        try {
+          const response = await fetch("/personal/atribuirTreino", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              id_aluno: "<%= aluno.id %>",
+              id_treino: idTreino,
+            }),
+          });
+
+          const data = await response.json();
+          if (response.ok) {
+            alert(data.message);
+            fecharModalTreinos();
+            location.reload();
+          } else {
+            alert(data.error || "Erro ao atribuir treino.");
+          }
+        } catch (error) {
+          console.error("Erro:", error);
+          alert("Erro ao atribuir treino.");
+        }
+      }
     </script>
   </body>
 </html>
