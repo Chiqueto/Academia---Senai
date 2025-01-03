@@ -145,7 +145,7 @@
 
       async function atribuirTreino(idTreino) {
         try {
-          const response = await fetch("/personal/atribuirTreino", {
+          const response = await fetch(`/treino/atribuir`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
