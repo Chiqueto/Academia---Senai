@@ -54,6 +54,11 @@
 
         <!-- Lista de Treinos -->
         <div class="max-h-[400px] overflow-y-auto">
+          <% if(!treinos || treinos.length == 0) { %>
+          <p class="text-center text-zinc-50 text-xl">
+            Nenhum treino criado por você!
+          </p>
+          <% } else { %>
           <ul class="grid grid-cols-1 gap-4">
             <% treinos.forEach(treino => { %>
             <li
@@ -82,6 +87,7 @@
             <% }) %>
           </ul>
         </div>
+        <% } %>
       </section>
 
       <!-- Modal -->
@@ -334,229 +340,216 @@
         }
       }
 
-      //   async function adicionarExerciciosSelecionados() {
-      //     if (!idTreinoAtual) {
-      //       alert("ID do treino não encontrado. Tente novamente.");
-      //       return;
-      //     }
-      //     console.log(idTreinoAtual);
-      //     const checkboxes = document.querySelectorAll(
-      //       "#formExercicios input[name='exercicios']:checked"
-      //     );
-      //     const ids_exercicios = Array.from(checkboxes).map(
-      //       (checkbox) => checkbox.value
-      //     );
+      async function adicionarExerciciosSelecionados() {
+        if (!idTreinoAtual) {
+          alert("ID do treino não encontrado. Tente novamente.");
+          return;
+        }
+        console.log(idTreinoAtual);
+        const checkboxes = document.querySelectorAll(
+          "#formExercicios input[name='exercicios']:checked"
+        );
+        const ids_exercicios = Array.from(checkboxes).map(
+          (checkbox) => checkbox.value
+        );
 
-      //     const seriesInputs = document.querySelectorAll(
-      //       "#formExercicios input[name='series']"
-      //     );
-      //     const series = Array.from(seriesInputs).map((input) => input.value);
+        const seriesInputs = document.querySelectorAll(
+          "#formExercicios input[name='series']"
+        );
+        const series = Array.from(seriesInputs).map((input) => input.value);
 
-      //     console.log(ids_exercicios, series);
+        console.log(ids_exercicios, series);
 
-      //     if (ids_exercicios.length === 0) {
-      //       alert("Selecione ao menos um exercício.");
-      //       return;
-      //     }
-      //     try {
-      //       const response = await fetch(
-      //         `/aluno/montarTreino/<%= id_personal %>/treino/addExercicios`,
-      //         {
-      //           method: "POST",
-      //           headers: {
-      //             "Content-Type": "application/json",
-      //           },
-      //           body: JSON.stringify({
-      //             id_treino: idTreinoAtual,
-      //             ids_exercicios,
-      //             series,
-      //           }),
-      //         }
-      //       );
+        if (ids_exercicios.length === 0) {
+          alert("Selecione ao menos um exercício.");
+          return;
+        }
+        try {
+          const response = await fetch(`/treino/addExercicios`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              id_treino: idTreinoAtual,
+              ids_exercicios,
+              series,
+            }),
+          });
 
-      //       const data = await response.json();
+          const data = await response.json();
 
-      //       if (response.ok) {
-      //         alert(data.message || "Exercícios adicionados com sucesso!");
-      //         toggleModalExercicio();
-      //       } else {
-      //         alert(data.error || "Erro ao adicionar exercícios.");
-      //       }
-      //     } catch (error) {
-      //       alert("Erro inesperado. Tente novamente mais tarde.");
-      //     }
-      //   }
+          if (response.ok) {
+            alert(data.message || "Exercícios adicionados com sucesso!");
+            toggleModalExercicio();
+          } else {
+            alert(data.error || "Erro ao adicionar exercícios.");
+          }
+        } catch (error) {
+          alert("Erro inesperado. Tente novamente mais tarde.");
+        }
+      }
 
-      //   async function toggleModalExercicio(button) {
-      //     const modal = document.getElementById("modalExercicio");
-      //     modal.classList.toggle("hidden");
-      //     const checkboxes = document.querySelectorAll(
-      //       "#formExercicios input[name='exercicios']:checked"
-      //     );
+      async function toggleModalExercicio(button) {
+        const modal = document.getElementById("modalExercicio");
+        modal.classList.toggle("hidden");
+        const checkboxes = document.querySelectorAll(
+          "#formExercicios input[name='exercicios']:checked"
+        );
 
-      //     checkboxes.forEach((checkbox) => {
-      //       checkbox.checked = false; // Desmarcar os checkboxes
-      //     });
+        checkboxes.forEach((checkbox) => {
+          checkbox.checked = false; // Desmarcar os checkboxes
+        });
 
-      //     if (button) {
-      //       idTreinoAtual = button.getAttribute("data-id");
+        if (button) {
+          idTreinoAtual = button.getAttribute("data-id");
 
-      //       // Carregar exercícios adicionados ao treino
-      //       try {
-      //         const response = await fetch(
-      //           `/aluno/montarTreino/<%= id_personal %>/treino/${idTreinoAtual}/exercicios`
-      //         );
-      //         const data = await response.json();
+          // Carregar exercícios adicionados ao treino
+          try {
+            const response = await fetch(`/exercicio/treino/${idTreinoAtual}`);
+            const data = await response.json();
 
-      //         if (response.ok) {
-      //           renderizarExerciciosAdicionados(data || []);
-      //         } else {
-      //           alert(data.error || "Erro ao carregar os exercícios do treino.");
-      //         }
-      //       } catch (error) {
-      //         alert("Erro inesperado ao carregar os exercícios.");
-      //       }
-      //     }
-      //   }
+            if (response.ok) {
+              renderizarExerciciosAdicionados(data || []);
+            } else {
+              alert(data.error || "Erro ao carregar os exercícios do treino.");
+            }
+          } catch (error) {
+            alert("Erro inesperado ao carregar os exercícios.");
+          }
+        }
+      }
 
-      //   async function carregarExerciciosAdicionados() {
-      //     try {
-      //       const response = await fetch(
-      //         `/aluno/montarTreino/<%= id_personal %>/treino/${idTreinoAtual}/exercicios`
-      //       );
+      async function carregarExerciciosAdicionados() {
+        try {
+          const response = await fetch(`/exercicio/treino/${idTreinoAtual}`);
 
-      //       const data = await response.json();
+          const data = await response.json();
 
-      //       if (response.ok) {
-      //         renderizarExerciciosAdicionados(data || []);
-      //       } else {
-      //         alert(data.error || "Erro ao carregar exercícios.");
-      //       }
-      //     } catch (error) {
-      //       alert("Erro ao atualizar a lista de exercícios.");
-      //     }
-      //   }
+          if (response.ok) {
+            renderizarExerciciosAdicionados(data || []);
+          } else {
+            alert(data.error || "Erro ao carregar exercícios.");
+          }
+        } catch (error) {
+          alert("Erro ao atualizar a lista de exercícios.");
+        }
+      }
 
-      //   function renderizarExerciciosAdicionados(exercicios) {
-      //     const lista = document.getElementById("exerciciosAdicionados");
-      //     lista.innerHTML = ""; // Limpa a lista atual
+      function renderizarExerciciosAdicionados(exercicios) {
+        const lista = document.getElementById("exerciciosAdicionados");
+        lista.innerHTML = ""; // Limpa a lista atual
 
-      //     exercicios.forEach((exercicio) => {
-      //       const li = document.createElement("li");
-      //       li.className = "flex justify-between items-center";
-      //       li.innerHTML = `
-      //   <span>${exercicio.nome}</span>
-      //   <button
-      //     onclick="removerExercicio('${exercicio.id}')"
-      //     class="bg-red-500 text-white px-2 py-1 rounded-lg"
-      //   >
-      //     Remover
-      //   </button>
-      // `;
-      //       lista.appendChild(li);
-      //     });
-      //   }
+        exercicios.forEach((exercicio) => {
+          const li = document.createElement("li");
+          li.className = "flex justify-between items-center";
+          li.innerHTML = `
+        <span>${exercicio.nome}</span>
+        <button
+          onclick="removerExercicio('${exercicio.id}')"
+          class="bg-red-500 text-white px-2 py-1 rounded-lg"
+        >
+          Remover
+        </button>
+      `;
+          lista.appendChild(li);
+        });
+      }
 
-      //   async function removerExercicio(idExercicio) {
-      //     try {
-      //       const response = await fetch(
-      //         `/aluno/montarTreino/<%= id_personal %>/treino/${idTreinoAtual}/exercicio/${idExercicio}`,
-      //         {
-      //           method: "DELETE",
-      //         }
-      //       );
+      async function removerExercicio(idExercicio) {
+        try {
+          const response = await fetch(
+            `/treino/${idTreinoAtual}/exercicio/${idExercicio}`,
+            {
+              method: "DELETE",
+            }
+          );
 
-      //       const data = await response.json();
+          const data = await response.json();
 
-      //       if (response.ok) {
-      //         alert(data.message || "Exercício removido com sucesso!");
-      //         carregarExerciciosAdicionados();
-      //       } else {
-      //         alert(data.error || "Erro ao remover exercício.");
-      //       }
-      //     } catch (error) {
-      //       alert("Erro inesperado ao remover exercício.");
-      //     }
-      //   }
+          if (response.ok) {
+            alert(data.message || "Exercício removido com sucesso!");
+            carregarExerciciosAdicionados();
+          } else {
+            alert(data.error || "Erro ao remover exercício.");
+          }
+        } catch (error) {
+          alert("Erro inesperado ao remover exercício.");
+        }
+      }
 
-      //   async function salvarExercicios() {
-      //     const checkboxes = document.querySelectorAll(
-      //       "#formExercicios input[name='exercicios']:checked"
-      //     );
+      async function salvarExercicios() {
+        const checkboxes = document.querySelectorAll(
+          "#formExercicios input[name='exercicios']:checked"
+        );
 
-      //     const exercicios = Array.from(checkboxes).map((checkbox) => {
-      //       const id = checkbox.value;
-      //       const series = checkbox
-      //         .closest("div")
-      //         .querySelector("input[name='series']").value;
-      //       return { id, series };
-      //     });
+        const exercicios = Array.from(checkboxes).map((checkbox) => {
+          const id = checkbox.value;
+          const series = checkbox
+            .closest("div")
+            .querySelector("input[name='series']").value;
+          return { id, series };
+        });
 
-      //     if (exercicios.length === 0) {
-      //       alert("Selecione ao menos um exercício para adicionar.");
-      //       return;
-      //     }
+        if (exercicios.length === 0) {
+          alert("Selecione ao menos um exercício para adicionar.");
+          return;
+        }
 
-      //     try {
-      //       const response = await fetch(
-      //         `/aluno/montarTreino/<%= id_personal %>/treino/addExercicios`,
-      //         {
-      //           method: "POST",
-      //           headers: {
-      //             "Content-Type": "application/json",
-      //           },
-      //           body: JSON.stringify({
-      //             id_treino: idTreinoAtual,
-      //             exercicios,
-      //           }),
-      //         }
-      //       );
+        try {
+          const response = await fetch(`/treino/addExercicios`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              id_treino: idTreinoAtual,
+              exercicios,
+            }),
+          });
 
-      //       const data = await response.json();
+          const data = await response.json();
 
-      //       if (response.ok) {
-      //         alert(data.message || "Exercícios adicionados com sucesso!");
-      //         toggleModalExercicio(); // Fecha o modal após salvar
-      //       } else {
-      //         alert(data.error || "Erro ao adicionar exercícios.");
-      //       }
-      //     } catch (error) {
-      //       alert("Erro inesperado ao salvar exercícios.");
-      //     }
-      //   }
+          if (response.ok) {
+            alert(data.message || "Exercícios adicionados com sucesso!");
+            toggleModalExercicio(); // Fecha o modal após salvar
+          } else {
+            alert(data.error || "Erro ao adicionar exercícios.");
+          }
+        } catch (error) {
+          alert("Erro inesperado ao salvar exercícios.");
+        }
+      }
 
-      //   // Função para confirmar a exclusão do treino
-      //   function confirmarDelecaoTreino(idTreino) {
-      //     const modalConfirmacao = document.getElementById("modalConfirmacao");
-      //     const confirmarExclusaoBtn = document.getElementById(
-      //       "confirmarExclusaoBtn"
-      //     );
+      // Função para confirmar a exclusão do treino
+      function confirmarDelecaoTreino(idTreino) {
+        const modalConfirmacao = document.getElementById("modalConfirmacao");
+        const confirmarExclusaoBtn = document.getElementById(
+          "confirmarExclusaoBtn"
+        );
 
-      //     confirmarExclusaoBtn.onclick = () => deletarTreino(idTreino);
-      //     modalConfirmacao.classList.remove("hidden");
-      //   }
+        confirmarExclusaoBtn.onclick = () => deletarTreino(idTreino);
+        modalConfirmacao.classList.remove("hidden");
+      }
 
-      //   async function deletarTreino(idTreino) {
-      //     try {
-      //       const response = await fetch(
-      //         `/aluno/montarTreino/<%= id_personal %>/treino/${idTreino}`,
-      //         {
-      //           method: "DELETE",
-      //         }
-      //       );
+      async function deletarTreino(idTreino) {
+        try {
+          const response = await fetch(`/treino/personal/${idTreino}`, {
+            method: "DELETE",
+          });
 
-      //       const data = await response.json();
+          const data = await response.json();
 
-      //       if (response.ok) {
-      //         alert(data.message || "Treino excluído com sucesso!");
-      //         window.location.reload();
-      //       } else {
-      //         alert(data.error || "Erro ao excluir treino.");
-      //       }
-      //     } catch (error) {
-      //       alert("Erro inesperado ao excluir treino.");
-      //     }
-      //   }
+          if (response.ok) {
+            alert(data.message || "Treino excluído com sucesso!");
+            window.location.reload();
+          } else {
+            alert(data.error || "Erro ao excluir treino.");
+          }
+        } catch (error) {
+          alert("Erro inesperado ao excluir treino.");
+        }
+      }
     </script>
   </body>
 </html>

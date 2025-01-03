@@ -7,7 +7,8 @@ router.post("/personal/:id_personal", Treino.criarTreinoPersonal);
 router.post("/aluno/:id_aluno", Treino.criarTreinoAluno);
 
 // Rota para deletar um treino pelo ID
-router.delete("/:id", Treino.deletarTreino);
+router.delete("/:id_treino", Treino.deletarTreino);
+router.delete("/personal/:id_treino", Treino.personalDeleteTreino);
 
 // Rota para atualizar um treino pelo ID
 router.put("/:id", Treino.atualizarTreino);
@@ -30,5 +31,13 @@ router.post("/iniciarTreino/:id_aluno/:id_treino", Treino.iniciarTreino);
 router.delete("/cancelarTreino/:id_aluno/:id_treino", Treino.cancelarTreino);
 router.put("/concluirTreino/:id_aluno/:id_treino", Treino.concluirTreino);
 router.get("/verificaSerie/:id_aluno/:id_treino", Treino.verificaSeries);
+//add exercicio a um treino
+router.post("/addExercicios", Treino.adicionarExercicios);
+
+//remover um exercicio
+router.delete(`/:id_treino/exercicio/:id_exercicio`, Treino.removerExercicio);
+
+//add exercicio a um treino
+router.post("/addExercicios", Treino.adicionarExercicios);
 
 module.exports = router;

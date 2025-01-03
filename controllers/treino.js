@@ -57,9 +57,22 @@ const criarTreinoPersonal = async (req, res) => {
   }
 };
 
+const personalDeleteTreino = async (req, res) => {
+  const { id_treino } = req.params;
+  try {
+    const deleteTreinoAluno = await Treino.deleteTreinoAluno(id_treino);
+    const result = await Treino.deleteTreino(id_treino);
+    if (result === 0) {
+      return res.status(404).json({ message: "Treino não encontrado!" });
+    }
+    res.json({ message: "Treino excluído com sucesso!" });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 const deletarTreino = async (req, res) => {
   const { id_treino } = req.params;
-  console;
   try {
     // Verificar se o treino tem um id_personal
     const treino = await Treino.getTreinoById(id_treino);
@@ -460,4 +473,5 @@ module.exports = {
   cancelarTreino,
   concluirTreino,
   verificaSeries,
+  personalDeleteTreino,
 };

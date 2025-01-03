@@ -100,4 +100,5 @@ router.post(
 router.get("/editar/:id", personalController.editarPersonal);
 
 router.post("/treino/:id_personal", personalController.criarTreino);
+
 module.exports = router;
