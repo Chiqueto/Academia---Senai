@@ -8,7 +8,6 @@ const Exercicio = require("../models/exercicio.js");
 
 // const id_personal = document.getElementById('listaAlunos').getAttribute('data-id-personal');
 
-
 const SECRET_KEY = process.env.SECRET_KEY;
 
 const formatarTelefone = (telefone) => {
@@ -143,7 +142,7 @@ const listarAlunos = async (req, res) => {
 const buscarPersonal = async (req, res) => {
   const { nome } = req.query;
 
-  console.log("Nome recebido:", nome);
+  // console.log("Nome recebido:", nome);
 
   try {
     const personais = await Personal.findByNome(nome);
@@ -289,8 +288,8 @@ const adicionarAluno = async (req, res) => {
   const { id_aluno } = req.body; // Pega o idAluno do corpo da requisição
   const { id_personal } = req.params; // Pega o idPersonal da URL
 
-  console.log("ID do Aluno:", id_aluno);
-  console.log("ID do Personal:", id_personal);
+  // console.log("ID do Aluno:", id_aluno);
+  // console.log("ID do Personal:", id_personal);
 
   try {
     const alunoPersonal = await Personal.adicionarAluno(id_aluno, id_personal);
@@ -304,17 +303,17 @@ const adicionarAluno = async (req, res) => {
 };
 
 const removerAluno = async (req, res) => {
-  const {id_personal, id_aluno} = req.params
+  const { id_personal, id_aluno } = req.params;
   // const { } = req.body
 
-  try{
-    const response = await Personal.removerAluno(id_aluno, id_personal)
+  try {
+    const response = await Personal.removerAluno(id_aluno, id_personal);
 
-    res.status(201).json({message: "Aluno excluído com sucesso!"})
-  }catch(error){
-    res.status(500).json({error: error.message})
+    res.status(201).json({ message: "Aluno excluído com sucesso!" });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
-}
+};
 
 // async function removerAluno(id_aluno) {
 //   try {
@@ -342,8 +341,6 @@ const removerAluno = async (req, res) => {
 //     alert('Erro ao tentar remover o aluno.');
 //   }
 // }
-
-
 
 const renderizaCriarExercicio = async (req, res) => {
   const { id_personal } = req.params;

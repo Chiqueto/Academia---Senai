@@ -57,7 +57,6 @@ const findStudents = async (id) => {
   return result.rows;
 };
 
-
 const findPersonais = async (id) => {
   const result = await pool.query(
     "SELECT * FROM tb_personal WHERE id in (SELECT id_personal FROM tb_academias_personais WHERE id_academia = $1)",
@@ -66,7 +65,6 @@ const findPersonais = async (id) => {
 
   return result.rows;
 };
-
 
 const updateAcademia = async (id, academiaData) => {
   const { cidade, bairro, logradouro, telefone, nome } = academiaData;
@@ -83,8 +81,6 @@ const updateAcademia = async (id, academiaData) => {
     throw error;
   }
 };
-
-
 
 // const updateAcademia = async (id, academiaData) => {
 //   const { nome, cep, cidade, bairro, logradouro, numero, uf, telefone } =
@@ -129,8 +125,6 @@ const deletePersonal = async (idPersonal, idAcademia) => {
   return result.rowCount;
 };
 
-
-
 const findByCnpj = async (cnpj) => {
   const result = await pool.query("SELECT * FROM tb_academia WHERE cnpj = $1", [
     cnpj,
@@ -159,16 +153,16 @@ const loginAcademia = async (email) => {
   return result.rows[0];
 };
 
-const insertPersonal = async ( id_personal, id_academia) => {
+const insertPersonal = async (id_personal, id_academia) => {
   const result = await pool.query(
     "INSERT INTO tb_academias_personais (id_academia, id_personal) VALUES ($1, $2) RETURNING *",
-    [id_personal, id_academia ]
+    [id_academia, id_personal]
   );
 
   return result.rows[0];
 };
 
-const insertAluno= async (id_aluno, id_academia) => {
+const insertAluno = async (id_aluno, id_academia) => {
   const result = await pool.query(
     "INSERT INTO tb_alunos_academias (id_aluno, id_academia) VALUES ($1, $2) RETURNING *",
     [id_aluno, id_academia]
@@ -192,6 +186,4 @@ module.exports = {
   deleteAluno,
   deletePersonal,
   insertAluno,
-  
-
 };

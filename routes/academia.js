@@ -23,7 +23,10 @@ router.get("/perfil/:id", academiaController.renderizaPerfil);
 
 router.get("/alunos/:id_academia", academiaController.renderizaListaAlunos);
 
-router.get("/personais/:id", academiaController.renderizaListaPersonais);
+router.get(
+  "/personais/:id_academia",
+  academiaController.renderizaListaPersonais
+);
 
 router.get("/equipamento/:id", academiaController.renderizaEquipamento);
 

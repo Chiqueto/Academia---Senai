@@ -22,30 +22,33 @@
         <h2 class="text-3xl text-center text-white py-4">Lista de Alunos</h2>
 
         <% if (alunos && alunos.length > 0) { %> <% alunos.forEach(aluno => { %>
-        
-          <div
-            data-gender="<%= aluno.genero %>"
-            class="container bg-white rounded-lg flex items-center p-3 shadow-md w-auto mb-2"
+        <div
+          data-gender="<%= aluno.genero %>"
+          class="container bg-white rounded-lg flex items-center p-3 shadow-md w-auto mb-2"
+        >
+          <a
+            href="/academia/<%= id_academia %>/aluno/<%= aluno.id %>"
+            class="flex items-center"
           >
-          <a href="/academia/<%= id_academia %>/aluno/<%= aluno.id %>"></a>
             <div class="rounded-full bg-pink-200 flex-shrink-0 w-10 h-10">
               <img src="/icons/user.svg" class="w-10 h-8" alt="Usuário" />
             </div>
-            <span class="ml-4 text-2xl text-gray-900 font-semibold"
-              ><%= aluno.nome %></span
-            >
+            <span class="ml-4 text-2xl text-gray-900 font-semibold">
+              <%= aluno.nome %>
+            </span>
             <span class="ml-4 text-xl text-gray-900">Cod: <%= aluno.id %></span>
           </a>
-            <button
-              class="ml-auto px-4 py-2 rounded-lg"
-              onclick="removerAluno('<%= aluno.id %>')"
-            >
-              <img src="/icons/delete.svg" class="w-8 h-8" />
-            </button></div
-        >
+          <button
+            class="ml-auto px-4 py-2 rounded-lg"
+            onclick="confirmarRemocaoAluno('<%= aluno.id %>')"
+          >
+            <img src="/icons/delete.svg" class="w-8 h-8" />
+          </button>
+        </div>
         <% }) %> <% } else { %>
         <p class="text-gray-500">Nenhum aluno encontrado.</p>
         <% } %>
+
         <button
           id="openSearchModal"
           class="fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-neonGreen rounded-xl px-4 py-2 hover:bg-neonGreenHover transition-colors text-zinc-50 font-zain text-4xl shadow-lg"
@@ -75,6 +78,31 @@
             id="searchResults"
             class="max-h-60 overflow-y-auto space-y-2"
           ></ul>
+        </div>
+      </div>
+
+      <!-- Modal de Confirmação -->
+      <div
+        id="confirmModal"
+        class="hidden fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center"
+      >
+        <div class="bg-white p-6 rounded-lg shadow-lg w-96">
+          <h3 class="text-xl font-semibold mb-4">Confirmar Remoção</h3>
+          <p class="mb-4">Tem certeza de que deseja remover este aluno?</p>
+          <div class="flex justify-end gap-4">
+            <button
+              id="cancelRemove"
+              class="bg-gray-500 text-white px-4 py-2 rounded"
+            >
+              Cancelar
+            </button>
+            <button
+              id="confirmRemove"
+              class="bg-red-600 text-white px-4 py-2 rounded"
+            >
+              Remover
+            </button>
+          </div>
         </div>
       </div>
     </main>
@@ -166,26 +194,45 @@
         }
       }
 
-      async function removerAluno(id_aluno){
-        try{
-          const response = await fetch(
-            `/academia/<%= id_academia %>/removerAluno/${id_aluno}`,
-            {
-              method: "DELETE",
-              headers: { "Content-Type": "application/json" },
-            }
-          )
-         const result = await response.json();
-          if (response.ok) {
-            alert(result.message);
-            location.reload();
-          } else {
-            alert(result.error || "Erro ao remover aluno.");
-          }
-        } catch (error) {
-          console.error("Erro ao adicionar aluno:", error);
-        }
+      let alunoIdParaRemover = null;
+
+      function confirmarRemocaoAluno(id_aluno) {
+        alunoIdParaRemover = id_aluno;
+        document.getElementById("confirmModal").classList.remove("hidden");
       }
+
+      document.getElementById("cancelRemove").addEventListener("click", () => {
+        document.getElementById("confirmModal").classList.add("hidden");
+        alunoIdParaRemover = null;
+      });
+
+      document
+        .getElementById("confirmRemove")
+        .addEventListener("click", async () => {
+          if (alunoIdParaRemover) {
+            try {
+              const response = await fetch(
+                `/academia/<%= id_academia %>/removerAluno/${alunoIdParaRemover}`,
+                {
+                  method: "DELETE",
+                  headers: { "Content-Type": "application/json" },
+                }
+              );
+              const result = await response.json();
+              if (response.ok) {
+                alert(result.message);
+                location.reload();
+              } else {
+                alert(result.error || "Erro ao remover aluno.");
+              }
+            } catch (error) {
+              console.error("Erro ao remover aluno:", error);
+            } finally {
+              document.getElementById("confirmModal").classList.add("hidden");
+              alunoIdParaRemover = null;
+            }
+          }
+        });
     </script>
   </body>
 </html>

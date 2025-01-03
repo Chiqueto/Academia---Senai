@@ -95,7 +95,7 @@ const listarAcademias = async (req, res) => {
 
 const listarAcademiaPorId = async (req, res) => {
   const { id } = req.params;
-  console.log(id);
+  // console.log(id);
   try {
     const academia = await Academia.findById(id);
     res
@@ -252,13 +252,14 @@ const renderizaEquipamento = (req, res) => {
 
 // PERSONAL
 const renderizaListaPersonais = async (req, res) => {
-  const { id } = req.params;
-  const personais = await Academia.findPersonais(id);
-  console.log(personais);
-  res.render("academia/personais", { personais, id });
+  const { id_academia } = req.params;
+  const personais = await Academia.findPersonais(id_academia);
+  console.log(id_academia);
+  res.render("academia/personais", { personais, id_academia });
 };
 
 const inserirPersonal = async (req, res) => {
+  console.log("Entrou");
   const { id_personal } = req.body;
   const { id_academia } = req.params;
   console.log("Id do personal:", id_personal);
@@ -286,7 +287,8 @@ const deletarPersonal = async (req, res) => {
     }
 
     const rowsDeleted = await Academia.deletePersonal(idPersonal, idAcademia);
-
+    console.log(idAcademia);
+    console.log(idPersonal);
     if (rowsDeleted === 0) {
       return res
         .status(404)
@@ -332,8 +334,8 @@ const renderizaPerfilAluno = async (req, res) => {
 const adicionarAluno = async (req, res) => {
   const { id_aluno } = req.body;
   const { id_academia } = req.params;
-  console.log("Dados recebidos Aluno:", id_aluno);
-  console.log("Dados recebidos Academia:", id_academia); // Log para depuração
+  // console.log("Dados recebidos Aluno:", id_aluno);
+  // console.log("Dados recebidos Academia:", id_academia); // Log para depuração
 
   try {
     const alunoAcademia = await Academia.insertAluno(id_aluno, id_academia);

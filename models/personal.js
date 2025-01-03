@@ -38,24 +38,24 @@ const findAll = async () => {
 };
 
 const findById = async (id) => {
-  console.log("ID recebido no modelo:", id);
+  // console.log("ID recebido no modelo:", id);
   const result = await pool.query("SELECT * FROM tb_personal WHERE id = $1", [
     id,
   ]);
-  console.log("Resultado da query:", result.rows);
+  // console.log("Resultado da query:", result.rows);
 
   return result.rows[0];
 };
 
 const findByNome = async (nome) => {
-  console.log("Nome recebido no modelo:", nome);
+  // console.log("Nome recebido no modelo:", nome);
 
   const result = await pool.query(
     "SELECT * FROM tb_personal WHERE nome ILIKE $1",
     [`%${nome}%`] // Utiliza o operador LIKE para busca parcial
   );
 
-  console.log("Resultado da query:", result.rows);
+  // console.log("Resultado da query:", result.rows);
 
   return result.rows; // Retorna todas as linhas encontradas
 };
@@ -95,12 +95,12 @@ const loginPersonal = async (email) => {
 };
 
 const findAluno = async (personalId) => {
-  console.log("Personal ID recebido:", personalId);
+  // console.log("Personal ID recebido:", personalId);
   const result = await pool.query(
     "SELECT * FROM tb_aluno WHERE id IN (SELECT id_aluno FROM tb_alunos_personais WHERE id_personal = $1 )",
     [personalId]
   );
-  console.log("Resultado da query:", result.rows);
+  // console.log("Resultado da query:", result.rows);
   return result.rows;
 };
 
