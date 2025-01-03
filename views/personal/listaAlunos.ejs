@@ -45,6 +45,10 @@
                   class="container bg-gray-50 rounded-lg flex items-center p-4 shadow-md w-full mb-4 border border-gray-200 hover:bg-gray-100 transition"
                 >
                   <div class="flex items-center gap-4">
+                    <a
+            href="/personal/<%= id_personal %>/perfilAluno/<%= aluno.id %>"
+            class="flex items-center"
+          >
                     <div class="rounded-full bg-pink-200 w-12 h-12 flex items-center justify-center">
                       <img src="/icons/user.svg" alt="Usuário" class="w-6 h-6" />
                     </div>
@@ -52,6 +56,8 @@
                       <span class="block text-xl text-gray-900 font-semibold"><%= aluno.nome %></span>
                       <span class="text-gray-600">Cod: <%= aluno.id %></span>
                     </div>
+                </a>
+
                   </div>
                   <button
                   data-id-aluno="<%= aluno.id %>"

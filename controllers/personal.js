@@ -389,13 +389,24 @@ const renderizaPerfilAluno = async (req, res) => {
 
     // Aqui, você pode buscar o aluno pelo ID no banco de dados
     const aluno = await Aluno.findById(id_aluno); // Substitua pelo método de consulta do seu banco de dados
+    const treinos = await Treino.getTreinosByAlunoAndPersonal(
+      id_aluno,
+      id_personal
+    );
+
+    const treinosPersonal = await Treino.getTreinosByPersonal(id_personal);
 
     if (!aluno) {
       return res.status(404).send("Aluno não encontrado");
     }
 
     // Passa o aluno para o template
-    res.render("personal/perfilAluno", { id_personal, aluno });
+    res.render("personal/perfilAluno", {
+      id_personal,
+      aluno,
+      treinos,
+      treinosPersonal,
+    });
   } catch (error) {
     console.error(error);
     res.status(500).send("Erro ao carregar perfil do aluno");

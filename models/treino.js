@@ -57,6 +57,15 @@ const getTreinosByAluno = async (id_aluno) => {
   return result.rows;
 };
 
+const getTreinosByAlunoAndPersonal = async (id_aluno, id_personal) => {
+  const result = await pool.query(
+    "SELECT * FROM tb_treino WHERE id IN (SELECT id_treino FROM tb_treino_alunos WHERE id_aluno = $1) AND id_personal = $2",
+    [id_aluno, id_personal]
+  );
+
+  return result.rows;
+};
+
 const updateTreino = async (id, treinoData) => {
   const { nome, descricao } = treinoData;
 
@@ -229,4 +238,5 @@ module.exports = {
   getAllSeriesByTreino,
   getFinishedSeriesByTreino,
   deleteDoneSeries,
+  getTreinosByAlunoAndPersonal,
 };

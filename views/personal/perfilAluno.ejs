@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html>
   <head>
     <meta lang="pt-br" />
@@ -20,9 +21,22 @@
           <!-- <img src="/icons/GymFit.svg" /> -->
         </div>
       </nav>
+      <!-- <form
+        action="/aluno/uploadFoto/<%= aluno.id %>"
+        method="POST"
+        enctype="multipart/form-data"
+      >
+        <label for="fotoPerfil">Escolher imagem:</label>
+        <input type="file" id="fotoPerfil" name="fotoPerfil" accept="image/*" />
+        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">
+          Enviar
+        </button>
+      </form> -->
     </header>
 
-    <main class="rounded-3xl mx-4 bg-zinc-50 text-black font-zain flex-grow">
+    <main
+      class="flex flex-col rounded-3xl mx-4 bg-zinc-50 text-black font-zain flex-grow"
+    >
       <section class="font-zain px-4">
         <h2 class="text-4xl text-center"><%= aluno.nome %></h2>
         <div
@@ -31,28 +45,72 @@
           <img src="/icons/user.svg" class="h-52" />
         </div>
         <div class="p-2 text-2xl">
-          <h2 class="mx-2">Email: <%= aluno.email %></h2>
           <h2 class="mx-2">
             Sexo: <%= aluno.genero == "M" ? "Masculino" : "Feminino" %>
           </h2>
           <h2 class="mx-2">Idade: <%= aluno.idade %></h2>
-          <h2 class="mx-2">
-            Contato: <%= aluno.telefone.replace(/\D/g,
-            '').replace(/^(\d{2})(\d)/, '($1) $2').replace(/(\d{5})(\d)/,
-            '$1-$2').slice(0, 15) %>
-          </h2>
+          <h2 class="mx-2">Telefone: <%= aluno.telefone %></h2>
         </div>
 
         <!-- <button
-          class="flex justify-end mx-auto mt-60 bg-neonGreen rounded-xl px-12 py-2 hover:bg-neonGreenHover transition-colors text-zinc-50 text-4xl"
+      class="flex justify-end mx-auto mt-60 bg-neonGreen rounded-xl px-12 py-2 hover:bg-neonGreenHover transition-colors text-zinc-50 text-4xl"
+    >
+      Sair
+    </button> -->
+      </section>
+      <section class="text-center">
+        <h1 class="text-zinc-950 text-4xl">Treinos</h1>
+        <!-- Lista de Treinos -->
+        <div class="max-h-[400px] overflow-y-auto">
+          <% if(!treinos || treinos.length == 0) { %>
+          <p class="text-center text-zinc-950 text-xl">
+            Nenhum treino criado por você atribuído ao aluno!
+          </p>
+          <% } else { %>
+          <ul class="grid grid-cols-1 gap-4">
+            <% treinos.forEach(treino => { %>
+            <li
+              class="bg-zinc-600 p-4 rounded-lg flex justify-between items-center"
+            >
+              <div>
+                <h3 class="text-xl font-bold text-white"><%= treino.nome %></h3>
+                <p class="text-gray-300"><%= treino.descricao %></p>
+              </div>
+              <div class="flex gap-2">
+                <button
+                  onclick="toggleModalExercicio(this)"
+                  data-id="<%= treino.id %>"
+                  class="bg-neonGreen text-white px-4 py-2 rounded-lg hover:bg-neonGreenHover"
+                >
+                  Editar
+                </button>
+                <button
+                  onclick="confirmarDelecaoTreino('<%= treino.id %>')"
+                  class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600"
+                >
+                  Deletar
+                </button>
+              </div>
+            </li>
+            <% }) %>
+          </ul>
+        </div>
+        <% } %>
+        <button>Criar treino exclusivo</button>
+        <button
+          onclick="atribuirTreino()"
+          class="bg-neonGreen text-white px-4 py-2 rounded-lg hover:bg-neonGreenHover"
         >
-          Sair
-        </button> -->
+          Adicionar treino existente
+        </button>
       </section>
     </main>
 
     <footer class="text-center py-4 text-sm bg-zinc-800">
       <p class="text-zinc-50">&copy Luís Felipe, Edney Araujo, Marília</p>
     </footer>
+    <script>
+      async function atribuirTreino() {}
+    </script>
   </body>
 </html>

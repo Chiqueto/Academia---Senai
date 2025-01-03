@@ -40,4 +40,7 @@ router.delete(`/:id_treino/exercicio/:id_exercicio`, Treino.removerExercicio);
 //add exercicio a um treino
 router.post("/addExercicios", Treino.adicionarExercicios);
 
+//atribuir treino a um aluno
+router.post("/atribuir/:id_aluno/:id_treino");
+
 module.exports = router;
