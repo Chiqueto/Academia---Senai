@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta lang="pt-br" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/styles/output.css" />
+    <title>Lista de academias</title>
+  </head>
+
+  <body class="flex flex-col min-h-screen">
+    <header>
+      <nav class="flex justify-between bg-zinc-800 py-5 px-4">
+        <div class="flex items-center gap-4">
+          <a href="/aluno/menu/<%= id_aluno %>"><img src="/icons/back_arrow.svg" /></a>
+          <h1 class="font-jaro text-zinc-50 text-3xl">GymFit</h1>
+        </div>
+      </nav>
+    </header> 
+    <main class=" mx-4 flex-grow"><!--Começo do perfil-->
+      <section class="font-zain  px-4">
+          <h2 class="text-3xl text-center text-white py-2">Lista de Academias</h2>
+          <div class="relative w-full ">
+            <input type="text" placeholder="Pesquisar pelo nome da academia..."
+              class="w-full py-1 pl-10 pr-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-gray-700 placeholder-gray-400">
+            <div class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none">
+              <img src="/icons/lupa.svg" class="w-5 h-5">
+            </div>
+          </div><br>
+            <div id="">
+           <!-- Renderizar academias dinamicamente -->
+        <% if (academias && academias.length > 0) { %>
+          <% academias.forEach(academia => { %>
+            <a href="/aluno/<%= id_aluno%>/perfilAcademia/<%= academia.id %>">
+              <div class="container bg-white rounded-lg flex items-center p-3 shadow-md w-auto mb-2">
+                <div class="rounded-full bg-pink-200 flex-shrink-0 w-10 h-10">
+                  <img src="/icons/user.svg" class="w-10 h-8" alt="Usuário">
+                </div>
+                <span class="ml-4 text-2xl text-gray-900 font-semibold"><%= academia.nome %></span>
+              </div>
+            </a>
+          <% }) %>
+        <% } else { %>
+          <p class="text-gray-500">Nenhuma academia encontrado.</p>
+        <% } %></div>
+    
+      </section>
+    <div id="abaSuspensa" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-10">
+      <div class="bg-white p-6 rounded-lg w-96">
+        <h3 class="text-2xl font-semibold text-center mb-4">Pesquisar academias</h3>
+        <div class="relative w-full mb-4">
+          <input type="text" id="nomeAcademia" placeholder="Digite o nome da academia..."
+            class="w-full py-1 pl-10 pr-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-gray-700 placeholder-gray-400">
+          <div class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none">
+            <img src="/icons/lupa.svg" class="w-5 h-5">
+          </div>
+        </div>
+        <div class="flex justify-between">
+          <button onclick="BuscarAcademia()" class="bg-neonGreen text-white px-4 py-2 rounded-lg">
+            Adicionar Academia
+          </button>
+          <button onclick="toggleAbaSuspensa()" class="bg-red-500 text-white px-4 py-2 rounded-lg">
+            Fechar
+          </button>
+        </div>
+    </main>
+   <button onclick="toggleAbaSuspensa()" class="mx-auto bg-neonGreen rounded-xl px-4 py-2 hover:bg-neonGreenHover transition-colors text-zinc-50 font-zain text-4xl ">
+      Adicionar
+    </button><br>
+    <footer class="text-center py-4 text-sm bg-zinc-800">
+      <p class="text-zinc-50">&copy Luís Felipe, Edney Araujo, Marília</p>
+    </footer>
+    <script>// separar o script depois
+      function toggleAbaSuspensa() {
+        const abaSuspensa = document.getElementById("abaSuspensa");
+        abaSuspensa.classList.toggle("hidden");
+      }
+
+      // Função para simular a busca do aluno
+     /* function BuscarAluno() {
+        const nomeAluno = document.getElementById("nomeAluno").value;
+        console.log("Buscando aluno:", academias.nome);
+        // Aqui você pode adicionar a lógica para buscar o aluno
+      }*/
+     
+    </script>
+  </body>
+</html>

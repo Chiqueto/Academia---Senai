@@ -12,3 +12,4 @@ body {
   @apply bg-zinc-900; /* Usando a classe personalizada definida no tailwind.config.js */
   @apply font-zain;
 }
+

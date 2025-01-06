@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta lang="pt-br" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="/styles/output.css" rel="stylesheet" />
+    <title><%= exercicio.nome %></title>
+  </head>
+  <body class="flex flex-col min-h-screen bg-zinc-900 text-zinc-50">
+    <!-- Cabeçalho -->
+    <header>
+      <nav class="flex justify-between bg-zinc-800 py-5 px-4">
+        <div class="flex items-center gap-4">
+          <a href="/aluno/meusTreinos/<%= id_aluno %>/treino/<%= id_treino %>"
+            ><img src="/icons/back_arrow.svg"
+          /></a>
+          <h1 class="font-jaro text-zinc-50 text-3xl">GymFit</h1>
+        </div>
+      </nav>
+    </header>
+
+    <!-- Conteúdo principal -->
+    <main class="mx-4 flex-grow">
+      <!-- Título do Exercicio -->
+      <section class="text-center pt-6 pb-3">
+        <h2 class="text-4xl font-bold"><%= exercicio.nome %></h2>
+        <div class="bg-zinc-800 max-w-full mx-7 my-2 rounded-2xl p-3">
+          <img src="/icons/agachamento.svg" alt="Vídeo do exercício" />
+        </div>
+      </section>
+      <% if ( status === "concluido") { %>
+
+      <div
+        class="relative bg-gradient-to-br from-green-700 via-green-600 to-green-800 p-4 rounded-xl shadow-xl text-center hover:scale-105 transition-transform duration-300"
+      >
+        <div
+          class="absolute inset-0 bg-gradient-to-br from-green-400/20 to-transparent blur-lg"
+        ></div>
+        <h2
+          class="text-3xl font-bold text-white z-10 relative uppercase tracking-widest"
+        >
+          Treino Concluído
+        </h2>
+        <div
+          class="absolute inset-0 border-4 border-green-500/30 rounded-xl z-0 animate-pulse"
+        ></div>
+      </div>
+
+      <% } else { %>
+      <section class="text-center py-2">
+        <% if (exercicio.seriesFeitas < exercicio.maxSeries) { %>
+        <h2 class="text-3xl font-bold">Série atual</h2>
+        <form
+          id="form-repeticao"
+          action="/treino/repeticao/<%= id_aluno %>"
+          method="POST"
+          class="bg-zinc-200 flex flex-col items-center gap-2 justify-between max-w-full mx-7 my-2 rounded-2xl p-3 text-zinc-950 text-2xl"
+        >
+          <!-- Série atual -->
+          <div class="flex items-center">
+            <div class="ml-2 flex gap-2">
+              <strong>Série <%= exercicio.seriesFeitas + 1 %>: </strong>
+
+              <!-- Campo para a carga -->
+              <input
+                type="number"
+                name="carga"
+                placeholder="10"
+                class="w-14 rounded-md border border-zinc-400 px-2 py-1 text-xl text-center"
+                required
+                id="carga"
+              />
+              <span>kg</span>
+              <!-- Campo para as repetições -->
+              <input
+                type="number"
+                name="reps"
+                placeholder="12"
+                class="w-14 rounded-md border border-zinc-400 px-2 py-1 text-xl text-center"
+                required
+                id="reps"
+              />
+              <span>Reps</span>
+            </div>
+          </div>
+
+          <!-- Botão de envio -->
+          <button
+            type="submit"
+            class="ml-4 bg-green-600 text-zinc-50 px-4 py-2 rounded-md hover:bg-green-700"
+          >
+            Concluir
+          </button>
+
+          <!-- Campos ocultos -->
+          <input
+            type="hidden"
+            name="id_treino"
+            value="<%= id_treino %>"
+            id="id_treino"
+          />
+          <input
+            type="hidden"
+            name="id_exercicio"
+            value="<%= exercicio.id %>"
+            id="id_exercicio"
+          />
+        </form>
+        <% } else { %>
+        <div
+          class="relative bg-gradient-to-br from-green-700 via-green-600 to-green-800 p-4 rounded-xl shadow-xl text-center hover:scale-105 transition-transform duration-300"
+        >
+          <div
+            class="absolute inset-0 bg-gradient-to-br from-green-400/20 to-transparent blur-lg"
+          ></div>
+          <h2
+            class="text-3xl font-bold text-white z-10 relative uppercase tracking-widest"
+          >
+            Exercício Concluído
+          </h2>
+          <div
+            class="absolute inset-0 border-4 border-green-500/30 rounded-xl z-0 animate-pulse"
+          ></div>
+        </div>
+        <% } %>
+      </section>
+      <% } %>
+
+      <!-- Séries -->
+      <section class="text-center py-4">
+        <h2 class="text-3xl font-bold">Séries Feitas:</h2>
+        <div>
+          <!-- Lista de séries -->
+          <% if (series.length > 0) { %>
+          <ul class="text-left">
+            <% series.forEach((s, index) => { %>
+            <li
+              class="bg-zinc-200 flex items-center justify-between max-w-full mx-7 my-2 rounded-2xl p-3 text-zinc-950 text-3xl"
+            >
+              <strong>Série <%= index + 1 %>:</strong>
+              <div><%= s.carga %> kg - <%= s.qtde_reps %> Reps</div>
+            </li>
+            <% }) %>
+          </ul>
+          <% } else { %>
+          <p>Nenhuma série registrada até agora.</p>
+          <% } %>
+        </div>
+      </section>
+    </main>
+
+    <!-- Modal de Início de Treino -->
+    <div
+      id="init-modal"
+      class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden"
+    >
+      <div class="bg-white p-6 rounded-lg text-center">
+        <h3 id="init-modal-message" class="text-2xl font-bold text-green-600">
+          Treino não iniciado. Deseja iniciar agora?
+        </h3>
+        <button
+          onclick="iniciarTreino()"
+          class="mt-4 bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+        >
+          Iniciar
+        </button>
+        <button
+          onclick="fecharInitModal()"
+          class="mt-4 bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
+        >
+          Cancelar
+        </button>
+      </div>
+    </div>
+
+    <!-- Modal de Sucesso -->
+    <div
+      id="success-modal"
+      class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden"
+    >
+      <div class="bg-white p-6 rounded-lg text-center">
+        <h3 id="modal-message" class="text-2xl font-bold text-green-600"></h3>
+        <button
+          id="close-modal"
+          class="mt-4 bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+        >
+          OK
+        </button>
+      </div>
+    </div>
+
+    <!-- Rodapé -->
+    <footer class="text-center py-4 text-sm bg-zinc-800">
+      <p class="text-zinc-50">&copy Luís Felipe, Edney Araujo, Marília</p>
+    </footer>
+
+    <!-- Script para exibir modal e recarregar -->
+    <script>
+      const form = document.getElementById("form-repeticao");
+      const successModal = document.getElementById("success-modal");
+      const initModal = document.getElementById("init-modal");
+      const modalMessage = document.getElementById("modal-message");
+      const closeModal = document.getElementById("close-modal");
+
+      async function iniciarTreino() {
+        event.preventDefault();
+        console.log();
+        const res = await fetch(
+          "/treino/iniciarTreino/<%= id_aluno %>/<%= id_treino %>",
+          {
+            method: "POST",
+          }
+        );
+        if (res.ok) {
+          initModal.classList.add("hidden");
+          sendReq();
+        }
+      }
+
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault(); // Impede o envio padrão do formulário
+        // console.log( "<%= status %>" + " " + <%= id_aluno %> + " " + <%= id_treino %>);
+
+        if (<%= status  !== "iniciado" %>) {
+          initModal.classList.remove("hidden");
+        } else {
+          sendReq();
+        }
+      });
+
+      async function sendReq() {
+        const formData = new FormData(form);
+        const formDataJson = JSON.stringify(
+          Object.fromEntries(formData.entries())
+        );
+        const url = form.action;
+
+        try {
+          const response = await fetch(url, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: formDataJson,
+          });
+
+          const data = await response.json();
+
+          if (response.ok) {
+            // Exibe a mensagem no modal de sucesso
+            modalMessage.textContent =
+              data.message || "Série registrada com sucesso!";
+            successModal.classList.remove("hidden");
+
+            // Recarrega a página automaticamente após 3 segundos
+            setTimeout(() => {
+              window.location.reload();
+            }, 3000);
+          } else {
+            alert(data.message || "Erro ao registrar série.");
+          }
+        } catch (error) {
+          console.error("Erro:", error);
+          alert("Ocorreu um erro. Tente novamente.");
+        }
+      }
+
+      // Fechar o modal de sucesso manualmente
+      closeModal.addEventListener("click", () => {
+        successModal.classList.add("hidden");
+        window.location.reload();
+      });
+
+      // Fechar o modal de início de treino manualmente
+      function fecharInitModal() {
+        initModal.classList.add("hidden");
+      }
+    </script>
+  </body>
+</html>

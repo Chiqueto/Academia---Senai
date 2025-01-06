@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta lang="pt-br" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="/styles/output.css" rel="stylesheet" />
+    <title>Perfil do Aluno</title>
+  </head>
+  <body class="flex flex-col min-h-screen">
+    <header>
+      <nav class="flex justify-between bg-zinc-800 py-5 px-4">
+        <div class="flex items-center gap-4">
+          <a href="/academia/alunos/<%= id_academia %>"
+            ><img src="/icons/back_arrow.svg"
+          /></a>
+          <a href="/views/index.ejs"
+            ><h1 class="font-jaro text-zinc-50 text-3xl">GymFit</h1></a
+          >
+          <!-- <img src="/icons/GymFit.svg" /> -->
+        </div>
+      </nav>
+      <!-- <form
+        action="/aluno/uploadFoto/<%= aluno.id %>"
+        method="POST"
+        enctype="multipart/form-data"
+      >
+        <label for="fotoPerfil">Escolher imagem:</label>
+        <input type="file" id="fotoPerfil" name="fotoPerfil" accept="image/*" />
+        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">
+          Enviar
+        </button>
+      </form> -->
+    </header>
+
+    <main
+      class="flex flex-col rounded-3xl mx-4 bg-zinc-50 text-black font-zain flex-grow"
+    >
+      <section class="font-zain px-4">
+        <h2 class="text-4xl text-center"><%= aluno.nome %></h2>
+        <div
+          class="bg-slate-300 shadow-md rounded-lg flex flex-col items-center h-52"
+        >
+          <img src="/icons/user.svg" class="h-52" />
+        </div>
+        <div class="p-2 text-2xl">
+          <h2 class="mx-2">
+            Sexo: <%= aluno.genero == "M" ? "Masculino" : "Feminino" %>
+          </h2>
+          <h2 class="mx-2">Idade: <%= aluno.idade %></h2>
+          <h2 class="mx-2">Telefone: <%= aluno.telefone %></h2>
+        </div>
+
+        <!-- <button
+      class="flex justify-end mx-auto mt-60 bg-neonGreen rounded-xl px-12 py-2 hover:bg-neonGreenHover transition-colors text-zinc-50 text-4xl"
+    >
+      Sair
+    </button> -->
+
+        <!-- Calendário Automático -->
+        <div class="w-45 max-w-lg bg-zinc-700 p-4 rounded-lg shadow-md m-3">
+          <div
+            id="calendar"
+            class="grid grid-cols-7 gap-2 text-center text-white"
+          ></div>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      function generateCalendar() {
+        const calendarContainer = document.getElementById("calendar");
+        calendarContainer.innerHTML = ""; // Limpa o calendário para recriação
+
+        const today = new Date();
+        const currentYear = today.getFullYear();
+        const currentMonth = today.getMonth();
+
+        const daysInMonth = new Date(
+          currentYear,
+          currentMonth + 1,
+          0
+        ).getDate();
+        const firstDayOfMonth = new Date(currentYear, currentMonth, 1).getDay();
+
+        // Dias da semana
+        const daysOfWeek = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
+        daysOfWeek.forEach((day) => {
+          const dayElement = document.createElement("div");
+          dayElement.classList.add("font-bold");
+          dayElement.innerText = day;
+          calendarContainer.appendChild(dayElement);
+        });
+
+        // Espaço inicial para alinhar o primeiro dia do mês
+        for (let i = 0; i < firstDayOfMonth; i++) {
+          const emptyCell = document.createElement("div");
+          calendarContainer.appendChild(emptyCell);
+        }
+
+        // Dias do mês
+        for (let day = 1; day <= daysInMonth; day++) {
+          const dayElement = document.createElement("div");
+          dayElement.innerText = day;
+          dayElement.classList.add("p-2", "rounded-lg");
+
+          // Destaque para o dia atual
+          if (day === today.getDate()) {
+            dayElement.classList.add("bg-blue-500");
+          } else {
+            dayElement.classList.add("bg-zinc-600");
+          }
+          calendarContainer.appendChild(dayElement);
+        }
+      }
+      document.addEventListener("DOMContentLoaded", generateCalendar);
+    </script>
+    <footer class="text-center py-4 text-sm bg-zinc-800">
+      <p class="text-zinc-50">&copy Luís Felipe, Edney Araujo, Marília</p>
+    </footer>
+    <!-- <div class="font-zain text-white p-5">
+      <h3>
+        <p class="text-lime-500">Treino concluído</p>
+        <p class="text-red-600">Marca falta</p>
+      </h3>
+    </div>
+    <button
+      type="submit"
+      class="bg-neonGreen rounded-xl py-2 hover:bg-neonGreenHover transition-colors text-zinc-50 font-zain text-4xl mx-12"
+    >
+      Sair
+    </button> -->
+
+    <!-- <script>
+  // Recupera o token usando a função getToken
+  const token = localStorage.getItem("authorization");
+  console.log({ token });
+  if (!token) {
+    // Se não houver token, redireciona para a página de login
+    window.location.href = "/aluno";
+  } else {
+    // Faz a requisição autenticada
+    console.log(token);
+    fetch("/aluno/perfilAluno", {
+      method: "GET",
+      headers: {
+        authorization: `Bearer ${token}`, // Inclui o token no cabeçalho
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          // Se a resposta não for OK (ex: token inválido), redireciona para o login
+          throw new Error("Token inválido ou expirado");
+        }
+        console.log(response);
+        return;
+      })
+      .catch((error) => {
+        console.error(error);
+        window.location.href = "/aluno";
+      });
+  }
+</script> -->
+  </body>
+</html>

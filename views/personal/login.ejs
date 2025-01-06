@@ -22,28 +22,37 @@
     <main class="text-center mt-10 text-white mx-4 flex-grow">
       <section class="font-zain bg-zinc-50 text-zinc-950 py-4 rounded-2xl">
         <h2 class="text-4xl">Login</h2>
-        <form class="flex flex-col text-2xl">
+        <form
+          id="loginForm"
+          class="flex flex-col text-2xl"
+          action="/personal/login"
+          method="POST"
+        >
           <div class="flex flex-col gap-2 px-6 mb-6">
             <label class="text-start" for="email">Email</label>
             <input
-              class="border-2 border-black rounded-full bg-pink-50 text-lg px-2 py-1"
-              type="text"
+              class="border-2 border-black rounded-full bg-pink-50 text-lg px-2 py-1 text-center"
+              type="email"
               name="email"
               id="email"
               placeholder="seuemail@exemplo.com.br"
+              required
             />
           </div>
           <div class="flex flex-col gap-2 px-6 mb-12">
             <label class="text-start" for="senha">Senha</label>
             <input
-              class="border-2 border-black rounded-full bg-pink-50 text-lg px-2 py-1"
+              class="border-2 border-black rounded-full bg-pink-50 text-lg px-2 py-1 text-center"
               type="password"
               name="senha"
               id="senha"
               placeholder="*********"
+              required
+              minlength="6"
             />
           </div>
           <button
+            type="submit"
             class="bg-neonGreen rounded-xl py-2 hover:bg-neonGreenHover transition-colors text-zinc-50 font-zain text-4xl mx-12"
           >
             Login
@@ -55,8 +64,9 @@
       </section>
     </main>
 
-    <footer class="text-zinc-200">
-      <p>&copy Luís Felipe, Edney Araujo, Marília</p>
+    <script src="/scripts/personalLogin.js"></script>
+    <footer class="text-center py-4 text-sm bg-zinc-800">
+      <p class="text-zinc-50">&copy Luís Felipe, Edney Araujo, Marília</p>
     </footer>
   </body>
 </html>

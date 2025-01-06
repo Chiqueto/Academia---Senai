@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-
 <html>
   <head>
     <meta lang="pt-br" />
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="/styles/output.css" />
+    <script src="/scripts/personalCadastro.js" defer></script>
     <title>Cadastro</title>
   </head>
   <body class="flex flex-col min-h-screen">
@@ -14,92 +14,165 @@
         <div class="flex items-center gap-4">
           <a href="/personal"><img src="/icons/back_arrow.svg" /></a>
           <h1 class="font-jaro text-zinc-50 text-3xl">GymFit</h1>
-          <!-- <img src="/icons/GymFit.svg" /> -->
         </div>
       </nav>
     </header>
 
     <main class="text-center my-10 text-white mx-4 flex-grow">
-      <section class="font- bg-zinc-50 text-zinc-950 py-4 rounded-2xl">
+      <section class="font-zain bg-zinc-50 text-zinc-950 py-4 rounded-2xl">
         <h2 class="text-4xl">Cadastrar</h2>
-        <!-- Formulário de inserção -->
-        <form class="flex flex-col text-2xl gap-6 text-black">
+
+        <form
+          id="formCadastro"
+          action="/personal/cadastro"
+          method="post"
+          class="flex flex-col text-2xl gap-6 text-black"
+        >
           <div class="flex flex-col gap-2 px-6">
             <label class="text-start" for="nome">Nome</label>
             <input
-              class="border-2 border-black rounded-full bg-pink-50 text-lg px-2 py-1"
+              class="border-2 border-black rounded-full bg-pink-50 text-lg px-2 py-1 text-center"
               type="text"
               name="nome"
               placeholder="Nome"
+              required
+              minlength="5"
+              maxlength="50"
             />
           </div>
 
           <div class="flex flex-col gap-2 px-6">
             <label class="text-start" for="email">Email</label>
             <input
-              class="border-2 border-black rounded-full bg-pink-50 text-lg px-2 py-1"
+              class="border-2 border-black rounded-full bg-pink-50 text-lg px-2 py-1 text-center"
               type="email"
               name="email"
               placeholder="seuemail@exemplo.com.br"
-            />
-          </div>
-
-          <div class="flex flex-col gap-2 px-6">
-            <label class="text-start" for="senha">Senha</label>
-            <input
-              class="border-2 border-black rounded-full bg-pink-50 text-lg px-2 py-1"
-              type="password"
-              name="senha"
-              placeholder="*********"
+              required
+              minlength="5"
+              maxlength="25"
             />
           </div>
 
           <div class="flex flex-col gap-2 px-6">
             <label class="text-start" for="cref">CREF</label>
             <input
-              class="border-2 border-black rounded-full bg-pink-50 text-lg px-2 py-1"
+              class="border-2 border-black rounded-full bg-pink-50 text-lg px-2 py-1 text-center"
               type="text"
               name="cref"
-              placeholder="0000-G/SC"
+              placeholder="0000-G/XX"
+              required
+              minlength="7"
+              maxlength="9"
+              oninput="this.value = this.value
+              .replace(/\W/g, '').replace(/^(\d{4})([A-Za-z])?/, '$1-$2').replace(/-(\w)(\w{0,2})?/, '-$1/$2').slice(0, 9)"
             />
           </div>
-
+          <div class="flex flex-row px-6 gap-3">
+            <div class="flex flex-col w-2/3 gap-2">
+              <label class="text-start" for="cidade">Cidade</label>
+              <input
+                class="border-2 border-black rounded-full bg-pink-50 text-lg px-2 py-1 text-center"
+                type="text"
+                name="cidade"
+                placeholder="Cidade"
+                required
+                minlength="3"
+                oninput="this.value = this.value.replace(/[^a-zA-Z\s]/g, '')"
+              />
+            </div>
+            <div class="flex flex-col w-1/3 gap-2">
+              <label class="text-start" for="uf">UF</label>
+              <select
+                name="uf"
+                id="uf"
+                class="border-2 border-black rounded-full bg-pink-50 text-lg px-2 py-1 text-center"
+              >
+                <option value="SP">SP</option>
+                <option value="MG">MG</option>
+                <option value="RJ">RJ</option>
+              </select>
+            </div>
+          </div>
           <div class="flex flex-col gap-2 px-6">
-            <label class="text-start" for="cref">Cidade</label>
+            <label class="text-start" for="cep">CEP</label>
             <input
-              class="border-2 border-black rounded-full bg-pink-50 text-lg px-2 py-1"
+              class="border-2 border-black rounded-full bg-pink-50 text-lg px-2 py-1 text-center"
               type="text"
-              name="cidade"
-              placeholder="Cidade"
+              name="cep"
+              placeholder="00000-000"
+              required
+              minlength="8"
+              maxlength="9"
+              pattern="\d{5}-\d{3}"
+              title="Digite um CEP válido, ex 00000-000"
+              id="cep"
+              inputmode="numeric"
+              oninput="this.value = this.value.replace(/\D/g, '').replace(/^(\d{5})(\d)/, '$1-$2').slice(0, 9)"
             />
           </div>
 
           <div class="flex flex-col gap-2 px-6">
             <label class="text-start" for="especialidade">Especialidade</label>
-
             <select
               name="especialidade"
               id="especialidade"
-              class="border-2 border-black rounded-full bg-pink-50 text-lg px-2 py-1"
-              placeholder="Especialidade"
+              class="border-2 border-black rounded-full bg-pink-50 text-lg px-2 py-1 text-center"
+              required
             >
-              >
-              <option class="text-sm" value="teste">Hipertrofia</option>
-              <option class="text-sm" value="teste">Esporte</option>
-              <option class="text-sm" value="teste">Força</option>
+              <option value="hipertrofia">Hipertrofia</option>
+              <option value="esporte">Esporte</option>
+              <option value="forca">Força</option>
+              <option value="emagrecimento">Emagrecimento</option>
             </select>
+          </div>
+
+          <div class="flex flex-col gap-2 px-6">
+            <label class="text-start" for="descricao">Descrição</label>
+            <input
+              class="border-2 border-black rounded-full bg-pink-50 text-lg px-2 py-1 text-center"
+              type="text"
+              name="descricao"
+              placeholder="Descreva suas habilidades como personal"
+              required
+              minlength="20"
+              maxlength="500"
+            />
           </div>
 
           <div class="flex flex-col gap-2 px-6">
             <label class="text-start" for="telefone">Telefone</label>
             <input
-              class="border-2 border-black rounded-full bg-pink-50 text-lg px-2 py-1"
+              class="border-2 border-black rounded-full bg-pink-50 text-lg px-2 py-1 text-center"
               type="text"
               name="telefone"
-              placeholder="(16) 999968-6044"
+              placeholder="(16) 99996-6044"
+              required
+              minlength="14"
+              maxlength="15"
+              title="Digite um telefone com 11"
+              oninput="this.value = this.value.replace(/\D/g, '').replace(/^(\d{2})(\d)/, '($1) $2').replace(/(\d{5})(\d)/, '$1-$2').slice(0, 15)"
             />
           </div>
+          <div class="flex flex-col gap-2 px-6">
+            <label class="text-start" for="senha">Senha</label>
+            <input
+              class="border-2 border-black rounded-full bg-pink-50 text-lg px-2 py-1 text-center"
+              type="password"
+              name="senha"
+              placeholder="*********"
+              required
+              maxlength="30"
+              oninput="validatePassword(this)"
+            />
+            <small id="passwordMessage" class="text-red-500 hidden"
+              >A senha deve ter pelo menos 6 caracteres.</small
+            >
+          </div>
+          <!-- Elemento para exibir mensagens -->
+          <div id="mensagem" class="text-lg font-bold mb-4"></div>
           <button
+            type="submit"
             class="bg-neonGreen rounded-xl py-2 hover:bg-neonGreenHover transition-colors text-zinc-50 font-zain text-4xl mx-12"
           >
             Cadastrar
@@ -108,8 +181,66 @@
       </section>
     </main>
 
-    <footer class="text-zinc-200">
-      <p>&copy Luís Felipe, Edney Araujo, Marília</p>
+    <footer class="text-center py-4 text-sm bg-zinc-800">
+      <p class="text-zinc-50">&copy Luís Felipe, Edney Araujo, Marília</p>
     </footer>
+
+    <script>
+      function validatePassword(input) {
+        const message = document.getElementById("passwordMessage");
+        if (input.value.length > 0 && input.value.length < 6) {
+          message.classList.remove("hidden"); // Mostra a mensagem
+        } else {
+          message.classList.add("hidden"); // Esconde a mensagem
+        }
+      }
+
+      document
+        .getElementById("formCadastro")
+        .addEventListener("submit", async function (event) {
+          event.preventDefault(); // Evita o envio padrão do formulário
+
+          const form = event.target;
+          const formData = new FormData(form);
+          const formDataJson = JSON.stringify(
+            Object.fromEntries(formData.entries())
+          );
+          const url = form.action;
+
+          try {
+            const response = await fetch(url, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: formDataJson,
+            });
+
+            const data = await response.json();
+            const mensagemEl = document.getElementById("mensagem");
+
+            if (response.ok) {
+              mensagemEl.textContent =
+                data.message || "Cadastro realizado com sucesso!";
+              mensagemEl.className = "text-green-500";
+              form.reset(); // Limpa o formulário após o sucesso
+
+              // Redireciona após 2 segundos
+              setTimeout(() => {
+                window.location.href = data.redirectTo;
+              }, 2000);
+            } else {
+              mensagemEl.textContent =
+                data.message || "Erro ao realizar cadastro.";
+              mensagemEl.className = "text-red-500";
+            }
+          } catch (error) {
+            console.error("Erro:", error);
+            const mensagemEl = document.getElementById("mensagem");
+            mensagemEl.textContent = "Ocorreu um erro. Tente novamente.";
+            mensagemEl.className = "text-red-500";
+          }
+        });
+    </script>
   </body>
 </html>

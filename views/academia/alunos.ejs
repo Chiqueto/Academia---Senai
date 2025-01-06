@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/styles/output.css" />
+    <title>Lista de Alunos</title>
+  </head>
+  <body class="flex flex-col min-h-screen">
+    <header>
+      <nav class="flex justify-between bg-zinc-800 py-5 px-4">
+        <div class="flex items-center gap-4">
+          <a href="/academia/menu/<%= id_academia %>">
+            <img src="/icons/back_arrow.svg" alt="Voltar" />
+          </a>
+          <h1 class="font-jaro text-zinc-50 text-3xl">GymFit</h1>
+        </div>
+      </nav>
+    </header>
+    <main class="mx-4 flex-grow">
+      <section class="font-zain px-4 text-center">
+        <h2 class="text-3xl text-center text-white py-4">Lista de Alunos</h2>
+
+        <% if (alunos && alunos.length > 0) { %> <% alunos.forEach(aluno => { %>
+        <div
+          data-gender="<%= aluno.genero %>"
+          class="container bg-white rounded-lg flex items-center p-3 shadow-md w-auto mb-2"
+        >
+          <a
+            href="/academia/<%= id_academia %>/aluno/<%= aluno.id %>"
+            class="flex items-center"
+          >
+            <div class="rounded-full bg-pink-200 flex-shrink-0 w-10 h-10">
+              <img src="/icons/user.svg" class="w-10 h-8" alt="Usuário" />
+            </div>
+            <span class="ml-4 text-2xl text-gray-900 font-semibold">
+              <%= aluno.nome %>
+            </span>
+            <span class="ml-4 text-xl text-gray-900">Cod: <%= aluno.id %></span>
+          </a>
+          <button
+            class="ml-auto px-4 py-2 rounded-lg"
+            onclick="confirmarRemocaoAluno('<%= aluno.id %>')"
+          >
+            <img src="/icons/delete.svg" class="w-8 h-8" />
+          </button>
+        </div>
+        <% }) %> <% } else { %>
+        <p class="text-gray-500">Nenhum aluno encontrado.</p>
+        <% } %>
+
+        <button
+          id="openSearchModal"
+          class="fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-neonGreen rounded-xl px-4 py-2 hover:bg-neonGreenHover transition-colors text-zinc-50 font-zain text-4xl shadow-lg"
+        >
+          Adicionar
+        </button>
+      </section>
+      <div
+        id="searchModal"
+        class="hidden fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center"
+      >
+        <div class="bg-white p-6 rounded-lg shadow-lg w-96">
+          <button
+            id="closeSearchModal"
+            class="text-red-600 float-right font-bold"
+          >
+            Fechar
+          </button>
+          <h3 class="text-xl font-semibold mb-4">Buscar Aluno</h3>
+          <input
+            type="text"
+            id="searchInput"
+            class="w-full p-2 border border-gray-300 rounded-md mb-4"
+            placeholder="Buscar aluno..."
+          />
+          <ul
+            id="searchResults"
+            class="max-h-60 overflow-y-auto space-y-2"
+          ></ul>
+        </div>
+      </div>
+
+      <!-- Modal de Confirmação -->
+      <div
+        id="confirmModal"
+        class="hidden fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center"
+      >
+        <div class="bg-white p-6 rounded-lg shadow-lg w-96">
+          <h3 class="text-xl font-semibold mb-4">Confirmar Remoção</h3>
+          <p class="mb-4">Tem certeza de que deseja remover este aluno?</p>
+          <div class="flex justify-end gap-4">
+            <button
+              id="cancelRemove"
+              class="bg-gray-500 text-white px-4 py-2 rounded"
+            >
+              Cancelar
+            </button>
+            <button
+              id="confirmRemove"
+              class="bg-red-600 text-white px-4 py-2 rounded"
+            >
+              Remover
+            </button>
+          </div>
+        </div>
+      </div>
+    </main>
+    <script>
+      document
+        .getElementById("openSearchModal")
+        .addEventListener("click", () => {
+          document.getElementById("searchModal").classList.remove("hidden");
+        });
+
+      document
+        .getElementById("closeSearchModal")
+        .addEventListener("click", () => {
+          document.getElementById("searchModal").classList.add("hidden");
+        });
+
+      // Buscar personais
+      document
+        .getElementById("searchInput")
+        .addEventListener("input", async (event) => {
+          const query = event.target.value.trim();
+
+          if (query.length > 1) {
+            try {
+              const response = await fetch(`/aluno/buscarAluno?nome=${query}`);
+              const alunos = await response.json();
+
+              const resultsList = document.getElementById("searchResults");
+              resultsList.innerHTML = "";
+
+              if (Array.isArray(alunos) && alunos.length > 0) {
+                alunos.forEach((aluno) => {
+                  const li = document.createElement("li");
+                  li.classList.add(
+                    "flex",
+                    "justify-between",
+                    "items-center",
+                    "p-2",
+                    "border-b"
+                  );
+                  li.innerHTML = `
+            <div class="flex items-center gap-2">
+              <div class="rounded-full bg-pink-200 w-10 h-10 flex items-center justify-center">
+                <img src="/icons/user.svg" class="w-7 h-8" alt="Usuário">
+              </div>
+              <span class="ml-4 text-2xl text-gray-900 font-semibold">${aluno.nome}</span>
+              <span class="ml-4 text-xl text-gray-900 ">Cod: ${aluno.id}</span>
+            </div>
+            <button
+              class="bg-blue-500 text-white px-2 py-1 rounded"
+             onclick="adicionarAluno(${aluno.id})">
+              Selecionar
+            </button>
+          `;
+
+                  resultsList.appendChild(li);
+                });
+              } else {
+                resultsList.innerHTML = "<li>Nenhum aluno encontrado.</li>";
+              }
+            } catch (error) {
+              console.error("Erro ao buscar alunos:", error);
+            }
+          }
+        });
+
+      async function adicionarAluno(id_aluno) {
+        try {
+          const id_academia = "<%= id_academia %>";
+          console.log(id_academia);
+          const response = await fetch(
+            `/academia/inserirAluno/${id_academia}`,
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ id_aluno }),
+            }
+          );
+
+          const result = await response.json();
+          if (response.ok) {
+            alert(result.message);
+            location.reload();
+          } else {
+            alert(result.error || "Erro ao adicionar aluno.");
+          }
+        } catch (error) {
+          console.error("Erro ao adicionar aluno:", error);
+        }
+      }
+
+      let alunoIdParaRemover = null;
+
+      function confirmarRemocaoAluno(id_aluno) {
+        alunoIdParaRemover = id_aluno;
+        document.getElementById("confirmModal").classList.remove("hidden");
+      }
+
+      document.getElementById("cancelRemove").addEventListener("click", () => {
+        document.getElementById("confirmModal").classList.add("hidden");
+        alunoIdParaRemover = null;
+      });
+
+      document
+        .getElementById("confirmRemove")
+        .addEventListener("click", async () => {
+          if (alunoIdParaRemover) {
+            try {
+              const response = await fetch(
+                `/academia/<%= id_academia %>/removerAluno/${alunoIdParaRemover}`,
+                {
+                  method: "DELETE",
+                  headers: { "Content-Type": "application/json" },
+                }
+              );
+              const result = await response.json();
+              if (response.ok) {
+                alert(result.message);
+                location.reload();
+              } else {
+                alert(result.error || "Erro ao remover aluno.");
+              }
+            } catch (error) {
+              console.error("Erro ao remover aluno:", error);
+            } finally {
+              document.getElementById("confirmModal").classList.add("hidden");
+              alunoIdParaRemover = null;
+            }
+          }
+        });
+    </script>
+  </body>
+</html>

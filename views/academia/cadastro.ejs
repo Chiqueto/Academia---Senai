@@ -6,7 +6,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="/styles/output.css" />
-    <title>Cadastro</title>
+    <title>Cadastro de Academia</title>
   </head>
   <body class="flex flex-col min-h-screen">
     <header>
@@ -14,52 +14,76 @@
         <div class="flex items-center gap-4">
           <a href="/academia"><img src="/icons/back_arrow.svg" /></a>
           <h1 class="font-jaro text-zinc-50 text-3xl">GymFit</h1>
-          <!-- <img src="/icons/GymFit.svg" /> -->
         </div>
       </nav>
     </header>
 
     <main class="text-center my-10 text-white mx-4 flex-grow">
       <section class="font-zain bg-zinc-50 text-zinc-950 py-4 rounded-2xl">
-        <h2 class="text-4xl">Cadastrar</h2>
-        <form class="flex flex-col text-2xl gap-6 text-black max-w-screen-sm">
+        <h2 class="text-4xl">Cadastrar Academia</h2>
+
+        <form
+          id="formCadastro"
+          action="/academia/cadastro"
+          method="post"
+          class="flex flex-col text-2xl gap-6 text-black max-w-screen-sm"
+        >
           <div class="flex flex-col gap-2 px-6">
             <label class="text-start" for="nome">Nome</label>
             <input
-              class="border-2 border-black rounded-full bg-pink-50 text-lg px-2 py-1"
+              class="border-2 border-black rounded-full bg-pink-50 text-lg px-2 py-1 text-center"
               type="text"
               name="nome"
-              placeholder="Nome"
+              required
+              minlength="3"
+              maxlength="50"
+              placeholder="Nome da academia"
+              oninput="this.value = this.value.replace(/[^a-zA-Z\s]/g, '')"
             />
           </div>
 
           <div class="flex flex-col gap-2 px-6">
             <label class="text-start" for="cnpj">CNPJ</label>
             <input
-              class="border-2 border-black rounded-full bg-pink-50 text-lg px-2 py-1"
+              class="border-2 border-black rounded-full bg-pink-50 text-lg px-2 py-1 text-center"
               type="text"
               name="cnpj"
+              maxlength="18"
               placeholder="00.000.000/0000-00"
+              required
+              title="Digite um CNPJ com 14 dígitos"
+              oninput="this.value = this.value
+    .replace(/\D/g, '')
+    .replace(/^(\d{2})(\d)/, '$1.$2')
+    .replace(/^(\d{2})\.(\d{3})(\d)/, '$1.$2.$3')
+    .replace(/\.(\d{3})(\d)/, '.$1/$2')
+    .replace(/\/(\d{4})(\d)/, '/$1-$2')
+    .slice(0, 18)"
             />
           </div>
 
           <div class="flex flex-col gap-2 px-6">
             <label class="text-start" for="email">Email</label>
             <input
-              class="border-2 border-black rounded-full bg-pink-50 text-lg px-2 py-1"
+              class="border-2 border-black rounded-full bg-pink-50 text-lg px-2 py-1 text-center"
               type="email"
               name="email"
               placeholder="seuemail@exemplo.com.br"
+              required
+              minlength="5"
+              maxlength="30"
             />
           </div>
 
           <div class="flex flex-col gap-2 px-6">
             <label class="text-start" for="senha">Senha</label>
             <input
-              class="border-2 border-black rounded-full bg-pink-50 text-lg px-2 py-1"
+              class="border-2 border-black rounded-full bg-pink-50 text-lg px-2 py-1 text-center"
               type="password"
               name="senha"
               placeholder="*********"
+              required
+              oninput="if (this.value.length < 6) this.setCustomValidity('A senha deve ter pelo menos 6 caracteres'); else this.setCustomValidity('')"
             />
           </div>
 
@@ -67,10 +91,13 @@
             <div class="flex flex-col w-2/3 gap-2">
               <label class="text-start" for="cidade">Cidade</label>
               <input
-                class="border-2 border-black rounded-full bg-pink-50 text-lg px-2 py-1"
+                class="border-2 border-black rounded-full bg-pink-50 text-lg px-2 py-1 text-center"
                 type="text"
                 name="cidade"
                 placeholder="Cidade"
+                required
+                minlength="3"
+                oninput="this.value = this.value.replace(/[^a-zA-Z\s]/g, '')"
               />
             </div>
             <div class="flex flex-col w-1/3 gap-2">
@@ -78,7 +105,7 @@
               <select
                 name="uf"
                 id="uf"
-                class="border-2 border-black rounded-full bg-pink-50 text-lg px-2 py-1"
+                class="border-2 border-black rounded-full bg-pink-50 text-lg px-2 py-1 text-center"
               >
                 <option value="SP">SP</option>
                 <option value="MG">MG</option>
@@ -91,54 +118,140 @@
             <div class="flex flex-col w-2/3 gap-2">
               <label class="text-start" for="logradouro">Logradouro</label>
               <input
-                class="border-2 border-black rounded-full bg-pink-50 text-lg px-2 py-1"
+                class="border-2 border-black rounded-full bg-pink-50 text-lg px-2 py-1 text-center"
                 type="text"
                 name="logradouro"
                 placeholder="Logradouro"
+                required
+                minlength="3"
+                oninput="this.value = this.value.replace(/[^a-zA-Z0-9\s]/g, '')"
               />
             </div>
             <div class="flex flex-col w-1/3 gap-2">
               <label class="text-start" for="numero">N°</label>
               <input
-                class="border-2 border-black rounded-full bg-pink-50 text-lg px-2 py-1"
+                class="border-2 border-black rounded-full bg-pink-50 text-lg px-2 py-1 text-center"
                 type="text"
                 name="numero"
                 placeholder="123"
+                required
+                maxlength="4"
+                oninput="this.value = this.value.replace(/\D/g, '')"
               />
             </div>
           </div>
 
           <div class="flex flex-col gap-2 px-6">
-            <label class="text-start" for="nome">Bairro</label>
+            <label class="text-start" for="bairro">Bairro</label>
             <input
-              class="border-2 border-black rounded-full bg-pink-50 text-lg px-2 py-1"
+              class="border-2 border-black rounded-full bg-pink-50 text-lg px-2 py-1 text-center"
               type="text"
               name="bairro"
               placeholder="Bairro"
+              required
+              minlength="3"
+              oninput="this.value = this.value.replace(/[^a-zA-Z\s]/g, '')"
+            />
+          </div>
+
+          <div class="flex flex-col gap-2 px-6">
+            <label class="text-start" for="cep">Cep</label>
+            <input
+              class="border-2 border-black rounded-full bg-pink-50 text-lg px-2 py-1 text-center"
+              type="text"
+              name="cep"
+              placeholder="00000-000"
+              required
+              maxlength="9"
+              title="Digite um CEP com 8 dígitos"
+              oninput="this.value = this.value
+              .replace(/\D/g, '')
+              .replace(/^(\d{5})(\d)/, '$1-$2')
+              .slice(0, 9)"
             />
           </div>
 
           <div class="flex flex-col gap-2 px-6">
             <label class="text-start" for="telefone">Telefone</label>
             <input
-              class="border-2 border-black rounded-full bg-pink-50 text-lg px-2 py-1"
+              class="border-2 border-black rounded-full bg-pink-50 text-lg px-2 py-1 text-center"
               type="text"
               name="telefone"
-              placeholder="(16) 999968-6044"
+              placeholder="(16) 99996-6044"
+              required
+              maxlength="15"
+              title="Digite um telefone com 11 dígitos"
+              oninput="this.value = this.value
+              .replace(/\D/g, '')
+              .replace(/^(\d{2})(\d)/, '($1) $2')
+              .replace(/(\d{4,5})(\d{4})/, '$1-$2')
+              .slice(0, 15)"
             />
           </div>
 
+          <!-- Elemento para exibir mensagens -->
+          <div id="mensagem" class="text-lg font-bold mb-4"></div>
+
           <button
+            type="submit"
             class="bg-neonGreen rounded-xl py-2 hover:bg-neonGreenHover transition-colors text-zinc-50 font-zain text-4xl mx-12"
           >
             Cadastrar
           </button>
         </form>
       </section>
+      <footer class="text-center py-4 text-sm bg-zinc-800">
+        <p class="text-zinc-50">&copy Luís Felipe, Edney Araujo, Marília</p>
+      </footer>
     </main>
 
-    <footer class="text-zinc-200">
-      <p>&copy Luís Felipe, Edney Araujo, Marília</p>
-    </footer>
+    <script>
+      document
+        .getElementById("formCadastro")
+        .addEventListener("submit", async function (event) {
+          event.preventDefault(); // Evita o envio padrão do formulário
+
+          const form = event.target;
+          const formData = new FormData(form);
+          const formDataJson = JSON.stringify(
+            Object.fromEntries(formData.entries())
+          );
+          const url = form.action;
+
+          try {
+            const response = await fetch(url, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: formDataJson,
+            });
+
+            const data = await response.json();
+            const mensagemEl = document.getElementById("mensagem");
+
+            if (response.ok) {
+              mensagemEl.textContent =
+                data.message || "Cadastro realizado com sucesso!";
+              mensagemEl.className = "text-green-500";
+              form.reset(); // Limpa o formulário após o sucesso
+
+              // Redireciona após 2 segundos
+              setTimeout(() => {
+                window.location.href = data.redirectTo;
+              }, 2000);
+            } else {
+              mensagemEl.textContent =
+                data.message || "Erro ao realizar cadastro.";
+              mensagemEl.className = "text-red-500";
+            }
+          } catch (error) {
+            console.error("Erro:", error);
+            const mensagemEl = document.getElementById("mensagem");
+            mensagemEl.textContent = "Ocorreu um erro. Tente novamente.";
+            mensagemEl.className = "text-red-500";
+          }
+        });
+    </script>
   </body>
 </html>

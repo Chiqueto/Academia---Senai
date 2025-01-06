@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta lang="pt-br" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="/styles/output.css" rel="stylesheet" />
+    <title>Opções de treino</title>
+  </head>
+
+  <body class="flex flex-col min-h-screen">
+    <header>
+      <nav class="flex justify-between bg-zinc-800 py-5 px-4">
+        <div class="flex items-center gap-4">
+          <a href="/personal/menuPersonal/<%= id_personal %>">
+            <img src="/icons/back_arrow.svg" />
+          </a>
+          <h1 class="font-jaro text-zinc-50 text-3xl">GymFit</h1>
+        </div>
+      </nav>
+    </header>
+
+    <!-- Conteúdo Principal -->
+    <main class="flex flex-col flex-grow mx-4">
+      <section class="font-zain px-4 flex-grow">
+        <h2 class="text-3xl text-center text-white py-2">Meus Exercícios</h2>
+        <p class="text-xl text-center text-white py-2">
+          Gerencie seus exercícios
+        </p>
+        <!-- Barra de Busca -->
+        <div class="relative w-full mb-4">
+          <input
+            type="text"
+            placeholder="Buscar pelo exercício..."
+            class="w-full py-1 pl-10 pr-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-gray-700 placeholder-gray-400"
+          />
+          <div
+            class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none"
+          >
+            <img src="/icons/lupa.svg" alt="Buscar" class="w-5 h-5" />
+          </div>
+        </div>
+
+        <!-- Lista de Exercícios -->
+        <div class="max-h-[400px] overflow-y-auto">
+          <% if (exercicios && exercicios.length > 0) { %>
+          <ul class="grid grid-cols-1 gap-4">
+            <% exercicios.forEach((exercicio) => { %>
+            <li
+              class="bg-zinc-200 shadow-md rounded-xl p-3 flex flex-col justify-center items-center hover:bg-zinc-300 transition-colors"
+            >
+              <a href="#">
+                <div>
+                  <h3 class="text-xl font-bold text-zinc-950">
+                    <%= exercicio.nome %>
+                  </h3>
+                </div>
+              </a>
+            </li>
+            <% }) %>
+          </ul>
+          <% } else { %>
+          <p class="text-zinc-50 text-center">Nenhum exercício encontrado.</p>
+          <% } %>
+        </div>
+      </section>
+
+      <!-- Botão Adicionar -->
+      <div class="mb-4">
+        <button
+          onclick="toggleModal()"
+          class="w-full bg-neonGreen rounded-xl px-4 py-2 hover:bg-neonGreenHover transition-colors text-zinc-50 font-zain text-2xl"
+        >
+          Adicionar
+        </button>
+      </div>
+    </main>
+
+    <div
+      id="modalExercicio"
+      class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-10"
+    >
+      <div class="bg-white p-6 rounded-lg w-96">
+        <h1 class="text-center text-4xl font-bold mb-4">Cadastrar Exercício</h1>
+
+        <!-- Lista de Exercícios Disponíveis -->
+        <div class="w-full mb-4">
+          <form
+            id="formExercicios"
+            class="grid grid-cols-1 gap-4"
+            onsubmit="cadastrarExercicio(event)"
+          >
+            <!-- Nome do Exercício -->
+            <div class="flex flex-col">
+              <label for="nome" class="font-medium mb-1"
+                >Nome do exercício:</label
+              >
+              <input
+                type="text"
+                name="nome"
+                placeholder="Elevação lateral"
+                required
+                id="nome"
+                minlength="1"
+                class="py-1 px-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-gray-700 placeholder-gray-400 border border-gray-300"
+              />
+            </div>
+
+            <!-- Descrição -->
+            <div class="flex flex-col">
+              <label for="descricao" class="font-medium mb-1">Descrição:</label>
+              <input
+                minlength="1"
+                type="text"
+                id="descricao"
+                name="descricao"
+                placeholder="Descrição do exercício"
+                required
+                class="py-1 px-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-gray-700 placeholder-gray-400 border border-gray-300"
+              />
+            </div>
+
+            <!-- URL do Vídeo -->
+            <div class="flex flex-col">
+              <label for="url_video" class="font-medium mb-1"
+                >URL do vídeo:</label
+              >
+              <input
+                type="text"
+                name="url_video"
+                id="url_video"
+                placeholder="Link para vídeo do exercício"
+                class="py-1 px-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-gray-700 placeholder-gray-400 border border-gray-300"
+              />
+            </div>
+            <!-- Botões -->
+            <div class="flex justify-between mt-4 w-full">
+              <button
+                type="submit"
+                class="bg-neonGreen text-white px-4 py-2 rounded-lg hover:bg-neonGreenHover"
+              >
+                Cadastrar Exercício
+              </button>
+              <button
+                onclick="toggleModalExercicio()"
+                class="bg-red-500 text-white px-4 py-2 rounded-lg"
+              >
+                Cancelar
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <footer class="text-center py-4 text-sm bg-zinc-800">
+      <p class="text-zinc-50">&copy Luís Felipe, Edney Araujo, Marília</p>
+    </footer>
+
+    <script>
+      // Exibir o formulário no modal
+      function toggleModal() {
+        const modal = document.getElementById("modalExercicio");
+        modal.classList.toggle("hidden");
+      }
+
+      async function cadastrarExercicio(event) {
+        event.preventDefault();
+        const form = event.target;
+
+        try {
+          const nome = document.getElementById("nome").value.trim();
+          const descricao = document.getElementById("descricao").value.trim();
+          const url_video = document.getElementById("url_video").value.trim();
+
+          const response = await fetch(
+            `/personal/criarExercicio/<%= id_personal %>`,
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ nome, descricao, url_video }),
+            }
+          );
+
+          const data = await response.json();
+
+          if (response.ok) {
+            alert(data.message || "Exercício cadastrado com sucesso!");
+            form.reset(); // Reseta os valores do formulário
+            toggleModal(); // Fecha o modal
+            window.location.reload();
+          } else {
+            alert(data.message || "Erro ao cadastrar o exercício.");
+          }
+        } catch (error) {
+          console.error("Erro inesperado:", error);
+          alert("Erro inesperado. Tente novamente mais tarde.");
+        }
+      }
+    </script>
+  </body>
+</html>

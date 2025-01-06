@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta lang="pt-br" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/styles/output.css" />
+
+    <title>Perfil Academia</title>
+  </head>
+
+  <body class="flex flex-col min-h-screen">
+    <header>
+      <nav class="flex flex-grow bg-zinc-800 py-5 px-4">
+        <div class="flex items-center gap-4">
+          <a href="/academia/menu/<%= academia.id %>"
+            ><img src="/icons/back_arrow.svg"
+          /></a>
+          <h1 class="font-jaro text-zinc-50 text-3xl">GymFit</h1>
+        </div>
+      </nav>
+    </header>
+    <main class="rounded-3xl mx-4 bg-zinc-50 text-black font-zain flex-grow">
+      <!--Começo do perfil-->
+      <section class="font-zain px-4">
+        <h2 class="text-4xl text-center uppercase"><%= academia.nome %></h2>
+        <div
+          class="bg-slate-300 shadow-md rounded-lg flex flex-col items-center"
+        >
+          <img src="/icons/upload.svg" class="w-25 h-25" />
+        </div>
+        <div class="p-2 text-2xl">
+          <h2 class="font-bold"><%= academia.cidade %>,<%= academia.uf %></h2>
+          <h2 class="mx-4">Rua: <%= academia.logradouro %></h2>
+          <h2 class="mx-4">Bairro: <%= academia.bairro %></h2>
+          <h2 class="mx-4">
+            Contato: <%= academia.telefone %>
+            <a href="/academia/editar/<%= academia.id %>" class="ml-2">
+              <img
+                src="/icons/edit.svg"
+                alt="Editar"
+                class="inline-block w-6 h-6 cursor-pointer hover:opacity-80"
+              />
+            </a>
+          </h2>
+        </div>
+        <div
+          class="bg-slate-300 shadow-md rounded-lg mt-auto flex flex-col items-center"
+        >
+          <img src="/icons/upload.svg" class="w-25 h-25" />
+        </div>
+
+        <button
+          class="flex justify-end mx-auto mt-60 bg-neonGreen rounded-xl px-12 py-2 hover:bg-neonGreenHover transition-colors text-zinc-50 text-4xl"
+        >
+          Sair
+        </button>
+      </section>
+    </main>
+
+    <footer class="text-center py-4 text-sm bg-zinc-800">
+      <p class="text-zinc-50">&copy Luís Felipe, Edney Araujo, Marília</p>
+    </footer>
+  </body>
+</html>
