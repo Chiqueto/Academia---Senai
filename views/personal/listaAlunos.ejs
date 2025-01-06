@@ -6,6 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link href="/styles/output.css" rel="stylesheet" />
     <title>Lista de Alunos</title>
+    <style>
+      .button-container {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 20px;
+      }
+    </style>
   </head>
 
   <body class="flex flex-col min-h-screen">
@@ -90,9 +97,16 @@
             </div>
           </div>
           
-          <button id="openSearchModal" class="mx-auto bg-neonGreen rounded-xl px-4 py-2 hover:bg-neonGreenHover transition-colors text-zinc-50 font-zain text-4xl">
-          Adicionar
-        </button>
+          <div class="button-container">
+            <button id="openSearchModal" class="bg-neonGreen rounded-xl px-4 py-2 hover:bg-neonGreenHover transition-colors text-zinc-50 font-zain text-4xl">
+              Adicionar
+            </button>
+          </div>
+        </main>
+
+        <footer class="text-center py-4 text-sm bg-zinc-800">
+          <p class="text-zinc-50">&copy Luís Felipe, Edney Araujo, Marília</p>
+        </footer>
 
         <script>
     document.getElementById('openSearchModal').addEventListener('click', () => {
@@ -225,6 +239,5 @@ genderFilter.addEventListener('change', (event) => {
 
         </script>
 
-  </body>
   </body>
 </html>

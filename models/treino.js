@@ -48,6 +48,13 @@ const getTreinosByPersonal = async (id_personal) => {
   return result.rows;
 };
 
+const removeTreinoForAluno = async (id_aluno, id_treino) => {
+  const result = await pool.query(
+    "DELETE FROM tb_treino_alunos WHERE id_aluno = $1 AND id_treino = $2",
+    [id_aluno, id_treino]
+  );
+};
+
 const getTreinosByAluno = async (id_aluno) => {
   const result = await pool.query(
     "SELECT * FROM tb_treino WHERE id IN (SELECT id_treino FROM tb_treino_alunos WHERE id_aluno = $1)",
@@ -239,4 +246,5 @@ module.exports = {
   getFinishedSeriesByTreino,
   deleteDoneSeries,
   getTreinosByAlunoAndPersonal,
+  removeTreinoForAluno,
 };

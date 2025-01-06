@@ -1,65 +1,76 @@
 <!DOCTYPE html>
-
-<html>
+<html lang="pt-br">
   <head>
-    <meta lang="pt-br" />
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link href="/styles/output.css" rel="stylesheet" />
-    <title>Perfil do Personal</title>
+    <link rel="stylesheet" href="/styles/output.css" />
+    <title>Alunos do Personal</title>
+    <style>
+      .fixed-bottom-center {
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+    </style>
   </head>
   <body class="flex flex-col min-h-screen">
     <header>
       <nav class="flex justify-between bg-zinc-800 py-5 px-4">
         <div class="flex items-center gap-4">
-          <a href="/personal/menuPersonal"><img src="/icons/back_arrow.svg" /></a>
-          <a href="/views/index.ejs"
-            ><h1 class="font-jaro text-zinc-50 text-3xl">GymFit</h1></a
-          >
-          <!-- <img src="/icons/GymFit.svg" /> -->
+          <a href="/personal/menuPersonal/<%= personal.id %>">
+            <img src="/icons/back_arrow.svg" alt="Voltar" />
+          </a>
+          <h1 class="font-jaro text-zinc-50 text-3xl">GymFit</h1>
         </div>
       </nav>
-      <form
-        action="/personal/uploadFoto/<%= personal.id %>"
-        method="POST"
-        enctype="multipart/form-data"
-      >
-        <label for="fotoPerfil">Escolher imagem:</label>
-        <input type="file" id="fotoPerfil" name="fotoPerfil" accept="image/*" />
-        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">
-          Enviar
-        </button>
-      </form>
     </header>
 
-    <main class="flex flex-col">
-      <div
-        class="shadow-md rounded p-3 flex flex-col justify-center items-center"
-      >
-        <div class="rounded-full p-2 bg-slate-300">
-          <img
-            src="<%= personal.foto_perfil ? personal.foto_perfil : '/icons/user.svg' %>"
-            alt="Foto de Perfil"
-            class="w-14 h-14"
-          />
-        </div>
-        <h4 class="ml-3 text-white"><%= personal.nome %></h4>
-        <p class="font-zain text-lg text-white mt-2"></p>
-      </div>
-      <div class="font-zain text-white p-5">
-        <h4><strong> <%= personal.cidade %>, <%= personal.uf %></strong></h4>
-        <h4 class="ml-3">
-          <%= personal.descricao %>
-        </h4>
-        <h4 class="ml-3">Telefone: <%= personal.telefone %></h4>
-      </div>
+    <main class="flex flex-col flex-grow mx-4 bg-zinc-50 text-black font-zain">
+      <section class="font-zain px-4 text-center">
+        <h2 class="text-4xl text-center my-4">Alunos</h2>
+        <% if (alunos && alunos.length > 0) { %>
+        <ul class="grid grid-cols-1 gap-4">
+          <% alunos.forEach(aluno => { %>
+          <li
+            class="bg-zinc-200 shadow-md rounded-xl p-3 flex justify-between items-center"
+          >
+            <div class="flex items-center gap-4">
+              <div
+                class="rounded-full bg-pink-200 w-10 h-10 flex items-center justify-center"
+              >
+                <img src="/icons/user.svg" class="w-7 h-8" alt="Usuário" />
+              </div>
+              <span class="text-2xl text-gray-900 font-semibold"
+                ><%= aluno.nome %></span
+              >
+            </div>
+            <a
+              href="/personal/aluno/<%= aluno.id %>"
+              class="bg-neonGreen text-white px-4 py-2 rounded-lg hover:bg-neonGreenHover"
+            >
+              Ver Perfil
+            </a>
+          </li>
+          <% }) %>
+        </ul>
+        <% } else { %>
+        <p class="text-gray-500">Nenhum aluno encontrado.</p>
+        <% } %>
+      </section>
     </main>
 
-    <button
-      type="submit"
-      class="bg-neonGreen rounded-xl py-2 hover:bg-neonGreenHover transition-colors text-zinc-50 font-zain text-4xl mx-12"
-    >
-      Sair
-    </button>
+    <div class="flex justify-center">
+      <button
+        onclick="window.location.href='/personal/inserirAluno'"
+        class="bg-neonGreen text-white px-4 py-2 rounded-lg hover:bg-neonGreenHover mb-4"
+      >
+        Inserir Novo Aluno
+      </button>
+    </div>
+
+    <footer class="text-center py-4 text-sm bg-zinc-800">
+      <p class="text-zinc-50">&copy Luís Felipe, Edney Araujo, Marília</p>
+    </footer>
   </body>
 </html>

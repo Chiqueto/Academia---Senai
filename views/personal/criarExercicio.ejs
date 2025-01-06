@@ -49,7 +49,9 @@
             <li
               class="bg-zinc-200 shadow-md rounded-xl p-3 flex flex-col justify-center items-center hover:bg-zinc-300 transition-colors"
             >
-              <a href="#">
+              <a
+                href="/personal/<%= id_personal %>/exercicio/<%= exercicio.id %>"
+              >
                 <div>
                   <h3 class="text-xl font-bold text-zinc-950">
                     <%= exercicio.nome %>
@@ -164,6 +166,10 @@
         modal.classList.toggle("hidden");
       }
 
+      function toggleModalExercicio() {
+        const modal = document.getElementById("modalExercicio");
+        modal.classList.add("hidden");
+      }
       async function cadastrarExercicio(event) {
         event.preventDefault();
         const form = event.target;

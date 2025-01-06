@@ -413,6 +413,17 @@ const renderizaPerfilAluno = async (req, res) => {
   }
 };
 
+const renderizaExercicio = async (req, res) => {
+  const { id_personal, id_exercicio } = req.params;
+  try {
+    const exercicio = await Exercicio.getExercicioById(id_exercicio);
+    res.render("personal/exercicio", { exercicio, id_personal });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Erro ao carregar exercicio");
+  }
+};
+
 const criarTreino = async (req, res) => {
   const { id_personal } = req.params;
   const { nome, descricao } = req.body;
@@ -449,4 +460,5 @@ module.exports = {
   renderizaCriarExercicio,
   renderizaTreinos,
   criarTreino,
+  renderizaExercicio,
 };

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta lang="pt-br" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="/styles/output.css" rel="stylesheet" />
+    <title><%= exercicio.nome %></title>
+  </head>
+  <body class="flex flex-col min-h-screen bg-zinc-900 text-zinc-50">
+    <!-- Cabeçalho -->
+    <header>
+      <nav class="flex justify-between bg-zinc-800 py-5 px-4">
+        <div class="flex items-center gap-4">
+          <a href="/personal/criarExercicio/<%= id_personal %>"
+            ><img src="/icons/back_arrow.svg"
+          /></a>
+          <h1 class="font-jaro text-zinc-50 text-3xl">GymFit</h1>
+        </div>
+      </nav>
+    </header>
+
+    <!-- Conteúdo principal -->
+    <main class="mx-4 flex-grow">
+      <!-- Título do Exercicio -->
+      <section class="text-center pt-6 pb-3">
+        <h2 class="text-4xl font-bold"><%= exercicio.nome %></h2>
+        <div class="bg-zinc-800 max-w-full mx-7 my-2 rounded-2xl p-3">
+          <img src="/icons/agachamento.svg" alt="Vídeo do exercício" />
+        </div>
+      </section>
+    </main>
+
+    <!-- Rodapé -->
+    <footer class="text-center py-4 text-sm bg-zinc-800">
+      <p class="text-zinc-50">&copy; Luís Felipe, Edney Araujo, Marília</p>
+    </footer>
+  </body>
+</html>

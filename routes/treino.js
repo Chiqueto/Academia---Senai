@@ -43,4 +43,7 @@ router.post("/addExercicios", Treino.adicionarExercicios);
 //atribuir treino a um aluno
 router.post("/atribuir", Treino.atribuirTreino);
 
+//desvincular treino a um aluno
+router.delete("/desvincular/:id_aluno/:id_treino", Treino.desvincularTreino);
+
 module.exports = router;

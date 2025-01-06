@@ -33,6 +33,27 @@ const criarTreinoAluno = async (req, res) => {
   }
 };
 
+const desvincularTreino = async (req, res) => {
+  const { id_aluno, id_treino } = req.params;
+
+  if (!id_aluno || !id_treino) {
+    return res.status(400).json({ message: "Preencha todos os campos!" });
+  }
+
+  try {
+    const treinoDesvinculado = await Treino.removeTreinoForAluno(
+      id_aluno,
+      id_treino
+    );
+    if (treinoDesvinculado === 0) {
+      return res.status(404).json({ message: "Treino não encontrado!" });
+    }
+    res.json({ message: "Treino desvinculado com sucesso!" });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 const criarTreinoPersonal = async (req, res) => {
   const { id_personal } = req.params;
   const { nome, descricao } = req.body;
@@ -474,4 +495,5 @@ module.exports = {
   concluirTreino,
   verificaSeries,
   personalDeleteTreino,
+  desvincularTreino,
 };

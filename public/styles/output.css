@@ -662,6 +662,14 @@ video {
   margin: 0.75rem;
 }
 
+.m-4{
+  margin: 1rem;
+}
+
+.m-2{
+  margin: 0.5rem;
+}
+
 .mx-12{
   margin-left: 3rem;
   margin-right: 3rem;
@@ -700,6 +708,11 @@ video {
 .my-3{
   margin-top: 0.75rem;
   margin-bottom: 0.75rem;
+}
+
+.my-4{
+  margin-top: 1rem;
+  margin-bottom: 1rem;
 }
 
 .mb-1{
@@ -1484,11 +1497,6 @@ video {
 .text-zinc-950{
   --tw-text-opacity: 1;
   color: rgb(9 9 11 / var(--tw-text-opacity));
-}
-
-.text-zinc-200{
-  --tw-text-opacity: 1;
-  color: rgb(228 228 231 / var(--tw-text-opacity));
 }
 
 .placeholder-gray-400::-moz-placeholder{

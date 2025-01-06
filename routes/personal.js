@@ -101,4 +101,9 @@ router.get("/editar/:id", personalController.editarPersonal);
 
 router.post("/treino/:id_personal", personalController.criarTreino);
 
+router.get(
+  "/:id_personal/exercicio/:id_exercicio",
+  personalController.renderizaExercicio
+);
+
 module.exports = router;

@@ -7,6 +7,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link href="/styles/output.css" rel="stylesheet" />
     <title>Perfil do Aluno</title>
+    <style>
+      .scrollable {
+        max-height: 150px; /* Ajuste a altura conforme necessário */
+        overflow-y: auto;
+      }
+    </style>
   </head>
   <body class="flex flex-col min-h-screen">
     <header>
@@ -47,16 +53,16 @@
       Sair
     </button> -->
       </section>
-      <section class="text-center">
+      <section class="text-center relative flex-grow">
         <h1 class="text-zinc-950 text-4xl">Treinos</h1>
         <!-- Lista de Treinos -->
-        <div class="max-h-[400px] overflow-y-auto">
+        <div class="scrollable">
           <% if(!treinos || treinos.length == 0) { %>
           <p class="text-center text-zinc-950 text-xl">
             Nenhum treino criado por você atribuído ao aluno!
           </p>
           <% } else { %>
-          <ul class="grid grid-cols-1 gap-4">
+          <ul class="m-4 grid grid-cols-1 gap-4">
             <% treinos.forEach(treino => { %>
             <li
               class="bg-zinc-600 p-4 rounded-lg flex justify-between items-center"
@@ -67,28 +73,20 @@
               </div>
               <div class="flex gap-2">
                 <button
-                  onclick="toggleModalExercicio(this)"
-                  data-id="<%= treino.id %>"
-                  class="bg-neonGreen text-white px-4 py-2 rounded-lg hover:bg-neonGreenHover"
-                >
-                  Editar
-                </button>
-                <button
                   onclick="confirmarDelecaoTreino('<%= treino.id %>')"
                   class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600"
                 >
-                  Deletar
+                  Remover
                 </button>
               </div>
             </li>
             <% }) %>
           </ul>
+          <% } %>
         </div>
-        <% } %>
-        <button>Criar treino exclusivo</button>
         <button
           onclick="abrirModalTreinos()"
-          class="bg-neonGreen text-white px-4 py-2 rounded-lg hover:bg-neonGreenHover"
+          class="bg-neonGreen text-white px-4 py-2 rounded-lg my-2 hover:bg-neonGreenHover"
         >
           Adicionar treino existente
         </button>
@@ -134,7 +132,75 @@
       </div>
     </div>
 
+    <!-- Modal de Confirmação de Remoção -->
+    <div
+      id="confirmModal"
+      class="hidden fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center"
+    >
+      <div class="bg-white p-6 rounded-lg shadow-lg w-96">
+        <h3 class="text-xl font-semibold mb-4">Confirmar Remoção</h3>
+        <p class="mb-4">Tem certeza de que deseja remover este treino?</p>
+        <div class="flex justify-end gap-4">
+          <button
+            id="cancelRemove"
+            class="bg-gray-500 text-white px-4 py-2 rounded"
+            onclick="fecharModalConfirmarRemocao()"
+          >
+            Cancelar
+          </button>
+          <button
+            id="confirmRemove"
+            class="bg-red-600 text-white px-4 py-2 rounded"
+            onclick="removerTreino()"
+          >
+            Remover
+          </button>
+        </div>
+      </div>
+    </div>
+
     <script>
+      let treinoIdParaRemover = null;
+
+      function confirmarDelecaoTreino(treino_id) {
+        treinoIdParaRemover = treino_id;
+        document.getElementById("confirmModal").classList.remove("hidden");
+      }
+
+      function fecharModalConfirmarRemocao() {
+        document.getElementById("confirmModal").classList.add("hidden");
+        treinoIdParaRemover = null;
+      }
+
+      async function removerTreino() {
+        if (!treinoIdParaRemover) return;
+
+        try {
+          const response = await fetch(
+            `/treino/desvincular/<%= aluno.id %>/${treinoIdParaRemover}`,
+            {
+              method: "DELETE",
+              headers: {
+                "Content-Type": "application/json",
+              },
+            }
+          );
+
+          if (response.ok) {
+            alert("Treino desvinculado com sucesso!");
+            location.reload();
+          } else {
+            const result = await response.json();
+            alert(result.error || "Erro ao desvincular treino.");
+          }
+        } catch (error) {
+          console.error("Erro:", error);
+          alert("Erro ao desvincular treino.");
+        } finally {
+          fecharModalConfirmarRemocao();
+        }
+      }
+
       function abrirModalTreinos() {
         document.getElementById("modalTreinos").classList.remove("hidden");
       }
